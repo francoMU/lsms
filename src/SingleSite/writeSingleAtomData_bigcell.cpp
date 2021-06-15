@@ -1,6 +1,10 @@
-#include <string.h>
-#include "AtomData.hpp"
+
+
 #include "writeSingleAtomData.hpp"
+
+#include <string.h>
+
+#include "AtomData.hpp"
 
 int writeSingleAtomData_bigcell(const char *fname, AtomData &atom)
 {

@@ -81,9 +81,9 @@ c     to define the Voronoi Polyhedron................................
 c     ****************************************************************
 c
       if(iprint.ge.1) then
-	 write(6,'(/,'' SETUP_VORPOL:: lmax   ='',i5)') lmax
-	 write(6,'(  ''                ngaussq='',i5)') ngaussq
-	 write(6,'(  ''                ngaussr='',i5)') ngaussr
+         write(6,'(/,'' SETUP_VORPOL:: lmax   ='',i5)') lmax
+         write(6,'(  ''                ngaussq='',i5)') ngaussq
+         write(6,'(  ''                ngaussr='',i5)') ngaussr
       endif
 c
 c     ================================================================
@@ -98,7 +98,7 @@ c     ----------------------------------------------------------------
      >                    system_bravais(1,3),
      >                    vplane,ipvp,nvplane,rad)
 c     ----------------------------------------------------------------
-      if(iprint.ge.0) then
+      if(iprint.ge.1) then
          write(6,'(/,'' SETUP_VORPOL:: Boundary Planes'')')
          write(6,'(  6x,i5,3f10.5)')
      >        (i,vplane(1,i),vplane(2,i),vplane(3,i),i=1,nvplane)
@@ -124,25 +124,25 @@ c     only if rmt <= 0
 c
 c     ================================================================
 c     get points at which w(l,m) has discontinuous derivatives........
-      if(iprint.ge.0) then
+      if(iprint.ge.1) then
          write(6,'(/,'' SETUP_VORPOL:: nbnd,ncorn,nedge:'',3i5)')
      >   nvplane,ncorn,nedge
       endif
 c     ----------------------------------------------------------------
-      call rcritpts(rcrit,ncrit,
+      call rcritpts(rcrit, ncrit,
      >              rmt*rmt,dc2(indxc(ncorn)),
      >              vplane,nvplane,
      >              dc2,ncorn,
      >              edgp,nedge,
      >              runion)
       if(ncrit.gt.iprcrit) then
-	write(6,'(''iprcrit too small: iprcrit='',i4)') iprcrit
-	stop'rcrit'
+         write(6,'(''iprcrit too small: iprcrit='',i4)') iprcrit
+         stop'rcrit'
       endif
 c     ----------------------------------------------------------------
 c     ================================================================
 c     write list of critical points if needed.........................
-      if(iprint.ge.0) then
+      if(iprint.ge.1) then
          write(6,'('' SETUP_VORPOL:: number of critical r-points'',
      >   '' for w(r) ='',i5)') ncrit
          write(6,'(''            i='',i4,'' rcrit='',1pd16.10)')
@@ -167,7 +167,7 @@ c
       rcirc = sqrt(dc2(indxc(ncorn)))
 c     ================================================================
 c     write out the calculated volumes................................
-      if(iprint.ge.0) then
+      if(iprint.ge.1) then
          write(6,'(  ''SETUP_VORPOL:Muffin-tin radius'',t40,''='',
      >   f14.8)') rmt
 c     set circumscribing sphere radius................................

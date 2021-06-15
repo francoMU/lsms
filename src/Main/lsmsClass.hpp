@@ -8,8 +8,9 @@
 #include <vector>
 
 #include "Real.hpp"
-#include "../Potential/PotentialShifter.hpp"
+#include "Potential/PotentialShifter.hpp"
 #include "mixing.hpp"
+#include "mixing_params.hpp"
 
 class LSMS {
 

@@ -1,6 +1,9 @@
-#include <string.h>
-#include "AtomData.hpp"
+
 #include "readSingleAtomData.hpp"
+
+#include <string.h>
+
+#include "AtomData.hpp"
 
 int readSingleAtomData_bigcell(const char *fname, AtomData &atom)
 {

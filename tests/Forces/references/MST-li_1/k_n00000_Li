@@ -1,0 +1,13 @@
+Source Code Version           : : v1.6.1.9                                      
+System Description            : Li bcc                                          
+Number of Atoms in Unit Cell  : 2                                               
+Number of Atomic Species      : 1                                               
+Number of Atoms in Each Type  : 2(Li)                                           
+Unit Cell Volume (au^3)       : 0.31443200D+03                                  
+Average Atomic Volume (au^3)  : 157.21600                                       
+Energy Offset                 : -14                                             
+=======================================================================================
+    Iter     Energy      3PV     Efermi   Rms_rho    Rms_pot   Mix  Alg  Alpha 
+---------------------------------------------------------------------------------------
+**       1  -0.820594  -0.05122  0.27810  0.184E-02  0.156E-02  pot  B   0.1000
+         2  -0.820790  -0.03965  0.27149  0.949E-05  0.940E-04  pot  B   0.1000

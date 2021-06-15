@@ -1,0 +1,6 @@
+[submodule "external/dftatom"]
+	path = external/dftatom
+	url = https://github.com/certik/dftatom.git
+[submodule "external/matplotplusplus"]
+	path = external/matplotplusplus
+	url = https://github.com/alandefreitas/matplotplusplus/

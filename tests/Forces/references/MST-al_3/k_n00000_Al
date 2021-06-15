@@ -1,0 +1,12 @@
+Source Code Version           : : v1.6.1.9                                      
+System Description            : Al fcc                                          
+Number of Atoms in Unit Cell  : 4                                               
+Number of Atomic Species      : 1                                               
+Number of Atoms in Each Type  : 4(Al)                                           
+Unit Cell Volume (au^3)       : 0.44829324D+03                                  
+Average Atomic Volume (au^3)  : 112.07331                                       
+Energy Offset                 : -482                                            
+=======================================================================================
+    Iter     Energy      3PV     Efermi   Rms_rho    Rms_pot   Mix  Alg  Alpha 
+---------------------------------------------------------------------------------------
+**       1  -0.944875  -0.23730  0.59456  0.317E+00  0.660E-02  pot  B   0.1000

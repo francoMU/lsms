@@ -1,16 +1,15 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
+#include "initializeAtom.hpp"
+
 #include <vector>
 #include <algorithm>
 #include <cstdio>
 
 #include "Real.hpp"
-#include "Complex.hpp"
 #include "Matrix.hpp"
 #include "SingleSite/AtomData.hpp"
-#include "initializeAtom.hpp"
-#include "Core/CoreStates.hpp"
+#include "Core/calculateCoreStates.hpp"
 #include "Misc/integrateOneDim.cpp"
-#include "Potential/calculateChargesPotential.hpp"
 
 /* initializeAtom(AtomData &a)
    initialize an atom using the following information in AtomData

@@ -8,8 +8,4 @@ if (BUILD_TESTING)
 
     add_subdirectory(Core)
 
-    add_subdirectory(Multipole)
-
-    add_subdirectory(Relaxation)
-
 endif()

@@ -118,7 +118,7 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
     // kineticEnergy -= integrateOneDim<0>(gridSqrt, integrand, integral, std::sqrt(rSphere)); // (3)
     // kineticEnergy -= integrateOneDim<11>(gridCbrt, integrand, integral, std::cbrt(rSphere)); // (3)
 
-    if (lsms.global.iprint > 0) {
+    if (lsms.global.iprint >= 0) {
         printf("evssum                      = %35.25lf Ry\n", eigenvalueSum);
         printf("kinetic Energy              = %35.25lf Ry\n", kineticEnergy);
     }
@@ -154,7 +154,7 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
     integral[0] = fit(0.0);
     Real erho = integrateOneDim(grid0, integral, integrand, rSphere); // (5a)
     energyStruct.hartree = erho;
-    if (lsms.global.iprint > 0)
+    if (lsms.global.iprint >= 0)
         printf("erho                        = %35.25lf Ry\n", erho);
 
     /*
@@ -174,11 +174,11 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
     integrand[0] = fit(0.0);
     Real ezrho = -integrateOneDim(grid0, integrand, integral, rSphere); // (5b)
     energyStruct.core_interaction = ezrho;
-    if (lsms.global.iprint > 0)
+    if (lsms.global.iprint >= 0)
         printf("ezrho                       = %35.25lf Ry\n", ezrho);
 
     coulombEnergy = erho + ezrho; // (5)
-    if (lsms.global.iprint > 0)
+    if (lsms.global.iprint >= 0)
         printf("Coulomb Energy              = %35.25lf Ry\n", coulombEnergy);
 
 // Exchange-Correlation energy                  -- (7)
@@ -215,7 +215,7 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
         printf("Unknown xc function in localTotalEnergy!\n");
         exit(1);
     }
-    if (lsms.global.iprint > 0) {
+    if (lsms.global.iprint >= 0) {
         printf("Exchange-Correlation Energy = %35.25lf Ry\n", xcEnergy);
 
         printf("ezpt                        = %35.25lf Ry\n\n", ezpt);

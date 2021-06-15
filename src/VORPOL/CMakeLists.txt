@@ -14,7 +14,7 @@ target_sources(lsmscore
         intpl0.f
         invm3.f
         polyhedron.f
-        rcritpts.f90
+        rcritpts.f
         setup_boundary.f
         setup_vorpol.f
         sigma.f

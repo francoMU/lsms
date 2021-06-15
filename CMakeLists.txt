@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 
-project(lsms
+
+project(MuST
         LANGUAGES
         Fortran
         C
@@ -10,7 +11,6 @@ project(lsms
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 
@@ -20,6 +20,10 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 add_subdirectory(src)
 
 add_subdirectory(include)
+
+#
+#
+#
 
 
 # Find MPI library
@@ -46,7 +50,7 @@ target_link_libraries(lsmscore PUBLIC LAPACK::LAPACK)
 find_package(BLAS REQUIRED)
 target_link_libraries(lsmscore PUBLIC BLAS::BLAS)
 
-# Lua
+#
 if (NOT DEFINED LUA_INCLUDE_DIR)
     message(FATAL_ERROR "LUA_INCLUDE_DIR is not defined")
 endif ()
@@ -63,9 +67,6 @@ add_subdirectory(mjson)
 target_link_libraries(lsmscore PUBLIC mjson)
 
 # LibXC
-if (NOT DEFINED Libxc_DIR)
-    message(FATAL_ERROR "Libxc_DIR is not defined")
-endif ()
 message(STATUS "LibXC: ${Libxc_DIR}")
 find_library(LIBXC xc
         PATHS ${Libxc_DIR}/lib
@@ -93,3 +94,13 @@ include(CTest)
 enable_testing()
 message(STATUS "Testing is " ${BUILD_TESTING})
 add_subdirectory(tests)
+
+include(FetchContent)
+set(WITH_C_INTERFACE yes CACHE INTERNAL "")  # Forces the value
+set(CMAKE_BUILD_TYPE_OLD ${CMAKE_BUILD_TYPE})
+set(CMAKE_BUILD_TYPE "Debug" CACHE INTERNAL "Set for release in dftatom")
+
+
+add_executable(force dev_scripts/forces/forces.f90)
+target_compile_options(force PUBLIC -O3 -mtune=native -cpp)
+target_compile_definitions(force PUBLIC DEBUG)

@@ -11,8 +11,7 @@ void calculateMadelungMatrices(LSMSSystemParameters &lsms, CrystalParameters &cr
         atom_position_3[i] = crystal.position(2, i);
     }
 
-    if (lsms.global.iprint > 0)
-        printf("Madelung matrix is calculated\n");
+    printf("Madelung matrix is calculated\n");
 
     // int lmax=1;
     // int ndlmadv=((lmax+1)*(lmax+2))/2;
@@ -22,8 +21,7 @@ void calculateMadelungMatrices(LSMSSystemParameters &lsms, CrystalParameters &cr
         // local.atom[i].madelungMatrixJ.resize(ndlmadv,num_atoms);
     }
 
-    if (lsms.global.iprint > 0)
-        printf("Number of atoms: %d \n", num_atoms);
+    printf("Number of atoms: %d \n", num_atoms);
 
 // cal_madelung_matrix appears not to be thread save.
     for (int i = 0; i < local.num_local; i++) {
@@ -37,8 +35,7 @@ void calculateMadelungMatrices(LSMSSystemParameters &lsms, CrystalParameters &cr
                              &lsms.global.iprint, lsms.global.istop, 32);
 
         for (int j = 0; j < crystal.num_types; j++) {
-            if (lsms.global.iprint > 0)
-                printf("Madelung matrix elements: %f\n", local.atom[i].madelungMatrix[j]);
+            printf("Madelung matrix elements: %f\n", local.atom[i].madelungMatrix[j]);
         }
     }
 

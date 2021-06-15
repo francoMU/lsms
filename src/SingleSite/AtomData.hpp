@@ -18,6 +18,11 @@ void spin_trafo_(Real *evec, Complex *u, Complex *ud);
 }
 
 
+#ifdef BUILDKKRMATRIX_GPU
+void * allocateDConst(void);
+void freeDConst(void *);
+#endif
+
 
 class AtomData {
 public:
@@ -464,8 +469,8 @@ public:
     bool spinFlipped{false};                   // Flag for antiferromagnetic condition
 
 // local energy
-    Real localEnergy {0.0};
-    Real localMadelungEnergy {0.0};
+    Real localEnergy;
+    Real localMadelungEnergy;
 
 // Alloy Class
     int alloy_class;

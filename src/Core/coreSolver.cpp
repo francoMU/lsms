@@ -159,6 +159,11 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
                     &c,
                     &nitmax, &tol, &atom.jws, &last, &iter, &local_iprpts, &ipdeq);
 
+            printf("n: %3d  l: %3d  kappa: %3d  E: %14.12f\n", atom.nc(ic, is),
+                   atom.lc(ic, is),
+                   atom.kc(ic, is),
+                   atom.ec(ic, is));
+
 #endif
 
             if (ndeep <= numDeepStates) {
@@ -277,7 +282,7 @@ c        -------------------------------------------------------------
         }
     }
 
-    if (lsms.global.iprint > 0) {
+    if (lsms.global.iprint >= 0) {
         for (int is = 0; is < lsms.n_spin_pola; is++) {
             printf("getCoreStates: spin index #%d\n", is);
             printf("Eigenvalues: n    l    k         energy      type\n");
@@ -333,7 +338,7 @@ c        -------------------------------------------------------------
     atom.qcpsc_ws = qcorws + qsemws;
 
 
-    if (lsms.global.iprint >= 1) {
+    if (lsms.global.iprint >= 0) {
         printf("getCoreStates: Muffin-tin core charge        = %16.11f\n", qcormt);
         printf("               Muffin-tin semicore charge    = %16.11f\n", qsemmt);
         printf("               Muffin-tin core+semi moment   = %16.11f\n", atom.mcpsc_mt);

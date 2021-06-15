@@ -1,28 +1,15 @@
 
 target_sources(lsmscore
         PUBLIC
-        SystemParameters.cpp
-        read_input.h
-        read_input.cpp
-        PotentialIO.cpp
+        SystemParameters.cpp read_input.cpp PotentialIO.cpp
         buildLIZandCommLists.cpp
-        buildLIZandCommLists.hpp
-        energyContourIntegration.cpp
-        solveSingleScatterers.hpp
-        solveSingleScatterers.cpp
-        calculateDensities.cpp
-        calculateChemPot.cpp
-        checkConsistency.cpp
-        lsmsClass.cpp
-        calculateEvec.cpp
-        initializeAtom.cpp
-        mixing.cpp
-        ReplicaExchangeWL.cpp
-        AlloyBankIO.cpp
-        rotateToGlobal.cpp
-        rotateToGlobal.hpp
+        energyContourIntegration.cpp solveSingleScatterers.cpp
+        calculateDensities.cpp calculateChemPot.cpp checkConsistency.cpp
+        lsmsClass.cpp calculateEvec.cpp initializeAtom.cpp mixing.cpp
+        ReplicaExchangeWL.cpp AlloyBankIO.cpp rotateToGlobal.cpp
         write_restart.cpp
         mixing_params.hpp
+        mixing_params.cpp
         )
 
 target_sources(lsmscore
@@ -62,14 +49,16 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-
-#
-#
-#
-target_sources(lsms_main
+target_sources(lsms
         PUBLIC
         lsms.cpp)
 
+set_target_properties(lsms
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+        )
 
+target_link_libraries(lsms
+        PUBLIC lsmscore)
 
 

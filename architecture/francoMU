@@ -1,0 +1,28 @@
+export USE_OPENMP=1
+export USE_LIBXC=1
+# define HAS_BACKTRACE if glibc backtrace functionality is available
+export HAS_BACKTRACE=1
+
+
+export LIBS +=
+export ADD_LIBS += -L/usr/lib/x86_64-linux-gnu/ \
+                    -lhdf5_serial \
+                    -lblas \
+                    -llapack \
+                    -lgfortran
+
+export INC_PATH += -I/usr/include/hdf5/serial/
+
+ifdef USE_OPENMP
+  export CXX=mpicxx.openmpi -g -std=c++11 -fopenmp -O3 $(OPT_DEFINES)
+  export F77=gfortran -g -fopenmp -O3 -std=legacy
+else
+  export CXX=mpicxx.openmpi -g -O3 -std=c++11  $(OPT_DEFINES)
+  export F77=gfortran -g -O3 -std=legacy
+endif
+
+# JSON++ requires flex and bison (version>=2.4)
+export FLEX=flex
+export BISON=bison
+
+export LUACXX = $(CXX)

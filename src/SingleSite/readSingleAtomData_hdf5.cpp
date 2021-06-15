@@ -1,5 +1,9 @@
+
+#include "readSingleAtomData.hpp"
+
 #define H5_USE_16_API
 #include <hdf5.h>
+
 #include "AtomData.hpp"
 #include "Main/HDF5io.hpp"
 

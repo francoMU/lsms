@@ -40,7 +40,7 @@ c     ================================================================
 
 // if(iharris<=1)
     Real etop = lsms.chempot;
-    if (lsms.global.iprint >= 0)
+    if (lsms.global.iprint > 0)
     {
       printf("atom[0].dosint[0] = %lf  atom[0].dosint[1] = %lf\n",local.atom[0].dosint[0], local.atom[0].dosint[1]);
       if(lsms.n_spin_cant==2)
@@ -62,11 +62,11 @@ c     ================================================================
     if(lsms.chempot < lsms.energyContour.ebot)
     {
       lsms.chempot = 0.5*(lsms.energyContour.ebot + etop);
-      if (lsms.global.iprint >= 0)
+      if (lsms.global.iprint > 0)
 	printf("           chempot limited by botom of contour!\n");
     }
     
-    if (lsms.global.iprint >= 0)
+    if (lsms.global.iprint > 0)
       printf("           new chempot = %lf\n", lsms.chempot);
     Real chempot = lsms.chempot;
 //    Real etop = lsms.energyContour.etop;

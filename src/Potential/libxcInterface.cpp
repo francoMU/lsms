@@ -1,6 +1,7 @@
+#include "Main/mixing.hpp"
+
 #include "Main/SystemParameters.hpp"
 #include "Real.hpp"
-#include "libxcInterface.hpp"
 #include "Misc/rationalFit.hpp"
 
 #ifdef USE_LIBXC

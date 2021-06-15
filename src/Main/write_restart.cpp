@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "mixing.hpp"
 #include "LSMSMode.hpp"
+#include "mixing_params.hpp"
 
 int writeRestart(const char *restartName, LSMSSystemParameters &lsms, CrystalParameters &crystal, MixingParameters &mix,
                  PotentialShifter &potentialShifter, AlloyMixingDesc& alloyDesc)

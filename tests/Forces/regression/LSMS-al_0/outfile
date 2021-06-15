@@ -1,0 +1,2828 @@
+LSMS_3: Program started
+Using 2 MPI processes
+Using 2 OpenMP threads
+Reading input file 'i_lsms'
+Loaded input file!
+System information:
+===================
+Number of atoms        :          4
+Number of atomic types :          4
+Performing Muffin-Tin (MT) calculation
+communicated Parameters.
+set global ids.
+building the LIZ and Communication lists [buildLIZandCommLists]
+time for buildLIZandCommLists [num_local=2]: 0.001415 sec
+LSMS Globals:
+  iprpts=1051
+  ipcore=30
+  iprint=0
+  print_node=0
+  default_iprint=-1
+  istop=main                            
+  linearSolver=0 "default solver: block inverse f77 (0xf00)"
+  buildKKRMatrix=0 "default buildKKRMatrix: LSMS 1 buildKKRMatrix (0x1000)"
+Title    : 'Aluminium test for LSMS 3'
+Id       : 'al'
+No. Atoms: 4
+Mtasa    : 0
+Pot. In  : v_al [Text (BIGCELL format)]
+Pot. Out : w_al [Text (BIGCELL format)]
+spin_cant: 2
+Relativity: non relativistic
+xcFunctional: 0 1 -1 [von Barth-Hedin (LSMS_1)]
+Electron Temperature: 0K
+RMS Tolerance: 1e-08
+No. of Alloy Classes : 0
+LIZ for atom 0 on this node
+ No.        dist       Global Idx      Store Idx
+   0     0.0000000       0      0
+   1     5.4117667       2      2
+   2     5.4117667       1      1
+   3     5.4117667       1      1
+   4     5.4117667       2      2
+   5     5.4117667       3      3
+   6     5.4117667       1      1
+   7     5.4117667       3      3
+   8     5.4117667       2      2
+   9     5.4117667       3      3
+  10     5.4117667       1      1
+  11     5.4117667       2      2
+  12     5.4117667       3      3
+  13     7.6533939       0      0
+  14     7.6533939       0      0
+  15     7.6533939       0      0
+  16     7.6533939       0      0
+  17     7.6533939       0      0
+  18     7.6533939       0      0
+
+ SETUP_VORPOL:: Boundary Planes
+          1  -1.91335  -1.91335   0.00000
+          2  -1.91335   0.00000  -1.91335
+          3  -1.91335   1.91335   0.00000
+          4  -1.91335   0.00000   1.91335
+          5   0.00000  -1.91335  -1.91335
+          6   1.91335  -1.91335   0.00000
+          7   0.00000  -1.91335   1.91335
+          8   1.91335   0.00000  -1.91335
+          9   0.00000   1.91335  -1.91335
+         10   1.91335   1.91335   0.00000
+         11   1.91335   0.00000   1.91335
+         12   0.00000   1.91335   1.91335
+
+ SETUP_VORPOL:: nbnd,ncorn,nedge:   12   14   24
+ SETUP_VORPOL:: number of critical r-points for w(r) =    4
+            i=   1 rcrit=2.7058833470D+00
+            i=   2 rcrit=3.1244849575D+00
+            i=   3 rcrit=3.3140167518D+00
+            i=   4 rcrit=3.8266969275D+00
+SETUP_VORPOL:Muffin-tin radius         =    2.70588335
+             Bounding sphere radius    =    3.82669693
+             Interstial region vol.    =   29.08520759
+
+ SETUP_VORPOL:: Boundary Planes
+          1   0.00000  -1.91335  -1.91335
+          2  -1.91335   0.00000  -1.91335
+          3  -1.91335  -1.91335   0.00000
+          4   0.00000  -1.91335   1.91335
+          5  -1.91335   0.00000   1.91335
+          6   0.00000   1.91335  -1.91335
+          7  -1.91335   1.91335   0.00000
+          8   0.00000   1.91335   1.91335
+          9   1.91335   0.00000  -1.91335
+         10   1.91335  -1.91335   0.00000
+         11   1.91335   0.00000   1.91335
+         12   1.91335   1.91335   0.00000
+
+ SETUP_VORPOL:: nbnd,ncorn,nedge:   12   14   24
+ SETUP_VORPOL:: number of critical r-points for w(r) =    4
+            i=   1 rcrit=2.7058833470D+00
+            i=   2 rcrit=3.1244849575D+00
+            i=   3 rcrit=3.3140167518D+00
+            i=   4 rcrit=3.8266969275D+00
+SETUP_VORPOL:Muffin-tin radius         =    2.70588335
+             Bounding sphere radius    =    3.82669693
+             Interstial region vol.    =   29.08520759
+
+ SETUP_VORPOL:: Boundary Planes
+          1  -1.91335  -1.91335   0.00000
+          2  -1.91335   0.00000  -1.91335
+          3  -1.91335   1.91335   0.00000
+          4  -1.91335   0.00000   1.91335
+          5   0.00000  -1.91335  -1.91335
+          6   1.91335  -1.91335   0.00000
+          7   0.00000  -1.91335   1.91335
+          8   1.91335   0.00000  -1.91335
+          9   0.00000   1.91335  -1.91335
+         10   1.91335   1.91335   0.00000
+         11   1.91335   0.00000   1.91335
+         12   0.00000   1.91335   1.91335
+
+ SETUP_VORPOL:: nbnd,ncorn,nedge:   12   14   24
+ SETUP_VORPOL:: number of critical r-points for w(r) =    4
+            i=   1 rcrit=2.7058833470D+00
+            i=   2 rcrit=3.1244849575D+00
+            i=   3 rcrit=3.3140167518D+00
+            i=   4 rcrit=3.8266969275D+00
+SETUP_VORPOL:Muffin-tin radius         =    2.70588335
+             Bounding sphere radius    =    3.82669693
+             Interstial region vol.    =   29.08520759
+
+ SETUP_VORPOL:: Boundary Planes
+          1   0.00000  -1.91335  -1.91335
+          2  -1.91335   0.00000  -1.91335
+          3  -1.91335  -1.91335   0.00000
+          4   0.00000  -1.91335   1.91335
+          5  -1.91335   0.00000   1.91335
+          6   0.00000   1.91335  -1.91335
+          7  -1.91335   1.91335   0.00000
+          8   0.00000   1.91335   1.91335
+          9   1.91335   0.00000  -1.91335
+         10   1.91335  -1.91335   0.00000
+         11   1.91335   0.00000   1.91335
+         12   1.91335   1.91335   0.00000
+
+ SETUP_VORPOL:: nbnd,ncorn,nedge:   12   14   24
+ SETUP_VORPOL:: number of critical r-points for w(r) =    4
+            i=   1 rcrit=2.7058833470D+00
+            i=   2 rcrit=3.1244849575D+00
+            i=   3 rcrit=3.3140167518D+00
+            i=   4 rcrit=3.8266969275D+00
+SETUP_VORPOL:Muffin-tin radius         =    2.70588335
+             Bounding sphere radius    =    3.82669693
+             Interstial region vol.    =   29.08520759
+Madelung matrix is calculated
+Number of atoms: 4 
+
+Total cell volume     =    448.2932282379220
+Volume renorm. factor =      1.0000000262782
+WS cell volume        =    112.0733070594805
+Interstitial volume   =    116.3408303431223
+WS sphere radius      =      2.9909181347163
+Circumscribed radius  =      3.8266969274931
+
+Mixing method     : broyden
+Mixing quantity   : potential
+Mixing parameters : 0.05
+Madelung matrix is calculated
+Number of atoms: 4 
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.370724
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.370724
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.370724
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.370724
+Madelung matrix elements: -0.076113
+Madelung matrix elements: -0.076113
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   2  l:   0  kappa:  -1  E: -6.887846780434
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   1  kappa:   1  E: -4.144045543509
+n:   2  l:   1  kappa:   1  E: -4.144045543509
+n:   2  l:   1  kappa:  -2  E: -4.144045537282
+n:   2  l:   1  kappa:  -2  E: -4.144045537282
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   0  kappa:  -1  E: -6.887846780434
+n:   2  l:   1  kappa:   1  E: -4.144045543509
+n:   2  l:   1  kappa:   1  E: -4.144045543509
+n:   2  l:   1  kappa:  -2  E: -4.144045537282
+n:   2  l:   1  kappa:  -2  E: -4.144045537282
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2315157544981    C
+             2    0   -1       -6.8878465248837    S
+             2    1    1       -4.1440443488827    S
+             2    1   -2       -4.1440443404891    S
+          Energy     core:    -109.23151575
+          Energy semicore:     -19.31997955
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2315157544981    C
+             2    0   -1       -6.8878465248837    S
+             2    1    1       -4.1440443488827    S
+             2    1   -2       -4.1440443404891    S
+          Energy     core:    -109.23151575
+          Energy semicore:     -19.31997955
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99930888098
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00069111902
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   1  kappa:   1  E: -4.144045543509
+n:   2  l:   1  kappa:   1  E: -4.144045543509
+n:   2  l:   1  kappa:  -2  E: -4.144045537282
+n:   2  l:   1  kappa:  -2  E: -4.144045537282
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   1  kappa:   1  E: -4.144045543509
+n:   2  l:   1  kappa:   1  E: -4.144045543509
+n:   2  l:   1  kappa:  -2  E: -4.144045537282
+n:   2  l:   1  kappa:  -2  E: -4.144045537282
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2315157544982    C
+             2    0   -1       -6.8878465248837    S
+             2    1    1       -4.1440443488827    S
+             2    1   -2       -4.1440443404892    S
+          Energy     core:    -109.23151575
+          Energy semicore:     -19.31997955
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2315157544982    C
+             2    0   -1       -6.8878465248837    S
+             2    1    1       -4.1440443488827    S
+             2    1   -2       -4.1440443404892    S
+          Energy     core:    -109.23151575
+          Energy semicore:     -19.31997955
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99930888098
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00069111902
+Maximal Core State = -4.14404Ry
+Finished calculateCoreStates(...)
+Total number of iterations:20
+SCF iteration 0:
+** Energy Contour Integration **
+Energy Contour Parameters: grid=2 npts=31, ebot=-0.300000 etop=0.599448 eibot=0.002500 eitop=0.825000
+timeSingleScatteres = 0.822005 sec
+time in energyContourIntegration = 3.435883 sec
+  before energy loop             = 0.000261 sec
+  in energy loop                 = 3.435622 sec
+    in calculateAllTauMatrices   = 2.244711 sec
+atom[0].dosint[0] = 2.987643  atom[0].dosint[1] = 0.000000
+atom[0].dosint[2] = 0.000000  atom[0].dosint[3] = 0.000000
+calculateChempot: xtws = 11.950572 zvaltss = 12.000000 tnen = 22.196237 old chempot = 0.599448
+           new chempot = 0.601675
+Total valence charge =    2.27150771755079405878
+Total valence charge =    2.27150771755090774562
+
+ GETQM_MT:: r_sph charge,w             =    12.27083249230     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27083249230     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91667003080
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91667003080
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -0.600859 2.809683 2.809683
+Contribution mad: 1 -1.201718 2.809683 2.809683
+Contribution mad: 2 -4.128332 2.809683 2.809683
+Contribution mad: 3 -4.729191 2.809683 2.809683
+Madelung contribution atom: 0 x 1 = -0.167829
+Contribution mad: 0 -2.926614 2.809683 2.809683
+Contribution mad: 1 -3.527473 2.809683 2.809683
+Contribution mad: 2 -4.128332 2.809683 2.809683
+Contribution mad: 3 -4.729191 2.809683 2.809683
+Madelung contribution atom: 0 x 1 = -0.167829
+Contribution mad: 0 -0.600859 2.809683 2.809683
+Contribution mad: 1 -3.527473 2.809683 2.809683
+Contribution mad: 2 -4.128332 2.809683 2.809683
+Contribution mad: 0 -0.600859 2.809683 2.809683
+Contribution mad: 1 -1.201718 2.809683 2.809683
+Contribution mad: 2 -1.802577 2.809683 2.809683
+Contribution mad: 3 -4.729191 2.809683 2.809683
+Contribution mad: 3 -4.729191 2.809683 2.809683
+Madelung contribution atom: 1 x 1 = -0.167829
+Madelung contribution atom: 1 x 1 = -0.167829
+Madelung constant: -0.671316
+Madelung constant: -0.671316
+Madelung constant: -0.671316
+Madelung constant: -0.671316
+
+calculateTotalEnergy:  ==============================================
+Total Energy contribution from atom 0.0:
+evssum                      =       -37.7956500706245464016319602 Ry
+kinetic Energy              =       480.9213635174396017646358814 Ry
+erho                        =       222.6863878752675418581929989 Ry
+ezrho                       =     -1151.0865295962100844917586073 Ry
+Coulomb Energy              =      -928.4001417209425426335656084 Ry
+Exchange-Correlation Energy =       -34.9007998237243981520805391 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+Total Energy contribution from atom 0.1:
+evssum                      =       -37.7956500706250437815469922 Ry
+kinetic Energy              =       480.9213635174309615649690386 Ry
+erho                        =       222.6863878752671439542609733 Ry
+ezrho                       =     -1151.0865295962373693328117952 Ry
+Coulomb Energy              =      -928.4001417209701685351319611 Ry
+Exchange-Correlation Energy =       -34.9007998237249594808417896 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+is, emad, emadp =     0        -0.7681972348443064646517087        -0.6876708253794611147569071
+is, emad, emadp =     1        -0.7681972348443064646517087        -0.6876708253794611147569071
+is, emad, emadp =     0        -0.7681972348443064646517087        -0.6876708253794611147569071
+is, emad, emadp =     1        -0.7681972348443064646517087        -0.6876708253794611147569071
+Interstitial:  ----------------------------------------------
+XC:        -0.1920493087110766161629272 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1920493087110766161629272 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1920493087110766161629272 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1920493087110766161629272 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+Madelung:        -0.6713163559245201028602423 Ry
+==================================================================
+calculateTotalEnergy:  ----------------------------------------------
+Total Energy              =     -1931.7260229346186406473862007 Ry
+Pressure                  =        -2.3496983450448123420528646 Ry
+=====================================================================
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   2  l:   0  kappa:  -1  E: -6.887846780434
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   1  kappa:   1  E: -4.144045543508
+n:   2  l:   1  kappa:   1  E: -4.144045543508
+n:   2  l:   1  kappa:  -2  E: -4.144045537309
+n:   2  l:   1  kappa:  -2  E: -4.144045537308
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   2  l:   0  kappa:  -1  E: -6.887846780434
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   1  kappa:   1  E: -4.144045543508
+n:   2  l:   1  kappa:   1  E: -4.144045543508
+n:   2  l:   1  kappa:  -2  E: -4.144045537309
+n:   2  l:   1  kappa:  -2  E: -4.144045537308
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2315157544981    C
+             2    0   -1       -6.8878465248837    S
+             2    1    1       -4.1440443488827    S
+             2    1   -2       -4.1440443404891    S
+          Energy     core:    -109.23151575
+          Energy semicore:     -19.31997955
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2315157544981    C
+             2    0   -1       -6.8878465248837    S
+             2    1    1       -4.1440443488827    S
+             2    1   -2       -4.1440443404891    S
+          Energy     core:    -109.23151575
+          Energy semicore:     -19.31997955
+
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99930888098
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00069111902
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   1  kappa:   1  E: -4.144045543508
+n:   2  l:   1  kappa:   1  E: -4.144045543508
+n:   2  l:   1  kappa:  -2  E: -4.144045537308
+n:   2  l:   1  kappa:  -2  E: -4.144045537308
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   1  l:   0  kappa:  -1  E: -109.231515754498
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   0  kappa:  -1  E: -6.887846780433
+n:   2  l:   1  kappa:   1  E: -4.144045543508
+n:   2  l:   1  kappa:   1  E: -4.144045543508
+n:   2  l:   1  kappa:  -2  E: -4.144045537308
+n:   2  l:   1  kappa:  -2  E: -4.144045537308
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2315157544982    C
+             2    0   -1       -6.8878465248837    S
+             2    1    1       -4.1440443488827    S
+             2    1   -2       -4.1440443404892    S
+          Energy     core:    -109.23151575
+          Energy semicore:     -19.31997955
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2315157544982    C
+             2    0   -1       -6.8878465248837    S
+             2    1    1       -4.1440443488827    S
+             2    1   -2       -4.1440443404892    S
+          Energy     core:    -109.23151575
+          Energy semicore:     -19.31997955
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99930888098
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00069111902
+Maximal Core State = -4.14404Ry
+
+ GETQM_MT:: r_sph charge,w             =    12.27083249230     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27083249230     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91667003080
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91667003080
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -0.600859 2.809683 2.809683
+Contribution mad: 1 -1.201718 2.809683 2.809683
+Contribution mad: 2 -4.128332 2.809683 2.809683
+Contribution mad: 3 -4.729191 2.809683 2.809683
+Madelung contribution atom: 0 x 1 = -0.167829
+Contribution mad: 0 -0.600859 2.809683 2.809683
+Contribution mad: 0 -2.926614 2.809683 2.809683
+Contribution mad: 1 -3.527473 2.809683 2.809683
+Contribution mad: 2 -4.128332 2.809683 2.809683
+Contribution mad: 3 -4.729191 2.809683 2.809683
+Madelung contribution atom: 0 x 1 = -0.167829
+Contribution mad: 0 -0.600859 2.809683 2.809683
+Contribution mad: 1 -3.527473 2.809683 2.809683
+Contribution mad: 2 -4.128332 2.809683 2.809683
+Contribution mad: 3 -4.729191 2.809683 2.809683
+Madelung contribution atom: 1 x 1 = -0.167829
+Madelung constant: -0.671316
+Madelung constant: -0.671316
+Contribution mad: 1 -1.201718 2.809683 2.809683
+Contribution mad: 2 -1.802577 2.809683 2.809683
+Contribution mad: 3 -4.729191 2.809683 2.809683
+Madelung contribution atom: 1 x 1 = -0.167829
+Madelung constant: -0.671316
+Madelung constant: -0.671316
+Band Energy = 3.377236 Ry           Fermi Energy = 0.601675 Ry
+Total Energy = -1931.726023 Ry
+RMS = 0.00166254
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2385239722142    C
+             2    0   -1       -6.8894638856006    S
+             2    1    1       -4.1458066916767    S
+             2    1   -2       -4.1458066832793    S
+          Energy     core:    -109.23852397
+          Energy semicore:     -19.32688394
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2385239722142    C
+             2    0   -1       -6.8894638856006    S
+             2    1    1       -4.1458066916767    S
+             2    1   -2       -4.1458066832793    S
+          Energy     core:    -109.23852397
+          Energy semicore:     -19.32688394
+
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99931019559
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00068980441
+
+calculateCoreState 0.1
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2385239722142    C
+             2    0   -1       -6.8894638856007    S
+             2    1    1       -4.1458066916767    S
+             2    1   -2       -4.1458066832794    S
+          Energy     core:    -109.23852397
+          Energy semicore:     -19.32688394
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2385239722142    C
+             2    0   -1       -6.8894638856007    S
+             2    1    1       -4.1458066916767    S
+             2    1   -2       -4.1458066832794    S
+          Energy     core:    -109.23852397
+          Energy semicore:     -19.32688394
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99931019559
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00068980441
+Maximal Core State = -4.14581Ry
+SCF iteration 1:
+** Energy Contour Integration **
+Energy Contour Parameters: grid=2 npts=31, ebot=-0.300000 etop=0.601675 eibot=0.002500 eitop=0.825000
+timeSingleScatteres = 0.794146 sec
+time in energyContourIntegration = 3.355520 sec
+  before energy loop             = 0.000154 sec
+  in energy loop                 = 3.355365 sec
+    in calculateAllTauMatrices   = 2.195367 sec
+atom[0].dosint[0] = 3.000663  atom[0].dosint[1] = 0.000000
+atom[0].dosint[2] = 0.000000  atom[0].dosint[3] = 0.000000
+calculateChempot: xtws = 12.002652 zvaltss = 12.000000 tnen = 22.243292 old chempot = 0.601675
+           new chempot = 0.601556
+Total valence charge =    2.27159446950491394901
+Total valence charge =    2.27159446950499743778
+
+ GETQM_MT:: r_sph charge,w             =    12.27092058136     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27092058136     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91631767455
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91631767455
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.925907 2.809344 2.809344
+Contribution mad: 1 -3.526621 2.809344 2.809344
+Contribution mad: 2 -4.127335 2.809344 2.809344
+Contribution mad: 3 -4.728049 2.809344 2.809344
+Madelung contribution atom: 0 x 1 = -0.167789
+Contribution mad: 0 -0.600714 2.809344 2.809344
+Contribution mad: 0 -0.600714 2.809344 2.809344
+Contribution mad: 1 -1.201428 2.809344 2.809344
+Contribution mad: 2 -4.127335 2.809344 2.809344
+Contribution mad: 3 -4.728049 2.809344 2.809344
+Madelung contribution atom: 0 x 1 = -0.167789
+Contribution mad: 0 -0.600714 2.809344 2.809344
+Contribution mad: 1 -1.201428 2.809344 2.809344
+Contribution mad: 2 -1.802142 2.809344 2.809344
+Contribution mad: 1 -3.526621 2.809344 2.809344
+Contribution mad: 2 -4.127335 2.809344 2.809344
+Contribution mad: 3 -4.728049 2.809344 2.809344
+Madelung contribution atom: 1 x 1 = -0.167789
+Contribution mad: 3 -4.728049 2.809344 2.809344
+Madelung constant: -0.671154
+Madelung constant: -0.671154
+Madelung contribution atom: 1 x 1 = -0.167789
+Madelung constant: -0.671154
+Madelung constant: -0.671154
+
+calculateTotalEnergy:  ==============================================
+Total Energy contribution from atom 0.0:
+evssum                      =       -37.8097943369891069664845418 Ry
+kinetic Energy              =       480.9600849334015606473258231 Ry
+erho                        =       222.7053548645821763329877285 Ry
+ezrho                       =     -1151.1420761150552607432473451 Ry
+Coulomb Energy              =      -928.4367212504730559885501862 Ry
+Exchange-Correlation Energy =       -34.9030830459733678594602679 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+Total Energy contribution from atom 0.1:
+evssum                      =       -37.8097943369895688192627858 Ry
+kinetic Energy              =       480.9600849334028112025407609 Ry
+erho                        =       222.7053548645882301570964046 Ry
+ezrho                       =     -1151.1420761150650378112914041 Ry
+Coulomb Energy              =      -928.4367212504768076541949995 Ry
+Exchange-Correlation Energy =       -34.9030830459737373416828632 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+is, emad, emadp =     0        -0.7680767408989943589858740        -0.6875620737765848478062480
+is, emad, emadp =     1        -0.7680767408989943589858740        -0.6875620737765848478062480
+is, emad, emadp =     0        -0.7680767408989943589858740        -0.6875620737765848478062480
+is, emad, emadp =     1        -0.7680767408989943589858740        -0.6875620737765848478062480
+Interstitial:  ----------------------------------------------
+XC:        -0.1920191852247485897464685 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1920191852247485897464685 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1920191852247485897464685 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1920191852247485897464685 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+Madelung:        -0.6711541653292059095292643 Ry
+==================================================================
+calculateTotalEnergy:  ----------------------------------------------
+Total Energy              =     -1931.7261850993354528327472508 Ry
+Pressure                  =        -2.1948224225344827864603303 Ry
+=====================================================================
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:   1  E: -4.145807884374
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+n:   2  l:   1  kappa:  -2  E: -4.145807878171
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   1  kappa:   1  E: -4.145807884375
+n:   2  l:   1  kappa:   1  E: -4.145807884374
+n:   2  l:   1  kappa:  -2  E: -4.145807878172
+n:   2  l:   1  kappa:  -2  E: -4.145807878171
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2385239722142    C
+             2    0   -1       -6.8894638856006    S
+             2    1    1       -4.1458066916767    S
+             2    1   -2       -4.1458066832793    S
+          Energy     core:    -109.23852397
+          Energy semicore:     -19.32688394
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2385239722142    C
+             2    0   -1       -6.8894638856006    S
+             2    1    1       -4.1458066916767    S
+             2    1   -2       -4.1458066832793    S
+          Energy     core:    -109.23852397
+          Energy semicore:     -19.32688394
+
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99931019559
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00068980441
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   1  kappa:   1  E: -4.145807884374
+n:   2  l:   1  kappa:   1  E: -4.145807884374
+n:   2  l:   1  kappa:  -2  E: -4.145807878171
+n:   2  l:   1  kappa:  -2  E: -4.145807878171
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   1  l:   0  kappa:  -1  E: -109.238523972214
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   0  kappa:  -1  E: -6.889464140858
+n:   2  l:   1  kappa:   1  E: -4.145807884374
+n:   2  l:   1  kappa:   1  E: -4.145807884374
+n:   2  l:   1  kappa:  -2  E: -4.145807878171
+n:   2  l:   1  kappa:  -2  E: -4.145807878171
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2385239722142    C
+             2    0   -1       -6.8894638856007    S
+             2    1    1       -4.1458066916767    S
+             2    1   -2       -4.1458066832794    S
+          Energy     core:    -109.23852397
+          Energy semicore:     -19.32688394
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.2385239722142    C
+             2    0   -1       -6.8894638856007    S
+             2    1    1       -4.1458066916767    S
+             2    1   -2       -4.1458066832794    S
+          Energy     core:    -109.23852397
+          Energy semicore:     -19.32688394
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99931019559
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00068980441
+Maximal Core State = -4.14581Ry
+
+ GETQM_MT:: r_sph charge,w             =    12.27092058136     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27092058136     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91631767455
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91631767455
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.925907 2.809344 2.809344
+Contribution mad: 1 -3.526621 2.809344 2.809344
+Contribution mad: 2 -4.127335 2.809344 2.809344
+Contribution mad: 3 -4.728049 2.809344 2.809344
+Madelung contribution atom: 0 x 1 = -0.167789
+Contribution mad: 0 -0.600714 2.809344 2.809344
+Contribution mad: 0 -0.600714 2.809344 2.809344
+Contribution mad: 1 -1.201428 2.809344 2.809344
+Contribution mad: 2 -4.127335 2.809344 2.809344
+Contribution mad: 3 -4.728049 2.809344 2.809344
+Madelung contribution atom: 0 x 1 = -0.167789
+Contribution mad: 0 -0.600714 2.809344 2.809344
+Contribution mad: 1 -1.201428 2.809344 2.809344
+Contribution mad: 2 -1.802142 2.809344 2.809344
+Contribution mad: 3 -4.728049 2.809344 2.809344
+Madelung contribution atom: 1 x 1 = -0.167789
+Madelung constant: -0.671154
+Madelung constant: -0.671154
+Contribution mad: 1 -3.526621 2.809344 2.809344
+Contribution mad: 2 -4.127335 2.809344 2.809344
+Contribution mad: 3 -4.728049 2.809344 2.809344
+Madelung contribution atom: 1 x 1 = -0.167789
+Madelung constant: -0.671154
+Madelung constant: -0.671154
+Band Energy = 3.375894 Ry           Fermi Energy = 0.601556 Ry
+Total Energy = -1931.726185 Ry
+RMS = 2.90585e-05
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.316518088974
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321387
+n:   2  l:   0  kappa:  -1  E: -6.907224321387
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:  -2  E: -4.165151826476
+n:   2  l:   1  kappa:  -2  E: -4.165151826476
+n:   1  l:   0  kappa:  -1  E: -109.316518088974
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321387
+n:   2  l:   0  kappa:  -1  E: -6.907224321387
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:  -2  E: -4.165151826476
+n:   2  l:   1  kappa:  -2  E: -4.165151826476
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3165180889749    C
+             2    0   -1       -6.9072240693925    S
+             2    1    1       -4.1651506609518    S
+             2    1   -2       -4.1651506525124    S
+          Energy     core:    -109.31651809
+          Energy semicore:     -19.40267604
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3165180889749    C
+             2    0   -1       -6.9072240693925    S
+             2    1    1       -4.1651506609518    S
+             2    1   -2       -4.1651506525124    S
+          Energy     core:    -109.31651809
+          Energy semicore:     -19.40267604
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932445449
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067554551
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321387
+n:   2  l:   0  kappa:  -1  E: -6.907224321387
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:  -2  E: -4.165151826476
+n:   2  l:   1  kappa:  -2  E: -4.165151826476
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321387
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321387
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:  -2  E: -4.165151826476
+n:   2  l:   1  kappa:  -2  E: -4.165151826476
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3165180889747    C
+             2    0   -1       -6.9072240693924    S
+             2    1    1       -4.1651506609517    S
+             2    1   -2       -4.1651506525123    S
+          Energy     core:    -109.31651809
+          Energy semicore:     -19.40267604
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3165180889747    C
+             2    0   -1       -6.9072240693924    S
+             2    1    1       -4.1651506609517    S
+             2    1   -2       -4.1651506525123    S
+          Energy     core:    -109.31651809
+          Energy semicore:     -19.40267604
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932445449
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067554551
+Maximal Core State = -4.16515Ry
+SCF iteration 2:
+** Energy Contour Integration **
+Energy Contour Parameters: grid=2 npts=31, ebot=-0.300000 etop=0.601556 eibot=0.002500 eitop=0.825000
+timeSingleScatteres = 0.794997 sec
+time in energyContourIntegration = 3.359711 sec
+  before energy loop             = 0.000153 sec
+  in energy loop                 = 3.359558 sec
+    in calculateAllTauMatrices   = 2.198897 sec
+atom[0].dosint[0] = 3.007147  atom[0].dosint[1] = 0.000000
+atom[0].dosint[2] = 0.000000  atom[0].dosint[3] = -0.000000
+calculateChempot: xtws = 12.028587 zvaltss = 12.000000 tnen = 22.262886 old chempot = 0.601556
+           new chempot = 0.600272
+Total valence charge =    2.27256409778068535488
+Total valence charge =    2.27256409778064094596
+
+ GETQM_MT:: r_sph charge,w             =    12.27190471809     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Contribution mad: 0 -0.599093 2.805551 2.805551
+Contribution mad: 1 -1.198186 2.805551 2.805551
+Contribution mad: 2 -4.116200 2.805551 2.805551
+Contribution mad: 3 -4.715293 2.805551 2.805551
+
+ GETQM_MT:: r_sph charge,w             =    12.27190471809     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91238112766
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91238112766
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.918013 2.805551 2.805551
+Contribution mad: 1 -3.517107 2.805551 2.805551
+Contribution mad: 2 -4.116200 2.805551 2.805551
+Contribution mad: 3 -4.715293 2.805551 2.805551
+Madelung contribution atom: 0 x 1 = -0.167336
+Contribution mad: 0 -0.599093 2.805551 2.805551
+Contribution mad: 1 -3.517107 2.805551 2.805551
+Contribution mad: 2 -4.116200 2.805551 2.805551
+Madelung contribution atom: 0 x 1 = -0.167336
+Contribution mad: 0 -0.599093 2.805551 2.805551
+Contribution mad: 3 -4.715293 2.805551 2.805551
+Madelung contribution atom: 1 x 1 = -0.167336
+Contribution mad: 1 -1.198186 2.805551 2.805551
+Contribution mad: 2 -1.797280 2.805551 2.805551
+Contribution mad: 3 -4.715293 2.805551 2.805551
+Madelung contribution atom: 1 x 1 = -0.167336
+Madelung constant: -0.669343
+Madelung constant: -0.669343
+Madelung constant: -0.669343
+Madelung constant: -0.669343
+
+calculateTotalEnergy:  ==============================================
+Total Energy contribution from atom 0.0:
+evssum                      =       -37.9650583967372625693315058 Ry
+kinetic Energy              =       481.3889154878873455345456023 Ry
+erho                        =       222.9147277520501120307017118 Ry
+ezrho                       =     -1151.7564421742881677346304059 Ry
+Coulomb Energy              =      -928.8417144222380557039286941 Ry
+Exchange-Correlation Energy =       -34.9282856930182106225402094 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+Total Energy contribution from atom 0.1:
+evssum                      =       -37.9650583967368788762541953 Ry
+kinetic Energy              =       481.3889154878983163143857382 Ry
+erho                        =       222.9147277520534089489956386 Ry
+ezrho                       =     -1151.7564421742736158194020391 Ry
+Coulomb Energy              =      -928.8417144222202068704064004 Ry
+Exchange-Correlation Energy =       -34.9282856930179619325826934 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+is, emad, emadp =     0        -0.7667308725936686775170870        -0.6863473737655193529505482
+is, emad, emadp =     1        -0.7667308725936686775170870        -0.6863473737655193529505482
+is, emad, emadp =     0        -0.7667308725936686775170870        -0.6863473737655193529505482
+is, emad, emadp =     1        -0.7667308725936686775170870        -0.6863473737655193529505482
+Interstitial:  ----------------------------------------------
+XC:        -0.1916827181484171693792717 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1916827181484171693792717 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1916827181484171693792717 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1916827181484171693792717 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+Madelung:        -0.6693434937968989473233705 Ry
+==================================================================
+calculateTotalEnergy:  ----------------------------------------------
+Total Energy              =     -1931.7271437483786939992569387 Ry
+Pressure                  =        -0.4787786947378627200322398 Ry
+=====================================================================
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.316518088974
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321465
+n:   2  l:   0  kappa:  -1  E: -6.907224321465
+n:   2  l:   1  kappa:   1  E: -4.165151832714
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:  -2  E: -4.165151826475
+n:   2  l:   1  kappa:  -2  E: -4.165151826475
+n:   1  l:   0  kappa:  -1  E: -109.316518088974
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321465
+n:   2  l:   0  kappa:  -1  E: -6.907224321465
+n:   2  l:   1  kappa:   1  E: -4.165151832714
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:  -2  E: -4.165151826475
+n:   2  l:   1  kappa:  -2  E: -4.165151826475
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3165180889749    C
+             2    0   -1       -6.9072240693924    S
+             2    1    1       -4.1651506609518    S
+             2    1   -2       -4.1651506525124    S
+          Energy     core:    -109.31651809
+          Energy semicore:     -19.40267604
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3165180889749    C
+             2    0   -1       -6.9072240693924    S
+             2    1    1       -4.1651506609518    S
+             2    1   -2       -4.1651506525124    S
+          Energy     core:    -109.31651809
+          Energy semicore:     -19.40267604
+
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932445449
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067554551
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321465
+n:   2  l:   0  kappa:  -1  E: -6.907224321465
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:  -2  E: -4.165151826475
+n:   2  l:   1  kappa:  -2  E: -4.165151826475
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   1  l:   0  kappa:  -1  E: -109.316518088975
+n:   2  l:   0  kappa:  -1  E: -6.907224321465
+n:   2  l:   0  kappa:  -1  E: -6.907224321465
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:   1  E: -4.165151832715
+n:   2  l:   1  kappa:  -2  E: -4.165151826475
+n:   2  l:   1  kappa:  -2  E: -4.165151826475
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3165180889747    C
+             2    0   -1       -6.9072240693923    S
+             2    1    1       -4.1651506609517    S
+             2    1   -2       -4.1651506525123    S
+          Energy     core:    -109.31651809
+          Energy semicore:     -19.40267604
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3165180889747    C
+             2    0   -1       -6.9072240693923    S
+             2    1    1       -4.1651506609517    S
+             2    1   -2       -4.1651506525123    S
+          Energy     core:    -109.31651809
+          Energy semicore:     -19.40267604
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932445449
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067554551
+Maximal Core State = -4.16515Ry
+
+ GETQM_MT:: r_sph charge,w             =    12.27190471809     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27190471809     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91238112766
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91238112766
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.918013 2.805551 2.805551
+Contribution mad: 1 -3.517107 2.805551 2.805551
+Contribution mad: 2 -4.116200 2.805551 2.805551
+Contribution mad: 3 -4.715293 2.805551 2.805551
+Madelung contribution atom: 0 x 1 = -0.167336
+Contribution mad: 0 -0.599093 2.805551 2.805551
+Contribution mad: 0 -0.599093 2.805551 2.805551
+Contribution mad: 1 -1.198186 2.805551 2.805551
+Contribution mad: 2 -4.116200 2.805551 2.805551
+Contribution mad: 3 -4.715293 2.805551 2.805551
+Madelung contribution atom: 0 x 1 = -0.167336
+Contribution mad: 0 -0.599093 2.805551 2.805551
+Contribution mad: 1 -1.198186 2.805551 2.805551
+Contribution mad: 2 -1.797280 2.805551 2.805551
+Contribution mad: 3 -4.715293 2.805551 2.805551
+Contribution mad: 1 -3.517107 2.805551 2.805551
+Contribution mad: 2 -4.116200 2.805551 2.805551
+Contribution mad: 3 -4.715293 2.805551 2.805551
+Madelung contribution atom: 1 x 1 = -0.167336
+Madelung contribution atom: 1 x 1 = -0.167336
+Madelung constant: -0.669343
+Madelung constant: -0.669343
+Madelung constant: -0.669343
+Madelung constant: -0.669343
+Band Energy = 3.361175 Ry           Fermi Energy = 0.600272 Ry
+Total Energy = -1931.727144 Ry
+RMS = 0.000319901
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   1  kappa:   1  E: -4.164868051743
+n:   2  l:   1  kappa:   1  E: -4.164868051743
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+n:   2  l:   1  kappa:  -2  E: -4.164868045504
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   1  kappa:   1  E: -4.164868051743
+n:   2  l:   1  kappa:   1  E: -4.164868051743
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+n:   2  l:   1  kappa:  -2  E: -4.164868045504
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3188814596813    C
+             2    0   -1       -6.9070037728989    S
+             2    1    1       -4.1648668796794    S
+             2    1   -2       -4.1648668712406    S
+          Energy     core:    -109.31888146
+          Energy semicore:     -19.40160440
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3188814596813    C
+             2    0   -1       -6.9070037728989    S
+             2    1    1       -4.1648668796794    S
+             2    1   -2       -4.1648668712406    S
+          Energy     core:    -109.31888146
+          Energy semicore:     -19.40160440
+
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932427855
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00067572145
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   1  kappa:   1  E: -4.164868051743
+n:   2  l:   1  kappa:   1  E: -4.164868051743
+n:   2  l:   1  kappa:  -2  E: -4.164868045504
+n:   2  l:   1  kappa:  -2  E: -4.164868045504
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   1  kappa:   1  E: -4.164868051743
+n:   2  l:   1  kappa:   1  E: -4.164868051743
+n:   2  l:   1  kappa:  -2  E: -4.164868045504
+n:   2  l:   1  kappa:  -2  E: -4.164868045504
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3188814596812    C
+             2    0   -1       -6.9070037728989    S
+             2    1    1       -4.1648668796793    S
+             2    1   -2       -4.1648668712406    S
+          Energy     core:    -109.31888146
+          Energy semicore:     -19.40160440
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3188814596812    C
+             2    0   -1       -6.9070037728989    S
+             2    1    1       -4.1648668796793    S
+             2    1   -2       -4.1648668712406    S
+          Energy     core:    -109.31888146
+          Energy semicore:     -19.40160440
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932427855
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00067572145
+Maximal Core State = -4.16487Ry
+SCF iteration 3:
+** Energy Contour Integration **
+Energy Contour Parameters: grid=2 npts=31, ebot=-0.300000 etop=0.600272 eibot=0.002500 eitop=0.825000
+timeSingleScatteres = 0.794034 sec
+time in energyContourIntegration = 3.378845 sec
+  before energy loop             = 0.000156 sec
+  in energy loop                 = 3.378689 sec
+    in calculateAllTauMatrices   = 2.212807 sec
+atom[0].dosint[0] = 2.999895  atom[0].dosint[1] = 0.000000
+atom[0].dosint[2] = 0.000000  atom[0].dosint[3] = -0.000000
+calculateChempot: xtws = 11.999579 zvaltss = 12.000000 tnen = 22.236087 old chempot = 0.600272
+           new chempot = 0.600291
+Total valence charge =    2.27255042394808315365
+Total valence charge =    2.27255042394806938688
+
+ GETQM_MT:: r_sph charge,w             =    12.27189086496     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27189086496     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91243654016
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91243654016
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -0.599116 2.805605 2.805605
+Contribution mad: 1 -1.198232 2.805605 2.805605
+Contribution mad: 2 -4.116356 2.805605 2.805605
+Contribution mad: 3 -4.715472 2.805605 2.805605
+Madelung contribution atom: 0 x 1 = -0.167342
+Contribution mad: 0 -0.599116 2.805605 2.805605
+Contribution mad: 1 -1.198232 2.805605 2.805605
+Contribution mad: 2 -1.797348 2.805605 2.805605
+Contribution mad: 3 -4.715472 2.805605 2.805605
+Madelung contribution atom: 1 x 1 = -0.167342
+Contribution mad: 0 -2.918124 2.805605 2.805605
+Contribution mad: 1 -3.517240 2.805605 2.805605
+Contribution mad: 2 -4.116356 2.805605 2.805605
+Contribution mad: 3 -4.715472 2.805605 2.805605
+Madelung contribution atom: 0 x 1 = -0.167342
+Contribution mad: 0 -0.599116 2.805605 2.805605
+Contribution mad: 1 -3.517240 2.805605 2.805605
+Contribution mad: 2 -4.116356 2.805605 2.805605
+Contribution mad: 3 -4.715472 2.805605 2.805605
+Madelung contribution atom: 1 x 1 = -0.167342
+Madelung constant: -0.669369
+Madelung constant: -0.669369
+Madelung constant: -0.669369
+Madelung constant: -0.669369
+
+calculateTotalEnergy:  ==============================================
+Total Energy contribution from atom 0.0:
+evssum                      =       -37.9628609485921941768538090 Ry
+kinetic Energy              =       481.3949543623489262245129794 Ry
+erho                        =       222.9143092819991522901545977 Ry
+ezrho                       =     -1151.7619945587046004220610484 Ry
+Coulomb Energy              =      -928.8476852767054197101970203 Ry
+Exchange-Correlation Energy =       -34.9283376343223963544915023 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+Total Energy contribution from atom 0.1:
+evssum                      =       -37.9628609485920804900160874 Ry
+kinetic Energy              =       481.3949543623460840535699390 Ry
+erho                        =       222.9143092820021365696447901 Ry
+ezrho                       =     -1151.7619945586998255748767406 Ry
+Coulomb Energy              =      -928.8476852766976890052319504 Ry
+Exchange-Correlation Energy =       -34.9283376343226095173122303 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+is, emad, emadp =     0        -0.7667498138120338868617409        -0.6863644688315976294390452
+is, emad, emadp =     1        -0.7667498138120338868617409        -0.6863644688315976294390452
+Interstitial:  ----------------------------------------------
+XC:        -0.1916874534530084717154352 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+is, emad, emadp =     0        -0.7667498138120338868617409        -0.6863644688315976294390452
+is, emad, emadp =     1        -0.7667498138120338868617409        -0.6863644688315976294390452
+XC:        -0.1916874534530084717154352 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1916874534530084717154352 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1916874534530084717154352 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+Madelung:        -0.6693689646072114030062039 Ry
+==================================================================
+calculateTotalEnergy:  ----------------------------------------------
+Total Energy              =     -1931.7271427869386570819187909 Ry
+Pressure                  =        -0.4546270483015539820570439 Ry
+=====================================================================
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   1  kappa:   1  E: -4.164868051742
+n:   2  l:   1  kappa:   1  E: -4.164868051742
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   1  kappa:   1  E: -4.164868051742
+n:   2  l:   1  kappa:   1  E: -4.164868051742
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3188814596813    C
+             2    0   -1       -6.9070037728989    S
+             2    1    1       -4.1648668796794    S
+             2    1   -2       -4.1648668712406    S
+          Energy     core:    -109.31888146
+          Energy semicore:     -19.40160440
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3188814596813    C
+             2    0   -1       -6.9070037728989    S
+             2    1    1       -4.1648668796794    S
+             2    1   -2       -4.1648668712406    S
+          Energy     core:    -109.31888146
+          Energy semicore:     -19.40160440
+
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932427855
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+               Interstitial charge core      =    0.00067572145
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   1  kappa:   1  E: -4.164868051742
+n:   2  l:   1  kappa:   1  E: -4.164868051742
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   1  l:   0  kappa:  -1  E: -109.318881459681
+n:   2  l:   1  kappa:   1  E: -4.164868051742
+n:   2  l:   0  kappa:  -1  E: -6.907004025011
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+n:   2  l:   1  kappa:   1  E: -4.164868051742
+n:   2  l:   1  kappa:  -2  E: -4.164868045503
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3188814596812    C
+             2    0   -1       -6.9070037728989    S
+             2    1    1       -4.1648668796793    S
+             2    1   -2       -4.1648668712406    S
+          Energy     core:    -109.31888146
+          Energy semicore:     -19.40160440
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3188814596812    C
+             2    0   -1       -6.9070037728989    S
+             2    1    1       -4.1648668796793    S
+             2    1   -2       -4.1648668712406    S
+          Energy     core:    -109.31888146
+          Energy semicore:     -19.40160440
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932427855
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067572145
+Maximal Core State = -4.16487Ry
+
+ GETQM_MT:: r_sph charge,w             =    12.27189086496     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27189086496     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91243654016
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91243654016
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.918124 2.805605 2.805605
+Contribution mad: 1 -3.517240 2.805605 2.805605
+Contribution mad: 2 -4.116356 2.805605 2.805605
+Contribution mad: 3 -4.715472 2.805605 2.805605
+Madelung contribution atom: 0 x 1 = -0.167342
+Contribution mad: 0 -0.599116 2.805605 2.805605
+Contribution mad: 1 -3.517240 2.805605 2.805605
+Contribution mad: 2 -4.116356 2.805605 2.805605
+Contribution mad: 3 -4.715472 2.805605 2.805605
+Madelung contribution atom: 1 x 1 = -0.167342
+Contribution mad: 0 -0.599116 2.805605 2.805605
+Contribution mad: 1 -1.198232 2.805605 2.805605
+Contribution mad: 2 -4.116356 2.805605 2.805605
+Contribution mad: 3 -4.715472 2.805605 2.805605
+Madelung contribution atom: 0 x 1 = -0.167342
+Contribution mad: 0 -0.599116 2.805605 2.805605
+Contribution mad: 1 -1.198232 2.805605 2.805605
+Contribution mad: 2 -1.797348 2.805605 2.805605
+Contribution mad: 3 -4.715472 2.805605 2.805605
+Madelung contribution atom: 1 x 1 = -0.167342
+Madelung constant: -0.669369
+Madelung constant: -0.669369
+Madelung constant: -0.669369
+Madelung constant: -0.669369
+Band Energy = 3.361391 Ry           Fermi Energy = 0.600291 Ry
+Total Energy = -1931.727143 Ry
+RMS = 3.66807e-06
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330509035213
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:   1  E: -4.163684515606
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:  -2  E: -4.163684509368
+n:   2  l:   1  kappa:  -2  E: -4.163684509368
+n:   1  l:   0  kappa:  -1  E: -109.330509035213
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:   1  E: -4.163684515606
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:  -2  E: -4.163684509368
+n:   2  l:   1  kappa:  -2  E: -4.163684509368
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305090352123    C
+             2    0   -1       -6.9061066041150    S
+             2    1    1       -4.1636833422884    S
+             2    1   -2       -4.1636833338524    S
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+          Energy     core:    -109.33050904
+          Energy semicore:     -19.39715661
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305090352123    C
+             2    0   -1       -6.9061066041150    S
+             2    1    1       -4.1636833422884    S
+             2    1   -2       -4.1636833338524    S
+          Energy     core:    -109.33050904
+          Energy semicore:     -19.39715661
+
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932355897
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067644103
+
+calculateCoreState 0.1
+n:   2  l:   1  kappa:   1  E: -4.163684515606
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:  -2  E: -4.163684509368
+n:   2  l:   1  kappa:   1  E: -4.163684515606
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:  -2  E: -4.163684509368
+n:   2  l:   1  kappa:   1  E: -4.163684515606
+n:   2  l:   1  kappa:  -2  E: -4.163684509368
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:   1  E: -4.163684515606
+n:   2  l:   1  kappa:  -2  E: -4.163684509368
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305090352124    C
+             2    0   -1       -6.9061066041151    S
+             2    1    1       -4.1636833422885    S
+             2    1   -2       -4.1636833338525    S
+          Energy     core:    -109.33050904
+          Energy semicore:     -19.39715661
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305090352124    C
+             2    0   -1       -6.9061066041151    S
+             2    1    1       -4.1636833422885    S
+             2    1   -2       -4.1636833338525    S
+          Energy     core:    -109.33050904
+          Energy semicore:     -19.39715661
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932355897
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067644103
+Maximal Core State = -4.16368Ry
+SCF iteration 4:
+** Energy Contour Integration **
+Energy Contour Parameters: grid=2 npts=31, ebot=-0.300000 etop=0.600291 eibot=0.002500 eitop=0.825000
+timeSingleScatteres = 0.819934 sec
+time in energyContourIntegration = 3.398230 sec
+  before energy loop             = 0.000188 sec
+  in energy loop                 = 3.398041 sec
+    in calculateAllTauMatrices   = 2.206372 sec
+atom[0].dosint[0] = 2.999541  atom[0].dosint[1] = 0.000000
+atom[0].dosint[2] = 0.000000  atom[0].dosint[3] = 0.000000
+calculateChempot: xtws = 11.998165 zvaltss = 12.000000 tnen = 22.234636 old chempot = 0.600291
+           new chempot = 0.600374
+Total valence charge =    2.27248759829428337298
+Total valence charge =    2.27248759829437219082
+
+ GETQM_MT:: r_sph charge,w             =    12.27182730413     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27182730413     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91269078349
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91269078349
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.918634 2.805850 2.805850
+Contribution mad: 0 -0.599221 2.805850 2.805850
+Contribution mad: 1 -3.517855 2.805850 2.805850
+Contribution mad: 2 -4.117075 2.805850 2.805850
+Contribution mad: 3 -4.716296 2.805850 2.805850
+Contribution mad: 1 -1.198441 2.805850 2.805850
+Contribution mad: 2 -4.117075 2.805850 2.805850
+Contribution mad: 3 -4.716296 2.805850 2.805850
+Madelung contribution atom: 0 x 1 = -0.167371
+Contribution mad: 0 -0.599221 2.805850 2.805850
+Contribution mad: 1 -1.198441 2.805850 2.805850
+Contribution mad: 2 -1.797662 2.805850 2.805850
+Madelung contribution atom: 0 x 1 = -0.167371
+Contribution mad: 0 -0.599221 2.805850 2.805850
+Contribution mad: 1 -3.517855 2.805850 2.805850
+Contribution mad: 2 -4.117075 2.805850 2.805850
+Contribution mad: 3 -4.716296 2.805850 2.805850
+Madelung contribution atom: 1 x 1 = -0.167371
+Contribution mad: 3 -4.716296 2.805850 2.805850
+Madelung contribution atom: 1 x 1 = -0.167371
+Madelung constant: -0.669486
+Madelung constant: -0.669486
+Madelung constant: -0.669486
+Madelung constant: -0.669486
+
+calculateTotalEnergy:  ==============================================
+Total Energy contribution from atom 0.0:
+evssum                      =       -37.9537407809664486535439210 Ry
+kinetic Energy              =       481.4262524475229270137788262 Ry
+erho                        =       222.9136696939631860914232675 Ry
+ezrho                       =     -1151.7921652742452351958490908 Ry
+Coulomb Energy              =      -928.8784955802821059478446841 Ry
+Exchange-Correlation Energy =       -34.9287509032450884660647716 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+Total Energy contribution from atom 0.1:
+evssum                      =       -37.9537407809672089342711843 Ry
+kinetic Energy              =       481.4262524475213353980507236 Ry
+erho                        =       222.9136696939610260415065568 Ry
+ezrho                       =     -1151.7921652742593323637265712 Ry
+Coulomb Energy              =      -928.8784955802982494788011536 Ry
+Exchange-Correlation Energy =       -34.9287509032455361079883005 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+is, emad, emadp =     0        -0.7668367211864036692148261        -0.6864429056174924381750202
+is, emad, emadp =     1        -0.7668367211864036692148261        -0.6864429056174924381750202
+is, emad, emadp =     0        -0.7668367211864036692148261        -0.6864429056174924381750202
+is, emad, emadp =     1        -0.7668367211864036692148261        -0.6864429056174924381750202
+Interstitial:  ----------------------------------------------
+XC:        -0.1917091802966009173037065 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917091802966009173037065 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917091802966009173037065 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917091802966009173037065 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+Madelung:        -0.6694858358390227692780172 Ry
+==================================================================
+calculateTotalEnergy:  ----------------------------------------------
+Total Energy              =     -1931.7271354222684749402105808 Ry
+Pressure                  =        -0.3294388307023313755550475 Ry
+=====================================================================
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330509035213
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:  -2  E: -4.163684509367
+n:   2  l:   1  kappa:  -2  E: -4.163684509367
+n:   1  l:   0  kappa:  -1  E: -109.330509035213
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:  -2  E: -4.163684509367
+n:   2  l:   1  kappa:  -2  E: -4.163684509367
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305090352123    C
+             2    0   -1       -6.9061066041150    S
+             2    1    1       -4.1636833422884    S
+             2    1   -2       -4.1636833338524    S
+          Energy     core:    -109.33050904
+          Energy semicore:     -19.39715661
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305090352123    C
+             2    0   -1       -6.9061066041150    S
+             2    1    1       -4.1636833422884    S
+             2    1   -2       -4.1636833338524    S
+          Energy     core:    -109.33050904
+          Energy semicore:     -19.39715661
+
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932355897
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00067644103
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:  -2  E: -4.163684509367
+n:   2  l:   1  kappa:  -2  E: -4.163684509367
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   1  l:   0  kappa:  -1  E: -109.330509035212
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   0  kappa:  -1  E: -6.906106856387
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:   1  E: -4.163684515605
+n:   2  l:   1  kappa:  -2  E: -4.163684509367
+n:   2  l:   1  kappa:  -2  E: -4.163684509367
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305090352124    C
+             2    0   -1       -6.9061066041151    S
+             2    1    1       -4.1636833422885    S
+             2    1   -2       -4.1636833338525    S
+          Energy     core:    -109.33050904
+          Energy semicore:     -19.39715661
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305090352124    C
+             2    0   -1       -6.9061066041151    S
+             2    1    1       -4.1636833422885    S
+             2    1   -2       -4.1636833338525    S
+          Energy     core:    -109.33050904
+          Energy semicore:     -19.39715661
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932355897
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067644103
+Maximal Core State = -4.16368Ry
+
+ GETQM_MT:: r_sph charge,w             =    12.27182730413     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27182730413     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91269078349
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91269078349
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.918634 2.805850 2.805850
+Contribution mad: 1 -3.517855 2.805850 2.805850
+Contribution mad: 2 -4.117075 2.805850 2.805850
+Contribution mad: 3 -4.716296 2.805850 2.805850
+Madelung contribution atom: 0 x 1 = -0.167371
+Contribution mad: 0 -0.599221 2.805850 2.805850
+Contribution mad: 1 -3.517855 2.805850 2.805850
+Contribution mad: 2 -4.117075 2.805850 2.805850
+Contribution mad: 3 -4.716296 2.805850 2.805850
+Madelung contribution atom: 1 x 1 = -0.167371
+Madelung constant: -0.669486
+Madelung constant: -0.669486
+Contribution mad: 0 -0.599221 2.805850 2.805850
+Contribution mad: 1 -1.198441 2.805850 2.805850
+Contribution mad: 2 -4.117075 2.805850 2.805850
+Contribution mad: 3 -4.716296 2.805850 2.805850
+Madelung contribution atom: 0 x 1 = -0.167371
+Contribution mad: 0 -0.599221 2.805850 2.805850
+Contribution mad: 1 -1.198441 2.805850 2.805850
+Contribution mad: 2 -1.797662 2.805850 2.805850
+Contribution mad: 3 -4.716296 2.805850 2.805850
+Madelung contribution atom: 1 x 1 = -0.167371
+Madelung constant: -0.669486
+Madelung constant: -0.669486
+Band Energy = 3.362290 Ry           Fermi Energy = 0.600374 Ry
+Total Energy = -1931.727135 Ry
+RMS = 1.71505e-05
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   2  l:   0  kappa:  -1  E: -6.906115493570
+n:   2  l:   1  kappa:   1  E: -4.163692862523
+n:   2  l:   0  kappa:  -1  E: -6.906115493570
+n:   2  l:   1  kappa:   1  E: -4.163692862523
+n:   2  l:   1  kappa:  -2  E: -4.163692856286
+n:   2  l:   1  kappa:  -2  E: -4.163692856286
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   2  l:   0  kappa:  -1  E: -6.906115493570
+n:   2  l:   0  kappa:  -1  E: -6.906115493570
+n:   2  l:   1  kappa:   1  E: -4.163692862523
+n:   2  l:   1  kappa:   1  E: -4.163692862523
+n:   2  l:   1  kappa:  -2  E: -4.163692856286
+n:   2  l:   1  kappa:  -2  E: -4.163692856286
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305171598468    C
+             2    0   -1       -6.9061152413107    S
+             2    1    1       -4.1636916892334    S
+             2    1   -2       -4.1636916807975    S
+          Energy     core:    -109.33051716
+          Energy semicore:     -19.39719029
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305171598468    C
+             2    0   -1       -6.9061152413107    S
+             2    1    1       -4.1636916892334    S
+             2    1   -2       -4.1636916807975    S
+          Energy     core:    -109.33051716
+          Energy semicore:     -19.39719029
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356399
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643601
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   2  l:   0  kappa:  -1  E: -6.906115493570
+n:   2  l:   0  kappa:  -1  E: -6.906115493570
+n:   2  l:   1  kappa:   1  E: -4.163692862523
+n:   2  l:   1  kappa:   1  E: -4.163692862523
+n:   2  l:   1  kappa:  -2  E: -4.163692856286
+n:   2  l:   1  kappa:  -2  E: -4.163692856286
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   2  l:   0  kappa:  -1  E: -6.906115493570
+n:   2  l:   1  kappa:   1  E: -4.163692862523
+n:   2  l:   1  kappa:  -2  E: -4.163692856286
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305171598470    C
+             2    0   -1       -6.9061152413108    S
+             2    1    1       -4.1636916892335    S
+             2    1   -2       -4.1636916807976    S
+          Energy     core:    -109.33051716
+          Energy semicore:     -19.39719029
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305171598470    C
+n:   2  l:   0  kappa:  -1  E: -6.906115493570
+n:   2  l:   1  kappa:   1  E: -4.163692862523
+             2    0   -1       -6.9061152413108    S
+             2    1    1       -4.1636916892335    S
+             2    1   -2       -4.1636916807976    S
+          Energy     core:    -109.33051716
+          Energy semicore:     -19.39719029
+
+n:   2  l:   1  kappa:  -2  E: -4.163692856286
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356399
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643601
+Maximal Core State = -4.16369Ry
+SCF iteration 5:
+** Energy Contour Integration **
+Energy Contour Parameters: grid=2 npts=31, ebot=-0.300000 etop=0.600374 eibot=0.002500 eitop=0.825000
+timeSingleScatteres = 0.817211 sec
+time in energyContourIntegration = 3.431538 sec
+  before energy loop             = 0.000165 sec
+  in energy loop                 = 3.431372 sec
+    in calculateAllTauMatrices   = 2.238799 sec
+atom[0].dosint[0] = 3.000006  atom[0].dosint[1] = 0.000000
+atom[0].dosint[2] = 0.000000  atom[0].dosint[3] = 0.000000
+calculateChempot: xtws = 12.000023 zvaltss = 12.000000 tnen = 22.236344 old chempot = 0.600374
+           new chempot = 0.600372
+Total valence charge =    2.27248817553943549541
+Total valence charge =    2.27248817553935378299
+
+ GETQM_MT:: r_sph charge,w             =    12.27182788657     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27182788657     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91268845373
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91268845373
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.918629 2.805847 2.805847
+Contribution mad: 1 -3.517849 2.805847 2.805847
+Contribution mad: 0 -0.599220 2.805847 2.805847
+Contribution mad: 1 -1.198439 2.805847 2.805847
+Contribution mad: 2 -4.117069 2.805847 2.805847
+Contribution mad: 3 -4.716288 2.805847 2.805847
+Madelung contribution atom: 0 x 1 = -0.167371
+Contribution mad: 0 -0.599220 2.805847 2.805847
+Contribution mad: 2 -4.117069 2.805847 2.805847
+Contribution mad: 3 -4.716288 2.805847 2.805847
+Madelung contribution atom: 0 x 1 = -0.167371
+Contribution mad: 0 -0.599220 2.805847 2.805847
+Contribution mad: 1 -3.517849 2.805847 2.805847
+Contribution mad: 2 -4.117069 2.805847 2.805847
+Contribution mad: 3 -4.716288 2.805847 2.805847
+Madelung contribution atom: 1 x 1 = -0.167371
+Contribution mad: 1 -1.198439 2.805847 2.805847
+Contribution mad: 2 -1.797659 2.805847 2.805847
+Contribution mad: 3 -4.716288 2.805847 2.805847
+Madelung contribution atom: 1 x 1 = -0.167371
+Madelung constant: -0.669485
+Madelung constant: -0.669485
+Madelung constant: -0.669485
+Madelung constant: -0.669485
+
+calculateTotalEnergy:  ==============================================
+Total Energy contribution from atom 0.0:
+evssum                      =       -37.9538110993283481775506516 Ry
+kinetic Energy              =       481.4263064559131066744157579 Ry
+erho                        =       222.9137118827314907321124338 Ry
+ezrho                       =     -1151.7922578209129369497532025 Ry
+Coulomb Energy              =      -928.8785459381814462176407687 Ry
+Exchange-Correlation Energy =       -34.9287552626825714696678915 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+Total Energy contribution from atom 0.1:
+evssum                      =       -37.9538110993290658257137693 Ry
+kinetic Energy              =       481.4263064559075360193673987 Ry
+erho                        =       222.9137118827254084862943273 Ry
+ezrho                       =     -1151.7922578209158928075339645 Ry
+Coulomb Energy              =      -928.8785459381904274778207764 Ry
+Exchange-Correlation Energy =       -34.9287552626828770030442683 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+is, emad, emadp =     0        -0.7668359247990667038052948        -0.6864421868511376700894289
+is, emad, emadp =     1        -0.7668359247990667038052948        -0.6864421868511376700894289
+is, emad, emadp =     0        -0.7668359247990667038052948        -0.6864421868511376700894289
+is, emad, emadp =     1        -0.7668359247990667038052948        -0.6864421868511376700894289
+Interstitial:  ----------------------------------------------
+XC:        -0.1917089811997666759513237 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917089811997666759513237 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917089811997666759513237 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917089811997666759513237 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+Madelung:        -0.6694847648415018781520303 Ry
+==================================================================
+calculateTotalEnergy:  ----------------------------------------------
+Total Energy              =     -1931.7271355942527861770940945 Ry
+Pressure                  =        -0.3292226400662778829087074 Ry
+=====================================================================
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   2  l:   0  kappa:  -1  E: -6.906115493582
+n:   2  l:   0  kappa:  -1  E: -6.906115493582
+n:   2  l:   1  kappa:   1  E: -4.163692862546
+n:   2  l:   1  kappa:   1  E: -4.163692862546
+n:   2  l:   1  kappa:  -2  E: -4.163692856309
+n:   2  l:   1  kappa:  -2  E: -4.163692856309
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   2  l:   0  kappa:  -1  E: -6.906115493582
+n:   2  l:   0  kappa:  -1  E: -6.906115493582
+n:   2  l:   1  kappa:   1  E: -4.163692862546
+n:   2  l:   1  kappa:   1  E: -4.163692862546
+n:   2  l:   1  kappa:  -2  E: -4.163692856309
+n:   2  l:   1  kappa:  -2  E: -4.163692856309
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305171598468    C
+             2    0   -1       -6.9061152413107    S
+             2    1    1       -4.1636916892334    S
+             2    1   -2       -4.1636916807975    S
+          Energy     core:    -109.33051716
+          Energy semicore:     -19.39719029
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305171598468    C
+             2    0   -1       -6.9061152413107    S
+             2    1    1       -4.1636916892334    S
+             2    1   -2       -4.1636916807975    S
+          Energy     core:    -109.33051716
+          Energy semicore:     -19.39719029
+
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356399
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00067643601
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   2  l:   0  kappa:  -1  E: -6.906115493582
+n:   2  l:   0  kappa:  -1  E: -6.906115493582
+n:   2  l:   1  kappa:   1  E: -4.163692862546
+n:   2  l:   1  kappa:   1  E: -4.163692862546
+n:   2  l:   1  kappa:  -2  E: -4.163692856309
+n:   2  l:   1  kappa:  -2  E: -4.163692856309
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   1  l:   0  kappa:  -1  E: -109.330517159847
+n:   2  l:   0  kappa:  -1  E: -6.906115493582
+n:   2  l:   0  kappa:  -1  E: -6.906115493582
+n:   2  l:   1  kappa:   1  E: -4.163692862546
+n:   2  l:   1  kappa:   1  E: -4.163692862546
+n:   2  l:   1  kappa:  -2  E: -4.163692856309
+n:   2  l:   1  kappa:  -2  E: -4.163692856309
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305171598470    C
+             2    0   -1       -6.9061152413108    S
+             2    1    1       -4.1636916892335    S
+             2    1   -2       -4.1636916807976    S
+          Energy     core:    -109.33051716
+          Energy semicore:     -19.39719029
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3305171598470    C
+             2    0   -1       -6.9061152413108    S
+             2    1    1       -4.1636916892335    S
+             2    1   -2       -4.1636916807976    S
+          Energy     core:    -109.33051716
+          Energy semicore:     -19.39719029
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356399
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00067643601
+Maximal Core State = -4.16369Ry
+
+ GETQM_MT:: r_sph charge,w             =    12.27182788657     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27182788657     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91268845373
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91268845373
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -0.599220 2.805847 2.805847
+Contribution mad: 1 -1.198439 2.805847 2.805847
+Contribution mad: 2 -4.117069 2.805847 2.805847
+Contribution mad: 3 -4.716288 2.805847 2.805847
+Contribution mad: 0 -2.918629 2.805847 2.805847
+Contribution mad: 1 -3.517849 2.805847 2.805847
+Contribution mad: 2 -4.117069 2.805847 2.805847
+Contribution mad: 3 -4.716288 2.805847 2.805847
+Madelung contribution atom: 0 x 1 = -0.167371
+Contribution mad: 0 -0.599220 2.805847 2.805847
+Contribution mad: 1 -1.198439 2.805847 2.805847
+Madelung contribution atom: 0 x 1 = -0.167371
+Contribution mad: 0 -0.599220 2.805847 2.805847
+Contribution mad: 1 -3.517849 2.805847 2.805847
+Contribution mad: 2 -1.797659 2.805847 2.805847
+Contribution mad: 3 -4.716288 2.805847 2.805847
+Madelung contribution atom: 1 x 1 = -0.167371
+Contribution mad: 2 -4.117069 2.805847 2.805847
+Contribution mad: 3 -4.716288 2.805847 2.805847
+Madelung contribution atom: 1 x 1 = -0.167371
+Madelung constant: -0.669485
+Madelung constant: -0.669485
+Madelung constant: -0.669485
+Madelung constant: -0.669485
+Band Energy = 3.362278 Ry           Fermi Energy = 0.600372 Ry
+Total Energy = -1931.727136 Ry
+RMS = 4.78877e-08
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277451
+n:   2  l:   0  kappa:  -1  E: -6.906157277451
+n:   2  l:   1  kappa:   1  E: -4.163710627892
+n:   2  l:   1  kappa:   1  E: -4.163710627892
+n:   2  l:   1  kappa:  -2  E: -4.163710621654
+n:   2  l:   1  kappa:  -2  E: -4.163710621654
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277451
+n:   2  l:   0  kappa:  -1  E: -6.906157277451
+n:   2  l:   1  kappa:   1  E: -4.163710627892
+n:   2  l:   1  kappa:   1  E: -4.163710627892
+n:   2  l:   1  kappa:  -2  E: -4.163710621654
+n:   2  l:   1  kappa:  -2  E: -4.163710621654
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306758126854    C
+             2    0   -1       -6.9061570253449    S
+             2    1    1       -4.1637094545861    S
+             2    1   -2       -4.1637094461503    S
+          Energy     core:    -109.33067581
+          Energy semicore:     -19.39728537
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306758126854    C
+             2    0   -1       -6.9061570253449    S
+             2    1    1       -4.1637094545861    S
+             2    1   -2       -4.1637094461503    S
+          Energy     core:    -109.33067581
+          Energy semicore:     -19.39728537
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356143
+               Muffin-tin core+semi moment   =   -0.00000000000
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00067643857
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277451
+n:   2  l:   0  kappa:  -1  E: -6.906157277451
+n:   2  l:   1  kappa:   1  E: -4.163710627892
+n:   2  l:   1  kappa:   1  E: -4.163710627892
+n:   2  l:   1  kappa:  -2  E: -4.163710621654
+n:   2  l:   1  kappa:  -2  E: -4.163710621654
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277451
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277451
+n:   2  l:   1  kappa:   1  E: -4.163710627892
+n:   2  l:   1  kappa:   1  E: -4.163710627892
+n:   2  l:   1  kappa:  -2  E: -4.163710621654
+n:   2  l:   1  kappa:  -2  E: -4.163710621654
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306758126855    C
+             2    0   -1       -6.9061570253450    S
+             2    1    1       -4.1637094545862    S
+             2    1   -2       -4.1637094461503    S
+          Energy     core:    -109.33067581
+          Energy semicore:     -19.39728537
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306758126855    C
+             2    0   -1       -6.9061570253450    S
+             2    1    1       -4.1637094545862    S
+             2    1   -2       -4.1637094461503    S
+          Energy     core:    -109.33067581
+          Energy semicore:     -19.39728537
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356143
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643857
+Maximal Core State = -4.16371Ry
+SCF iteration 6:
+** Energy Contour Integration **
+Energy Contour Parameters: grid=2 npts=31, ebot=-0.300000 etop=0.600372 eibot=0.002500 eitop=0.825000
+timeSingleScatteres = 0.796024 sec
+time in energyContourIntegration = 3.370238 sec
+  before energy loop             = 0.000229 sec
+  in energy loop                 = 3.370009 sec
+    in calculateAllTauMatrices   = 2.205169 sec
+atom[0].dosint[0] = 3.000057  atom[0].dosint[1] = 0.000000
+atom[0].dosint[2] = 0.000000  atom[0].dosint[3] = -0.000000
+calculateChempot: xtws = 12.000229 zvaltss = 12.000000 tnen = 22.236541 old chempot = 0.600372
+           new chempot = 0.600362
+Total valence charge =    2.27249347763688103186
+Total valence charge =    2.27249347763694808933
+
+ GETQM_MT:: r_sph charge,w             =    12.27183318798     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27183318798     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91266724810
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91266724810
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.918587 2.805827 2.805827
+Contribution mad: 1 -3.517798 2.805827 2.805827
+Contribution mad: 2 -4.117009 2.805827 2.805827
+Contribution mad: 3 -4.716220 2.805827 2.805827
+Madelung contribution atom: 0 x 1 = -0.167369
+Contribution mad: 0 -0.599211 2.805827 2.805827
+Contribution mad: 1 -3.517798 2.805827 2.805827
+Contribution mad: 2 -4.117009 2.805827 2.805827
+Contribution mad: 3 -4.716220 2.805827 2.805827
+Madelung contribution atom: 1 x 1 = -0.167369
+Contribution mad: 0 -0.599211 2.805827 2.805827
+Contribution mad: 1 -1.198422 2.805827 2.805827
+Contribution mad: 2 -4.117009 2.805827 2.805827
+Contribution mad: 3 -4.716220 2.805827 2.805827
+Madelung contribution atom: 0 x 1 = -0.167369
+Contribution mad: 0 -0.599211 2.805827 2.805827
+Contribution mad: 1 -1.198422 2.805827 2.805827
+Contribution mad: 2 -1.797633 2.805827 2.805827
+Contribution mad: 3 -4.716220 2.805827 2.805827
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+Madelung contribution atom: 1 x 1 = -0.167369
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+
+calculateTotalEnergy:  ==============================================
+Total Energy contribution from atom 0.0:
+evssum                      =       -37.9540311440073381277215958 Ry
+kinetic Energy              =       481.4262255313612968166125938 Ry
+erho                        =       222.9134563607346990465885028 Ry
+ezrho                       =     -1151.7919580259081158146727830 Ry
+Coulomb Energy              =      -928.8785016651734167680842802 Ry
+Exchange-Correlation Energy =       -34.9287251463427921294169209 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+Total Energy contribution from atom 0.1:
+evssum                      =       -37.9540311440077644533630519 Ry
+kinetic Energy              =       481.4262255313747687068826053 Ry
+erho                        =       222.9134563607364896142826183 Ry
+ezrho                       =     -1151.7919580259260783350327983 Ry
+Coulomb Energy              =      -928.8785016651895602990407497 Ry
+Exchange-Correlation Energy =       -34.9287251463427637077074905 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+is, emad, emadp =     0        -0.7668286760441199723103978        -0.6864356446063512029454046
+is, emad, emadp =     1        -0.7668286760441199723103978        -0.6864356446063512029454046
+is, emad, emadp =     0        -0.7668286760441199723103978        -0.6864356446063512029454046
+is, emad, emadp =     1        -0.7668286760441199723103978        -0.6864356446063512029454046
+Interstitial:  ----------------------------------------------
+XC:        -0.1917071690110299930775994 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917071690110299930775994 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917071690110299930775994 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917071690110299930775994 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+Madelung:        -0.6694750165992102708401035 Ry
+==================================================================
+calculateTotalEnergy:  ----------------------------------------------
+Total Energy              =     -1931.7271374892936819378519431 Ry
+Pressure                  =        -0.3295507935370610708147865 Ry
+=====================================================================
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277627
+n:   2  l:   0  kappa:  -1  E: -6.906157277627
+n:   2  l:   1  kappa:   1  E: -4.163710627978
+n:   2  l:   1  kappa:   1  E: -4.163710627978
+n:   2  l:   1  kappa:  -2  E: -4.163710621740
+n:   2  l:   1  kappa:  -2  E: -4.163710621740
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277627
+n:   2  l:   0  kappa:  -1  E: -6.906157277627
+n:   2  l:   1  kappa:   1  E: -4.163710627978
+n:   2  l:   1  kappa:   1  E: -4.163710627978
+n:   2  l:   1  kappa:  -2  E: -4.163710621740
+n:   2  l:   1  kappa:  -2  E: -4.163710621740
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306758126854    C
+             2    0   -1       -6.9061570253448    S
+             2    1    1       -4.1637094545861    S
+             2    1   -2       -4.1637094461503    S
+          Energy     core:    -109.33067581
+          Energy semicore:     -19.39728537
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306758126854    C
+             2    0   -1       -6.9061570253448    S
+             2    1    1       -4.1637094545861    S
+             2    1   -2       -4.1637094461503    S
+          Energy     core:    -109.33067581
+          Energy semicore:     -19.39728537
+
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356143
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00067643857
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277627
+n:   2  l:   0  kappa:  -1  E: -6.906157277627
+n:   2  l:   1  kappa:   1  E: -4.163710627978
+n:   2  l:   1  kappa:   1  E: -4.163710627978
+n:   2  l:   1  kappa:  -2  E: -4.163710621740
+n:   2  l:   1  kappa:  -2  E: -4.163710621741
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   1  l:   0  kappa:  -1  E: -109.330675812685
+n:   2  l:   0  kappa:  -1  E: -6.906157277627
+n:   2  l:   0  kappa:  -1  E: -6.906157277627
+n:   2  l:   1  kappa:   1  E: -4.163710627978
+n:   2  l:   1  kappa:   1  E: -4.163710627978
+n:   2  l:   1  kappa:  -2  E: -4.163710621740
+n:   2  l:   1  kappa:  -2  E: -4.163710621741
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306758126855    C
+             2    0   -1       -6.9061570253448    S
+             2    1    1       -4.1637094545862    S
+             2    1   -2       -4.1637094461503    S
+          Energy     core:    -109.33067581
+          Energy semicore:     -19.39728537
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306758126855    C
+             2    0   -1       -6.9061570253448    S
+             2    1    1       -4.1637094545862    S
+             2    1   -2       -4.1637094461503    S
+          Energy     core:    -109.33067581
+          Energy semicore:     -19.39728537
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356143
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643857
+Maximal Core State = -4.16371Ry
+
+ GETQM_MT:: r_sph charge,w             =    12.27183318798     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27183318798     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91266724810
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91266724810
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -0.599211 2.805827 2.805827
+Contribution mad: 1 -1.198422 2.805827 2.805827
+Contribution mad: 2 -4.117009 2.805827 2.805827
+Contribution mad: 3 -4.716220 2.805827 2.805827
+Contribution mad: 0 -2.918587 2.805827 2.805827
+Contribution mad: 1 -3.517798 2.805827 2.805827
+Contribution mad: 2 -4.117009 2.805827 2.805827
+Contribution mad: 3 -4.716220 2.805827 2.805827
+Madelung contribution atom: 0 x 1 = -0.167369
+Madelung contribution atom: 0 x 1 = -0.167369
+Contribution mad: 0 -0.599211 2.805827 2.805827
+Contribution mad: 1 -1.198422 2.805827 2.805827
+Contribution mad: 2 -1.797633 2.805827 2.805827
+Contribution mad: 0 -0.599211 2.805827 2.805827
+Contribution mad: 1 -3.517798 2.805827 2.805827
+Contribution mad: 2 -4.117009 2.805827 2.805827
+Contribution mad: 3 -4.716220 2.805827 2.805827
+Contribution mad: 3 -4.716220 2.805827 2.805827
+Madelung contribution atom: 1 x 1 = -0.167369
+Madelung contribution atom: 1 x 1 = -0.167369
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+Band Energy = 3.362158 Ry           Fermi Energy = 0.600362 Ry
+Total Energy = -1931.727137 Ry
+RMS = 9.88065e-07
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269429
+n:   2  l:   0  kappa:  -1  E: -6.906155269429
+n:   2  l:   1  kappa:   1  E: -4.163708691983
+n:   2  l:   1  kappa:   1  E: -4.163708691983
+n:   2  l:   1  kappa:  -2  E: -4.163708685745
+n:   2  l:   1  kappa:  -2  E: -4.163708685745
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269429
+n:   2  l:   0  kappa:  -1  E: -6.906155269429
+n:   2  l:   1  kappa:   1  E: -4.163708691983
+n:   2  l:   1  kappa:   1  E: -4.163708691983
+n:   2  l:   1  kappa:  -2  E: -4.163708685745
+n:   2  l:   1  kappa:  -2  E: -4.163708685745
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306738830178    C
+             2    0   -1       -6.9061550171452    S
+             2    1    1       -4.1637075185892    S
+             2    1   -2       -4.1637075101534    S
+          Energy     core:    -109.33067388
+          Energy semicore:     -19.39727756
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306738830178    C
+             2    0   -1       -6.9061550171452    S
+             2    1    1       -4.1637075185892    S
+             2    1   -2       -4.1637075101534    S
+          Energy     core:    -109.33067388
+          Energy semicore:     -19.39727756
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356029
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643971
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269429
+n:   2  l:   0  kappa:  -1  E: -6.906155269429
+n:   2  l:   1  kappa:   1  E: -4.163708691983
+n:   2  l:   1  kappa:   1  E: -4.163708691983
+n:   2  l:   1  kappa:  -2  E: -4.163708685745
+n:   2  l:   1  kappa:  -2  E: -4.163708685745
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269429
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269429
+n:   2  l:   1  kappa:   1  E: -4.163708691983
+n:   2  l:   1  kappa:   1  E: -4.163708691983
+n:   2  l:   1  kappa:  -2  E: -4.163708685745
+n:   2  l:   1  kappa:  -2  E: -4.163708685745
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306738830177    C
+             2    0   -1       -6.9061550171453    S
+             2    1    1       -4.1637075185893    S
+             2    1   -2       -4.1637075101535    S
+          Energy     core:    -109.33067388
+          Energy semicore:     -19.39727756
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306738830177    C
+             2    0   -1       -6.9061550171453    S
+             2    1    1       -4.1637075185893    S
+             2    1   -2       -4.1637075101535    S
+          Energy     core:    -109.33067388
+          Energy semicore:     -19.39727756
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356029
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =   -0.00000000000
+               Interstitial charge core      =    0.00067643971
+Maximal Core State = -4.16371Ry
+SCF iteration 7:
+** Energy Contour Integration **
+Energy Contour Parameters: grid=2 npts=31, ebot=-0.300000 etop=0.600362 eibot=0.002500 eitop=0.825000
+timeSingleScatteres = 0.803438 sec
+time in energyContourIntegration = 3.406691 sec
+  before energy loop             = 0.000176 sec
+  in energy loop                 = 3.406515 sec
+    in calculateAllTauMatrices   = 2.230883 sec
+atom[0].dosint[0] = 2.999999  atom[0].dosint[1] = 0.000000
+atom[0].dosint[2] = 0.000000  atom[0].dosint[3] = -0.000000
+calculateChempot: xtws = 11.999994 zvaltss = 12.000000 tnen = 22.236326 old chempot = 0.600362
+           new chempot = 0.600362
+Total valence charge =    2.27249332842600448856
+Total valence charge =    2.27249332842595785920
+
+ GETQM_MT:: r_sph charge,w             =    12.27183303758     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27183303758     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91266784968
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91266784968
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -2.918588 2.805828 2.805828
+Contribution mad: 1 -3.517799 2.805828 2.805828
+Contribution mad: 2 -4.117010 2.805828 2.805828
+Contribution mad: 3 -4.716221 2.805828 2.805828
+Contribution mad: 0 -0.599211 2.805828 2.805828
+Contribution mad: 1 -1.198422 2.805828 2.805828
+Contribution mad: 2 -4.117010 2.805828 2.805828
+Madelung contribution atom: 0 x 1 = -0.167369
+Contribution mad: 0 -0.599211 2.805828 2.805828
+Contribution mad: 1 -3.517799 2.805828 2.805828
+Contribution mad: 3 -4.716221 2.805828 2.805828
+Madelung contribution atom: 0 x 1 = -0.167369
+Contribution mad: 0 -0.599211 2.805828 2.805828
+Contribution mad: 1 -1.198422 2.805828 2.805828
+Contribution mad: 2 -4.117010 2.805828 2.805828
+Contribution mad: 3 -4.716221 2.805828 2.805828
+Contribution mad: 2 -1.797634 2.805828 2.805828
+Contribution mad: 3 -4.716221 2.805828 2.805828
+Madelung contribution atom: 1 x 1 = -0.167369
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+Madelung contribution atom: 1 x 1 = -0.167369
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+
+calculateTotalEnergy:  ==============================================
+Total Energy contribution from atom 0.0:
+evssum                      =       -37.9540147880167566540876578 Ry
+kinetic Energy              =       481.4262140498912572184053715 Ry
+erho                        =       222.9134468264950328375562094 Ry
+ezrho                       =     -1151.7919377817886470438679680 Ry
+Coulomb Energy              =      -928.8784909552936142063117586 Ry
+Exchange-Correlation Energy =       -34.9287241927512397410282574 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+Total Energy contribution from atom 0.1:
+evssum                      =       -37.9540147880171332417376107 Ry
+kinetic Energy              =       481.4262140499011479732871521 Ry
+erho                        =       222.9134468264968234052503249 Ry
+ezrho                       =     -1151.7919377817977419908856973 Ry
+Coulomb Energy              =      -928.8784909553008901639259420 Ry
+Exchange-Correlation Energy =       -34.9287241927514671147037006 Ry
+ezpt                        =         0.0029239614704160469225991 Ry
+
+is, emad, emadp =     0        -0.7668288816845492128493333        -0.6864358302037366632575299
+is, emad, emadp =     1        -0.7668288816845492128493333        -0.6864358302037366632575299
+is, emad, emadp =     0        -0.7668288816845492128493333        -0.6864358302037366632575299
+is, emad, emadp =     1        -0.7668288816845492128493333        -0.6864358302037366632575299
+Interstitial:  ----------------------------------------------
+XC:        -0.1917072204211373032123333 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917072204211373032123333 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917072204211373032123333 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+XC:        -0.1917072204211373032123333 Ry
+==================================================================
+Interstitial:  ----------------------------------------------
+Madelung:        -0.6694752931470917545198063 Ry
+==================================================================
+calculateTotalEnergy:  ----------------------------------------------
+Total Energy              =     -1931.7271374491187998501118273 Ry
+Pressure                  =        -0.3295967518319090627798573 Ry
+=====================================================================
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269428
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269428
+n:   2  l:   1  kappa:   1  E: -4.163708691982
+n:   2  l:   1  kappa:   1  E: -4.163708691982
+n:   2  l:   1  kappa:  -2  E: -4.163708685744
+n:   2  l:   1  kappa:  -2  E: -4.163708685744
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269428
+n:   2  l:   0  kappa:  -1  E: -6.906155269428
+n:   2  l:   1  kappa:   1  E: -4.163708691982
+n:   2  l:   1  kappa:   1  E: -4.163708691982
+n:   2  l:   1  kappa:  -2  E: -4.163708685744
+n:   2  l:   1  kappa:  -2  E: -4.163708685744
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306738830178    C
+             2    0   -1       -6.9061550171453    S
+             2    1    1       -4.1637075185892    S
+             2    1   -2       -4.1637075101534    S
+          Energy     core:    -109.33067388
+          Energy semicore:     -19.39727756
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306738830178    C
+             2    0   -1       -6.9061550171453    S
+             2    1    1       -4.1637075185892    S
+             2    1   -2       -4.1637075101534    S
+          Energy     core:    -109.33067388
+          Energy semicore:     -19.39727756
+
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356029
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643971
+
+calculateCoreState 0.1
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269428
+n:   2  l:   0  kappa:  -1  E: -6.906155269428
+n:   2  l:   1  kappa:   1  E: -4.163708691982
+n:   2  l:   1  kappa:   1  E: -4.163708691982
+n:   2  l:   1  kappa:  -2  E: -4.163708685744
+n:   2  l:   1  kappa:  -2  E: -4.163708685744
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   1  l:   0  kappa:  -1  E: -109.330673883018
+n:   2  l:   0  kappa:  -1  E: -6.906155269428
+n:   2  l:   0  kappa:  -1  E: -6.906155269428
+n:   2  l:   1  kappa:   1  E: -4.163708691982
+n:   2  l:   1  kappa:   1  E: -4.163708691982
+n:   2  l:   1  kappa:  -2  E: -4.163708685744
+n:   2  l:   1  kappa:  -2  E: -4.163708685744
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306738830177    C
+             2    0   -1       -6.9061550171453    S
+             2    1    1       -4.1637075185893    S
+             2    1   -2       -4.1637075101535    S
+          Energy     core:    -109.33067388
+          Energy semicore:     -19.39727756
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306738830177    C
+             2    0   -1       -6.9061550171453    S
+             2    1    1       -4.1637075185893    S
+             2    1   -2       -4.1637075101535    S
+          Energy     core:    -109.33067388
+          Energy semicore:     -19.39727756
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356029
+               Muffin-tin core+semi moment   =   -0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643971
+Maximal Core State = -4.16371Ry
+
+ GETQM_MT:: r_sph charge,w             =    12.27183303758     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+
+ GETQM_MT:: r_sph charge,w             =    12.27183303758     0.00000000000     2.70588334698  501    0
+            muffin-tin moment          =     0.00000000000
+
+ GENPOT / calculateCharges: 
+ Total charge and moment in W-S cell:
+ qtotws =     13.00000000000
+ mtotws =      0.00000000000
+Total interstitial charge =      2.91266784968
+Total interstitial moment =      0.00000000000
+Total interstitial charge =      2.91266784968
+Total interstitial moment =      0.00000000000
+Contribution mad: 0 -0.599211 2.805828 2.805828
+Contribution mad: 1 -1.198422 2.805828 2.805828
+Contribution mad: 2 -4.117010 2.805828 2.805828
+Contribution mad: 3 -4.716221 2.805828 2.805828
+Contribution mad: 0 -2.918588 2.805828 2.805828
+Contribution mad: 1 -3.517799 2.805828 2.805828
+Contribution mad: 2 -4.117010 2.805828 2.805828
+Contribution mad: 3 -4.716221 2.805828 2.805828
+Madelung contribution atom: 0 x 1 = -0.167369
+Contribution mad: 0 -0.599211 2.805828 2.805828
+Contribution mad: 1 -3.517799 2.805828 2.805828
+Contribution mad: 2 -4.117010 2.805828 2.805828
+Madelung contribution atom: 0 x 1 = -0.167369
+Contribution mad: 0 -0.599211 2.805828 2.805828
+Contribution mad: 1 -1.198422 2.805828 2.805828
+Contribution mad: 2 -1.797634 2.805828 2.805828
+Contribution mad: 3 -4.716221 2.805828 2.805828
+Madelung contribution atom: 1 x 1 = -0.167369
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+Contribution mad: 3 -4.716221 2.805828 2.805828
+Madelung contribution atom: 1 x 1 = -0.167369
+Madelung constant: -0.669475
+Madelung constant: -0.669475
+Band Energy = 3.362161 Ry           Fermi Energy = 0.600362 Ry
+Total Energy = -1931.727137 Ry
+RMS = 9.97222e-09
+
+calculateCoreState 0.0
+n:   1  l:   0  kappa:  -1  E: -109.330673322307
+n:   1  l:   0  kappa:  -1  E: -109.330673322307
+n:   2  l:   0  kappa:  -1  E: -6.906155455364
+n:   2  l:   0  kappa:  -1  E: -6.906155455365
+n:   2  l:   1  kappa:   1  E: -4.163708574162
+n:   2  l:   1  kappa:   1  E: -4.163708574162
+n:   2  l:   1  kappa:  -2  E: -4.163708567925
+n:   2  l:   1  kappa:  -2  E: -4.163708567925
+n:   1  l:   0  kappa:  -1  E: -109.330673322307
+n:   1  l:   0  kappa:  -1  E: -109.330673322307
+n:   2  l:   0  kappa:  -1  E: -6.906155455364
+n:   2  l:   0  kappa:  -1  E: -6.906155455365
+n:   2  l:   1  kappa:   1  E: -4.163708574162
+n:   2  l:   1  kappa:   1  E: -4.163708574162
+n:   2  l:   1  kappa:  -2  E: -4.163708567925
+n:   2  l:   1  kappa:  -2  E: -4.163708567925
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306733223074    C
+             2    0   -1       -6.9061552030823    S
+             2    1    1       -4.1637074007706    S
+             2    1   -2       -4.1637073923348    S
+          Energy     core:    -109.33067332
+          Energy semicore:     -19.39727739
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306733223074    C
+             2    0   -1       -6.9061552030823    S
+             2    1    1       -4.1637074007706    S
+             2    1   -2       -4.1637073923348    S
+          Energy     core:    -109.33067332
+          Energy semicore:     -19.39727739
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356037
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643963
+n:   1  l:   0  kappa:  -1  E: -109.330673322307
+
+calculateCoreState 0.1
+n:   2  l:   0  kappa:  -1  E: -6.906155455365
+n:   2  l:   1  kappa:   1  E: -4.163708574162
+n:   2  l:   1  kappa:  -2  E: -4.163708567925
+n:   1  l:   0  kappa:  -1  E: -109.330673322307
+n:   2  l:   0  kappa:  -1  E: -6.906155455365
+n:   2  l:   1  kappa:   1  E: -4.163708574162
+n:   1  l:   0  kappa:  -1  E: -109.330673322307
+n:   2  l:   0  kappa:  -1  E: -6.906155455365
+n:   2  l:   1  kappa:   1  E: -4.163708574162
+n:   2  l:   1  kappa:  -2  E: -4.163708567925
+n:   1  l:   0  kappa:  -1  E: -109.330673322307
+n:   2  l:   0  kappa:  -1  E: -6.906155455365
+n:   2  l:   1  kappa:   1  E: -4.163708574162
+n:   2  l:   1  kappa:  -2  E: -4.163708567925
+n:   2  l:   1  kappa:  -2  E: -4.163708567925
+getCoreStates: spin index #0
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306733223074    C
+             2    0   -1       -6.9061552030823    S
+             2    1    1       -4.1637074007706    S
+             2    1   -2       -4.1637073923348    S
+          Energy     core:    -109.33067332
+          Energy semicore:     -19.39727739
+getCoreStates: spin index #1
+Eigenvalues: n    l    k         energy      type
+             1    0   -1     -109.3306733223074    C
+             2    0   -1       -6.9061552030823    S
+             2    1    1       -4.1637074007706    S
+             2    1   -2       -4.1637073923348    S
+          Energy     core:    -109.33067332
+          Energy semicore:     -19.39727739
+
+getCoreStates: Muffin-tin core charge        =    2.00000000000
+               Muffin-tin semicore charge    =    7.99932356037
+               Muffin-tin core+semi moment   =    0.00000000000
+               Wigner-Seitz core+semi moment =    0.00000000000
+               Interstitial charge core      =    0.00067643963
+Maximal Core State = -4.16371Ry
+Writing new potentials and restart file.
+Writing new potentials.
+Writing restart file.
+Band Energy = 3.362161296263633 Ry
+Fermi Energy = 0.600362446995575 Ry
+Total Energy = -1931.727137449118800 Ry
+timeScfLoop[rank==0] = 27.452186 sec
+     number of iteration:8
+timeScfLoop/iteration = 3.431523 sec
+timeCalcChemPot[rank==0]/iteration = 0.000624 sec
+timeCalcPotentialsAndMixing[rank==0]/iteration = 0.006612 sec
+timeBuildLIZandCommList[rank==0]: 0.001415 sec
+FOM Scale = 112377856.000000
+Energy Contour Points = 32
+FOM = 3.27487e+07/sec
+FOM * energyContourPoints = = 1.04796e+09/sec
+  
+
+ Real Space Lattice:: nm1,nm2,nm3   =     4    4    4
+                      Rs cut radius =    7.94005
+                      Number of Rs  =   729
+  
+
+ Reciprocal Lattice:: nm1,nm2,nm3   =     4    4    4
+                      Kn cut radius =   37.98374
+                      Number of Kn  =   729
+  
+
+ Real Space Lattice:: nm1,nm2,nm3   =     4    4    4
+                      Rs cut radius =    7.94005
+                      Number of Rs  =   729
+  
+
+ Reciprocal Lattice:: nm1,nm2,nm3   =     4    4    4
+                      Kn cut radius =   37.98374
+                      Number of Kn  =   729
+********************************************************************************
+* Atom:    0
+* Force x:      -0.0000000000000009
+* Force y:      -0.0000000000000010
+* Force z:      -0.0000000000000012
+* Atom:    1
+* Force x:       0.0000000000000013
+* Force y:       0.0000000000000011
+* Force z:      -0.0000000000000010
+* Atom:    2
+* Force x:       0.0000000000000013
+* Force y:      -0.0000000000000010
+* Force z:       0.0000000000000010
+* Atom:    3
+* Force x:      -0.0000000000000009
+* Force y:       0.0000000000000011
+* Force z:       0.0000000000000010
+********************************************************************************
+* Global force sum
+* Force x:       0.0000000000000007
+* Force y:       0.0000000000000001
+* Force z:      -0.0000000000000002
+********************************************************************************
+********************************************************************************
+* Atom:    0
+* Force x:      -0.0000000000000011
+* Force y:      -0.0000000000000010
+* Force z:      -0.0000000000000011
+* Atom:    1
+* Force x:       0.0000000000000011
+* Force y:       0.0000000000000010
+* Force z:      -0.0000000000000010
+* Atom:    2
+* Force x:       0.0000000000000011
+* Force y:      -0.0000000000000011
+* Force z:       0.0000000000000011
+* Atom:    3
+* Force x:      -0.0000000000000011
+* Force y:       0.0000000000000011
+* Force z:       0.0000000000000011
+********************************************************************************
+* Global force sum
+* Force x:       0.0000000000000000
+* Force y:       0.0000000000000000
+* Force z:       0.0000000000000000
+********************************************************************************

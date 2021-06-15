@@ -3,7 +3,7 @@ export TOP_DIR = $(shell pwd)
 export INC_PATH =
 export LIBS := -L$(TOP_DIR)/lua/lib -llua $(TOP_DIR)/mjson/mjson.a
 
-include architecture.h 
+include architecture.mk
 
 ifdef USE_LIBXC
   ADDITIONAL_TARGETS += libxc

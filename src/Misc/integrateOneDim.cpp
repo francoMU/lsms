@@ -1,5 +1,6 @@
 #include "Real.hpp"
 #include "rationalFit.hpp"
+
 #include <vector>
 
 

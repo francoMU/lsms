@@ -1,6 +1,7 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 #include <mpi.h>
 #include "LSMSCommunication.hpp"
+#include "mixing_params.hpp"
 
 #define USE_ISEND
 

@@ -1,8 +1,11 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
+
+#include "setupVorpol.hpp"
+
 #include "Main/SystemParameters.hpp"
 #include "Communication/LSMSCommunication.hpp"
 #include "Misc/Coeficients.hpp"
-#include "VORPOL.hpp"
+#include "VORPOL/VORPOL.hpp"
 
 void setupVorpol(LSMSSystemParameters &lsms, CrystalParameters &crystal, LocalTypeInfo &local,SphericalHarmonicsCoeficients &shc)
 {

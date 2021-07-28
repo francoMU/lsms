@@ -116,12 +116,12 @@ void lsms::calculateForces(const LSMSCommunication &comm,
                         auto distance_l2_3 = distance_l2 * distance_l2 * distance_l2;
 
                         auto charge_j = atom_j.ztotss   // nucleus charge
-                                        - atom_j.qtotmt // electron charge
-                                        + atom_j.rhoInt * atom_j.omegaMT;
+                                        - atom_j.qtotws // electron charge
+                                        + atom_j.rhoInt * atom_j.omegaWS;
 
                         auto charge_i = atom_i.ztotss   // nucleus charge
-                                        - atom_i.qtotmt // electron charge
-                                        + atom_i.rhoInt * atom_i.omegaMT;
+                                        - atom_i.qtotws // electron charge
+                                        + atom_i.rhoInt * atom_i.omegaWS;
 
 
 #ifdef DEBUG

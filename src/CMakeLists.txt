@@ -1,6 +1,7 @@
 
 
-add_executable(lsms)
+add_executable(lsms_main)
+set_target_properties(lsms_main PROPERTIES OUTPUT_NAME "lsms")
 
 add_library(lsmscore STATIC)
 
@@ -45,5 +46,5 @@ add_subdirectory(VORPOL)
 add_subdirectory(Forces)
 
 
-target_link_libraries(lsms PUBLIC lsmscore)
+target_link_libraries(lsms_main PUBLIC lsmscore)
 

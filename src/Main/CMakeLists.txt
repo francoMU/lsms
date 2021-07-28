@@ -49,16 +49,16 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_sources(lsms
+target_sources(lsms_main
         PUBLIC
         lsms.cpp)
 
-set_target_properties(lsms
+set_target_properties(lsms_main
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
         )
 
-target_link_libraries(lsms
+target_link_libraries(lsms_main
         PUBLIC lsmscore)
 
 

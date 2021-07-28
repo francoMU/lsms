@@ -16,6 +16,8 @@ void initMadelung(int num_atoms,
                   double *pos,
                   int iprint);
 
+void endMadelung();
+
 #if defined (__cplusplus)
 }
 #endif

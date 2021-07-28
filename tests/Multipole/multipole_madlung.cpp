@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-#include "Madelung/Multipole/multipole_madelung.h"
+#include "multipole_madelung.h"
 
 namespace TestMultipoleMadelung {
 
@@ -10,7 +10,7 @@ namespace TestMultipoleMadelung {
 
         int num_local_atoms = 1;
         int num_atoms = 1;
-        int gindex[] = {0};
+        int gindex[] = {1};
         int lmax_rho = 1;
         int lmax_pot = 1;
 
@@ -21,11 +21,17 @@ namespace TestMultipoleMadelung {
         };
 
         double position[] = {
-                0.0, 0.0, 0.0
+                0.1, 0.1, 0.2
         };
 
-        initMadelung(num_local_atoms, num_atoms, gindex, lmax_rho, lmax_pot,
-                     bravais, position, 1);
+        initMadelung(num_local_atoms,
+                     num_atoms,
+                     gindex,
+                     lmax_rho,
+                     lmax_pot,
+                     bravais,
+                     position,
+                     1);
 
         return true;
     }

@@ -86,6 +86,7 @@ contains
    use IntegerFactorsModule, only : initIntegerFactors, endIntegerFactors
 !
    use MathParamModule, only : THIRD, THREE
+   use SphericalHarmonicsModule, only : initSphericalHarmonics
 !
    use GauntFactorsModule, only : isGauntInitialized => isInitialized
    use GauntFactorsModule, only : initGauntFactors
@@ -223,6 +224,7 @@ contains
    if ( jmax_mad > 1 ) then
       if (.not.isGauntInitialized()) then
 !        -------------------------------------------------------------
+         call initSphericalHarmonics(lmax_mad*2)
          call initGauntFactors(lmax_mad,'xxxx',iprint)
 !        -------------------------------------------------------------
       endif
@@ -622,7 +624,7 @@ contains
 !
    ipmax = nrslat
 !  -------------------------------------------------------------------
-   call lattice(vbrar,rscut,nm1,nm2,nm3,vec_x,vec_y,vec_z,vecsq,nr,ipmax)
+   call createLattice(vbrar,rscut,nm1,nm2,nm3,vec_x,vec_y,vec_z,vecsq,nr,ipmax)
 !  -------------------------------------------------------------------
 !
    if(PrintLevel.ge.0) then

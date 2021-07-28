@@ -10,6 +10,7 @@ macro(add_must_test library_target testname)
     set_target_properties(${exename} PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests)
 
+
     foreach (objectlib ${TEST_EXTRA_OBJECTS})
         add_dependencies(${exename} ${objectlib})
         target_sources(${exename} PUBLIC $<TARGET_OBJECTS:${objectlib}>)
@@ -18,6 +19,10 @@ macro(add_must_test library_target testname)
                 $<TARGET_PROPERTY:${objectlib},Fortran_MODULE_DIRECTORY>)
     endforeach ()
 
+    get_target_property(LIB_INCLUDES lsmscore INCLUDE_DIRECTORIES)
+    foreach (dir ${LIB_INCLUDES})
+        target_include_directories(${exename} PUBLIC ${dir})
+    endforeach ()
 
     target_include_directories(${exename} PRIVATE $<TARGET_PROPERTY:${library_target},Fortran_MODULE_DIRECTORY>)
     target_link_directories(${exename} PRIVATE $<TARGET_PROPERTY:${library_target},LIBRARY_OUTPUT_DIRECTORY>)

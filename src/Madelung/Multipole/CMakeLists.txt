@@ -2,16 +2,18 @@
 target_sources(
         lsmscore
         PUBLIC
-        IntegerFactorsModule.F90
-        KindParamModule.F90
-        MadelungModule.F90
-        ErrorHandlerModule.F90
-        GauntFactorsModule.F90
-        LegendreModule.F90
-        SphericalHarmonicsModule.F90
-        MathParamModule.F90
-        numlat.F90
+        IntegerFactorsModule.f90
+        KindParamModule.f90
+        MadelungModule.f90
+        ErrorHandlerModule.f90
+        GauntFactorsModule.f90
+        LegendreModule.f90
+        SphericalHarmonicsModule.f90
+        MathParamModule.f90
+        numlat.f90
         createLattice.f90
-        gaussq.F90
-        breakLine.F90
+        gaussq.f90
+        breakLine.f90
+        CMadelungModule.f90
+        multipole_madelung.h
 )

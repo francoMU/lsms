@@ -17,6 +17,19 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+
+target_compile_options(
+        lsmscore
+        PUBLIC
+        "-cpp"
+)
+
+target_link_libraries(
+        lsmscore
+        PUBLIC
+        gfortran
+)
+
 add_subdirectory(Accelerator)
 
 add_subdirectory(Communication)
@@ -47,4 +60,3 @@ add_subdirectory(Forces)
 
 
 target_link_libraries(lsms_main PUBLIC lsmscore)
-

@@ -1,10 +1,40 @@
 module CMadelungModule
-   use iso_c_binding, only : c_int, c_double, c_ptr
+   use iso_c_binding, only : c_int, c_double, c_ptr, c_loc
    implicit none
    private
    public :: c_initMadelung
+   public :: test_calling_from_cpp
+
+   real(c_double) :: variable
+   real(c_double), bind(C) :: variable_2
 
 contains
+
+   subroutine test_calling_from_cpp() bind(C, name="test_calling_from_cpp")
+
+      print *, "Method was called"
+
+      variable=1
+      variable_2=2
+
+   end subroutine test_calling_from_cpp
+
+   subroutine testMatrix(matrix) bind(C, name="testMatrix")
+
+      type(c_ptr), intent(out) :: matrix
+
+      real(kind=c_double), pointer :: tmp_matrix(:, :, :)
+
+      allocate(tmp_matrix(2, 3, 4))
+
+      tmp_matrix=1.0_8
+      tmp_matrix(2, 1, 1)=2.0_8
+      tmp_matrix(1, 2, 1)=3.0_8
+      tmp_matrix(2, 3, 4)=4.0_8
+
+      matrix=c_loc(tmp_matrix)
+
+   end subroutine testMatrix
 
    subroutine c_initMadelung(num_local_atoms, num_atoms, gindex, &
          lmax_rho, lmax_pot, bravais, posi, iprint) bind(C, name="initMadelung")
@@ -23,26 +53,11 @@ contains
 
    end subroutine
 
-   subroutine c_getMadelungMatrix(local_atom_index, madelung_matrix, madelung_matrix_size) &
-         bind(C, name="getMadelungMatrix")
-      use MadelungModule, only : getMadelungMatrix
-
-      integer (kind=c_int), value, intent(in) :: local_atom_index !< Global number of atoms
-      type(c_ptr), intent(out) :: madelung_matrix
-      integer (kind=c_int), intent(out) :: madelung_matrix_size
-
-      real (kind=c_double), pointer :: madelung_matrix_f(:)
-
-      madelung_matrix_f=>getMadelungMatrix(local_atom_index)
-
-      madelung_matrix_size=size(madelung_matrix_f)
-
-   end subroutine
-
    subroutine c_endMadelung() bind(C, name="endMadelung")
       use MadelungModule, only : endMadelung
 
       call endMadelung()
+
    end subroutine c_endMadelung
 
 end module CMadelungModule

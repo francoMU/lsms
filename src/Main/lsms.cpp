@@ -49,6 +49,8 @@
 #include "TotalEnergy/calculateTotalEnergy.hpp"
 #include "SingleSite/checkAntiFerromagneticStatus.hpp"
 #include "Forces/forces.hpp"
+#include "Madelung/Multipole/higherOrderMadelung.hpp"
+#include "Madelung/Multipole/calcHigherOrderMadelung.hpp"
 
 #include "Misc/readLastLine.hpp"
 
@@ -694,13 +696,39 @@ int main(int argc, char *argv[]) {
         //         (double)energyContourPoints * (double)fomScale * (double)lsms.nscf / timeScfLoop);
 
 
-        std::printf("Electrostatic energy: %26.12f\n", lsms.electroStaticEnergy);
-        lsms::displayCharges(comm, lsms, local, crystal);
-        lsms::calculateForces(comm, lsms, local, crystal, lsms.forceParams);
-        lsms::displayForces(local, crystal);
+        //std::printf("Electrostatic energy: %26.12f\n", lsms.electroStaticEnergy);
+        //lsms::displayCharges(comm, lsms, local, crystal);
 
 
     }
+
+    /*
+     * Calculate forces
+     */
+
+    lsms::HigherOrderMadelung higherOrderMadelung(lsms.num_atoms, crystal.num_atoms);
+
+    /*
+    lsms::calculateHigherOrderMadelung(lsms,
+                                       crystal,
+                                       local,
+                                       higherOrderMadelung);
+                                       */
+
+    MPI_Barrier(comm.comm);
+
+    lsms::calculateForces(comm,
+                          lsms,
+                          local,
+                          crystal,
+                          higherOrderMadelung,
+                          lsms.forceParams);
+
+    // lsms::displayForces(local, crystal);
+
+    /*
+     *
+     */
 
     local.tmatStore.unpinMemory();
 

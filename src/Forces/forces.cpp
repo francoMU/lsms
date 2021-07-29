@@ -18,6 +18,103 @@
 
 #endif
 
+
+void lsms::calculateForces(const LSMSCommunication &comm,
+                           const LSMSSystemParameters &lsms,
+                           LocalTypeInfo &local,
+                           CrystalParameters &crystal,
+                           lsms::HigherOrderMadelung &madelung,
+                           lsms::ForceParameters parameters) {
+
+    //  Number of local atoms
+    auto num_local_atoms = local.num_local;
+
+    // Gives the total number of atoms
+    auto num_atoms = lsms.num_atoms;
+    auto latt_scale = madelung.lattice_scale;
+
+    auto prefactor_11 = madelung.pre_factor_11_00;
+    auto prefactor_10 = madelung.pre_factor_10_00;
+
+    // Clear forces
+    for (auto i = 0; i < local.num_local; i++) {
+        std::fill(local.atom[i].force.begin(),
+                  local.atom[i].force.end(), 0.0);
+    }
+
+    // Charge array
+    std::vector<Real> charges(num_atoms, 0.0);
+
+    //
+    for (auto &a : local.global_id) {
+        std::cout << comm.rank << ": " << a << std::endl;
+    }
+    //
+
+
+    // Number of local atoms
+    for (int i_local = 0; i_local < num_local_atoms; i_local++) {
+
+        auto &atom_i = local.atom[i_local];
+
+        // Charge multipole memonent i
+        auto charge_i = atom_i.ztotss   // nucleus charge
+                        - atom_i.qtotws // electron charge
+                        + atom_i.rhoInt * atom_i.omegaWS;
+
+        auto i_global = local.global_id[i_local];
+        charges[i_global] = charge_i;
+
+    }
+
+    return;
+
+    /*
+     * Make it possible to access all other atoms
+     */
+    // How to access here all other atoms
+    //for (int j_global = 0; j_global < num_atoms; j_global++) {
+
+    //  auto &atom_j = local.atom[j_global];
+
+    //Complex G_11 = madelung.G_11(j_global, i_local);
+    //Complex G_10 = madelung.G_10(j_global, i_local);
+
+    //auto charge_j = atom_j.ztotss   // nucleus charge
+    //                - atom_j.qtotws // electron charge
+    //                + atom_j.rhoInt * atom_j.omegaWS;
+
+    /*
+     * F^(i)_x = - q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
+     *              Re{ M^(ij)_{11,00} } * q^(j)_{eff} * sqrt(3 / (2 * M_PI)) / a_0
+     */
+    //atom_i.force[0] += -std::sqrt(3.0 / (2.0 * M_PI))
+    //                   * std::real(G_11 * prefactor_11) * charge_i / latt_scale
+    //                   * charge_j;
+
+    /*
+     * F^(i)_y = + q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
+     *              Im{ M^(ij)_{11,00} } * q^(j)_{eff} * sqrt(3 / (2 * M_PI)) / a_0
+     */
+    //atom_i.force[1] += std::sqrt(3.0 / (2.0 * M_PI))
+    //                   * std::imag(G_11 * prefactor_11) * charge_i / latt_scale
+    //                   * charge_j;
+
+    /*
+     * F^(i)_z =  q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
+     *               Re{ M^(ij)_{10,00} } * q^(j)_{eff} * sqrt(3 / (4 * M_PI)) / a_0
+     */
+    //atom_i.force[2] += std::sqrt(3.0 / (4.0 * M_PI))
+    //                   * std::real(G_10 * prefactor_10) * charge_i / latt_scale
+    //                   * charge_j;
+
+    //}
+
+//}
+
+}
+
+
 void lsms::calculateForces(const LSMSCommunication &comm,
                            const LSMSSystemParameters &lsms,
                            LocalTypeInfo &local,

@@ -4,6 +4,7 @@
 
 #include "Communication/LSMSCommunication.hpp"
 #include "Main/SystemParameters.hpp"
+#include "Madelung/Multipole/higherOrderMadelung.hpp"
 
 namespace lsms {
 
@@ -52,6 +53,25 @@ namespace lsms {
                          LocalTypeInfo &local,
                          CrystalParameters &crystal,
                          ForceParameters parameters = ForceParameters{});
+
+    /**
+     * @brief calculates forces
+     *
+     * This function calculates the forces
+     *
+     * @param comm
+     * @param lsms
+     * @param local
+     * @param crystal
+     * @param parameters
+     */
+    void calculateForces(const LSMSCommunication &comm,
+                         const LSMSSystemParameters &lsms,
+                         LocalTypeInfo &local,
+                         CrystalParameters &crystal,
+                         HigherOrderMadelung &madelung,
+                         ForceParameters parameters = ForceParameters{}
+    );
 
 
 }

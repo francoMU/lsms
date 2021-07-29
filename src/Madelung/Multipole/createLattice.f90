@@ -51,6 +51,9 @@ subroutine createLattice(vbra, vcut, nm1, nm2, nm3, vlat_1, vlat_2, vlat_3, vsq,
    !  ===================================================================
    !  generate lattice vectors........................................
    !  ===================================================================
+
+   print *, "create Lattice inside"
+
    vlat_1(1:ipmax)=ZERO
    vlat_2(1:ipmax)=ZERO
    vlat_3(1:ipmax)=ZERO

@@ -29,8 +29,8 @@ void lsms::calculateHigherOrderMadelung(LSMSSystemParameters &lsms,
                    });
 
     initMadelung(
-            num_local_atoms,
             num_atoms,
+            num_local_atoms,
             global_index.data(),
             0,
             1,

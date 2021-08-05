@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <string>
 #include <cmath>
+#include <numeric>
 
 #include "Communication/LSMSCommunication.hpp"
 #include "Main/SystemParameters.hpp"
@@ -42,15 +43,8 @@ void lsms::calculateForces(const LSMSCommunication &comm,
                   local.atom[i].force.end(), 0.0);
     }
 
-    // Charge array
-    std::vector<Real> charges(num_atoms, 0.0);
-
-    //
-    for (auto &a : local.global_id) {
-        std::cout << comm.rank << ": " << a << std::endl;
-    }
-    //
-
+    std::vector<Real> local_charges(num_local_atoms, 0.0);
+    std::vector<Real> global_charges(num_atoms, 0.0);
 
     // Number of local atoms
     for (int i_local = 0; i_local < num_local_atoms; i_local++) {
@@ -62,55 +56,80 @@ void lsms::calculateForces(const LSMSCommunication &comm,
                         - atom_i.qtotws // electron charge
                         + atom_i.rhoInt * atom_i.omegaWS;
 
+        local_charges[i_local] = charge_i;
+
         auto i_global = local.global_id[i_local];
-        charges[i_global] = charge_i;
+        global_charges[i_global] = charge_i;
 
     }
 
-    return;
+    // number of elements in the message to receive from each process
+    std::vector<int> rcounts(comm.size);
 
+    for (int i = 0; i < num_atoms; i++) {
+        auto index = crystal.types[i].node;
+        rcounts[index] = crystal.types[i].local_id + 1;
+    }
+
+    // displacement vector
+    std::vector<int> displs(comm.size, 0);
+
+    for (int i = 1; i < comm.size; i++) {
+        displs[i] = std::accumulate(rcounts.begin(),
+                                    rcounts.begin() + i, 0);
+    }
+
+    MPI_Allgatherv(local_charges.data(),
+                   num_local_atoms,
+                   MPI_DOUBLE,
+                   global_charges.data(),
+                   rcounts.data(),
+                   displs.data(),
+                   MPI_DOUBLE,
+                   comm.comm);
     /*
-     * Make it possible to access all other atoms
+     *
      */
-    // How to access here all other atoms
-    //for (int j_global = 0; j_global < num_atoms; j_global++) {
+    for (int i_local = 0; i_local < num_local_atoms; i_local++) {
 
-    //  auto &atom_j = local.atom[j_global];
+        auto &atom_i = local.atom[i_local];
+        auto charge_i = local_charges[i_local];
 
-    //Complex G_11 = madelung.G_11(j_global, i_local);
-    //Complex G_10 = madelung.G_10(j_global, i_local);
+        for (int j_global = 0; j_global < num_atoms; j_global++) {
+            auto &atom_j = local.atom[j_global];
 
-    //auto charge_j = atom_j.ztotss   // nucleus charge
-    //                - atom_j.qtotws // electron charge
-    //                + atom_j.rhoInt * atom_j.omegaWS;
+            Complex G_11 = madelung.G_11(j_global, i_local);
+            Complex G_10 = madelung.G_10(j_global, i_local);
 
-    /*
-     * F^(i)_x = - q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
-     *              Re{ M^(ij)_{11,00} } * q^(j)_{eff} * sqrt(3 / (2 * M_PI)) / a_0
-     */
-    //atom_i.force[0] += -std::sqrt(3.0 / (2.0 * M_PI))
-    //                   * std::real(G_11 * prefactor_11) * charge_i / latt_scale
-    //                   * charge_j;
+            auto charge_j = global_charges[j_global];
 
-    /*
-     * F^(i)_y = + q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
-     *              Im{ M^(ij)_{11,00} } * q^(j)_{eff} * sqrt(3 / (2 * M_PI)) / a_0
-     */
-    //atom_i.force[1] += std::sqrt(3.0 / (2.0 * M_PI))
-    //                   * std::imag(G_11 * prefactor_11) * charge_i / latt_scale
-    //                   * charge_j;
+            /*
+             * F^(i)_x = - q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
+             *              Re{ M^(ij)_{11,00} } * q^(j)_{eff} * sqrt(3 / (2 * M_PI)) / a_0
+             */
+            atom_i.force[0] += -std::sqrt(3.0 / (2.0 * M_PI))
+                               * std::real(G_11 * prefactor_11) * charge_i / latt_scale
+                               * charge_j;
 
-    /*
-     * F^(i)_z =  q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
-     *               Re{ M^(ij)_{10,00} } * q^(j)_{eff} * sqrt(3 / (4 * M_PI)) / a_0
-     */
-    //atom_i.force[2] += std::sqrt(3.0 / (4.0 * M_PI))
-    //                   * std::real(G_10 * prefactor_10) * charge_i / latt_scale
-    //                   * charge_j;
+            /*
+             * F^(i)_y = + q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
+             *              Im{ M^(ij)_{11,00} } * q^(j)_{eff} * sqrt(3 / (2 * M_PI)) / a_0
+             */
+            atom_i.force[1] += std::sqrt(3.0 / (2.0 * M_PI))
+                               * std::imag(G_11 * prefactor_11) * charge_i / latt_scale
+                               * charge_j;
 
-    //}
+            /*
+             * F^(i)_z =  q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
+             *               Re{ M^(ij)_{10,00} } * q^(j)_{eff} * sqrt(3 / (4 * M_PI)) / a_0
+             */
+            atom_i.force[2] += std::sqrt(3.0 / (4.0 * M_PI))
+                               * std::real(G_10 * prefactor_10) * charge_i / latt_scale
+                               * charge_j;
 
-//}
+        }
+
+    }
 
 }
 

@@ -703,7 +703,7 @@ int main(int argc, char *argv[]) {
     }
 
     /*
-     * Calculate forces
+     * begin of forces calculations
      */
 
     lsms::HigherOrderMadelung higherOrderMadelung(lsms.num_atoms, crystal.num_atoms);
@@ -724,10 +724,10 @@ int main(int argc, char *argv[]) {
                           higherOrderMadelung,
                           lsms.forceParams);
 
-    // lsms::displayForces(local, crystal);
+    lsms::displayForces(local, crystal);
 
     /*
-     *
+     * End of force calculation
      */
 
     local.tmatStore.unpinMemory();

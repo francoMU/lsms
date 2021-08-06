@@ -27,7 +27,7 @@ target_sources(
         SphericalHarmonicsModule.f90
         MathParamModule.f90
         LatticeModule.f90
-        createLattice.f90
+        # createLattice.f90
         gaussq.f90
         breakLine.f90
         CMadelungModule.f90

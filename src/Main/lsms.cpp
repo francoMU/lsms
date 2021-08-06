@@ -706,16 +706,13 @@ int main(int argc, char *argv[]) {
      * begin of forces calculations
      */
 
-    lsms::HigherOrderMadelung higherOrderMadelung(lsms.num_atoms, crystal.num_atoms);
+    lsms::HigherOrderMadelung higherOrderMadelung(local.num_local, crystal.num_atoms);
 
-    /*
     lsms::calculateHigherOrderMadelung(lsms,
                                        crystal,
                                        local,
                                        higherOrderMadelung);
-                                       */
 
-    MPI_Barrier(comm.comm);
 
     lsms::calculateForces(comm,
                           lsms,

@@ -12,11 +12,8 @@
 #include "utils.hpp"
 #include "forces_params.hpp"
 
-
 #ifdef DEBUG
-
 #include <icecream.hpp>
-
 #endif
 
 
@@ -87,6 +84,34 @@ void lsms::calculateForces(const LSMSCommunication &comm,
                    displs.data(),
                    MPI_DOUBLE,
                    comm.comm);
+
+
+#ifdef DEBUG
+
+    std::cout << " Lattice scale " << std::endl;
+    std::cout << latt_scale << std::endl;
+
+    std::cout << " Prefactors " << std::endl;
+    std::cout << lsms.rank << " " << prefactor_11 << std::endl;
+    std::cout << lsms.rank << " " << prefactor_10 << std::endl;
+
+    std::cout << " Local charges " << std::endl;
+
+    for (int i_local = 0; i_local < num_local_atoms; i_local++) {
+        auto charge_i = local_charges[i_local];
+        std::cout << lsms.rank << " " << i_local << " " << charge_i << std::endl;
+    }
+
+    std::cout << " Global charges " << std::endl;
+
+    for (int j_global = 0; j_global < num_atoms; j_global++) {
+        auto charge_j = global_charges[j_global];
+        std::cout << lsms.rank << " " << j_global << " " << charge_j << std::endl;
+    }
+
+#endif
+
+
     /*
      *
      */
@@ -100,6 +125,11 @@ void lsms::calculateForces(const LSMSCommunication &comm,
 
             Complex G_11 = madelung.G_11(j_global, i_local);
             Complex G_10 = madelung.G_10(j_global, i_local);
+
+#ifdef DEBUG
+            std::cout << "G_11: " << G_11 << std::endl;
+            std::cout << "G_10: " << G_10 << std::endl;
+#endif
 
             auto charge_j = global_charges[j_global];
 
@@ -181,9 +211,9 @@ void lsms::calculateForces(const LSMSCommunication &comm,
     };
 
 
-    std::printf("distance x: %f %f\n", norm(bravais_x), norm(bravais_x)*m);
-    std::printf("distance y: %f %f\n", norm(bravais_y), norm(bravais_y)*n);
-    std::printf("distance z: %f %f\n", norm(bravais_z), norm(bravais_z)*u);
+    std::printf("distance x: %f %f\n", norm(bravais_x), norm(bravais_x) * m);
+    std::printf("distance y: %f %f\n", norm(bravais_y), norm(bravais_y) * n);
+    std::printf("distance z: %f %f\n", norm(bravais_z), norm(bravais_z) * u);
 
 #endif
 
@@ -238,30 +268,6 @@ void lsms::calculateForces(const LSMSCommunication &comm,
                         auto charge_i = atom_i.ztotss   // nucleus charge
                                         - atom_i.qtotws // electron charge
                                         + atom_i.rhoInt * atom_i.omegaWS;
-
-
-#ifdef DEBUG
-                        std::printf("rhoInt %f\n", atom_j.rhoInt);
-                                      // + atom_j.qInt; // interstitial contribution
-                                        //* lsms::pow(atom_j.rmt, 3) / radius_factor;
-
-                        auto charge_1 = atom_j.rhoInt * atom_j.omegaMT;
-                        auto charge_2 = atom_j.rhoInt * lsms.volumeTotal;
-                        auto charge_3 = atom_j.qInt * atom_j.omegaMT / lsms.volumeInterstitial;
-
-                        std::printf("rhoMT %f %f %f\n", charge_1, charge_2, charge_3);
-                        std::printf("V %f %f %f\n",
-                                    atom_i.omegaMT,
-                                    lsms.volumeInterstitial,
-                                    lsms.volumeTotal);
-
-                        std::printf("Z %f\n", atom_j.ztotss);
-                        std::printf("Val %f\n", atom_j.qvalmt);
-                        std::printf("Core %f\n",atom_j.qcpsc_mt);
-                        std::printf("Int %f\n", atom_j.qInt);
-                        std::printf("Charge %f\n", charge);
-#endif
-
 
                         if ((i_m != 0 && i_n != 0 && i_u != 0) || i != j) {
                             /*

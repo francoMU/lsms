@@ -126,6 +126,7 @@ contains
       real (kind=RealKind) :: vbrar(3, 3)
       real (kind=RealKind) :: vbrak(3, 3)
       !
+
       if (num_local_atoms < 1) then
          call ErrorHandler('initMadelung', 'invalid local number of atoms', &
                num_local_atoms)
@@ -242,8 +243,6 @@ contains
          !
          allocate(DL_matrix(GlobalNumAtoms, 1:kmax_mad, LocalNumAtoms))
          allocate(DL_factor(kmax_mad, jmax_mad))
-
-
 
          DL_matrix_ptr=c_loc(DL_matrix)
          DL_factor_ptr=c_loc(DL_factor)
@@ -648,6 +647,7 @@ contains
    !
    !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine genLattice(vbrar, vbrak)
+      use LatticeModule, only : createLattice
       !  ===================================================================
       implicit none
       !

@@ -20,7 +20,7 @@ ipcore=30
 
 infoEvecFileOut="info_evec_out"
 
-gpu_threads=8
+gpu_threads=2
 num_atoms=4
 relativity="none"
 core_relativity="none"
@@ -86,7 +86,7 @@ site[3].Zv=1
 site[3].rLIZ=9.500000
 site[3].rsteps={89.500000,91.500000,93.200000,99.900000}
 site[3].rad=2.500000
-site[4].pos={    0.500000000000000,     0.000000000000000,     0.500000000000000}
+site[4].pos={    0.500000000000000,     0.000000000000000,     0.525000000000000}
 site[4].evec={    0.000000000000000,     0.000000000000000,     1.000000000000000}
 site[4].atom="Li"
 site[4].lmax=2

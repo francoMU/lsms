@@ -12,9 +12,154 @@
 #include "utils.hpp"
 #include "forces_params.hpp"
 
+
 #ifdef DEBUG
+
 #include <icecream.hpp>
+
 #endif
+
+void lsms::gatherStructure(const LSMSCommunication &comm,
+                           const LSMSSystemParameters &lsms,
+                           const CrystalParameters &crystal,
+                           std::vector<int> &rcounts,
+                           std::vector<int> &displs) {
+
+    std::fill(rcounts.begin(),
+              rcounts.end(), 0.0);
+
+    std::fill(displs.begin(),
+              displs.end(), 0.0);
+
+    // number of elements in the message to receive from each process
+    rcounts.resize(comm.size);
+
+    for (int i = 0; i < lsms.num_atoms; i++) {
+        auto index = crystal.types[i].node;
+        rcounts[index] = crystal.types[i].local_id + 1;
+    }
+
+    // displacement vector
+    displs.resize(comm.size);
+
+    for (int i = 1; i < comm.size; i++) {
+        displs[i] = std::accumulate(rcounts.begin(),
+                                    rcounts.begin() + i, 0);
+    }
+
+}
+
+void lsms::normalizeForces(const LSMSCommunication &comm,
+                           const LSMSSystemParameters &lsms,
+                           LocalTypeInfo &local,
+                           const CrystalParameters &crystal) {
+
+    //  Number of local atoms
+    auto num_local_atoms = local.num_local;
+    // Gives the total number of atoms
+    auto num_atoms = lsms.num_atoms;
+
+
+    std::array<Real, 3> local_force_sum{{0.0,
+                                                0.0,
+                                                0.0}};
+
+    std::array<Real, 3> global_forces_sum{0.0};
+
+    // Local force sum
+    for (int i_local = 0; i_local < num_local_atoms; i_local++) {
+        for (int i_vec = 0; i_vec < 3; i_vec++) {
+            local_force_sum[i_vec] += local.atom[i_local].force[i_vec];
+        }
+    }
+
+    MPI_Allreduce(local_force_sum.data(),
+                  global_forces_sum.data(),
+                  3, MPI_DOUBLE, MPI_SUM, comm.comm);
+
+    for (int i_local = 0; i_local < num_local_atoms; i_local++) {
+        for (int i_vec = 0; i_vec < 3; i_vec++) {
+            local.atom[i_local].force[i_vec] -= global_forces_sum[i_vec] / num_atoms;
+        }
+    }
+
+
+#ifdef DEBUG
+    std::cout << comm.rank << " " << local_force_sum[0] << std::endl;
+    std::cout << comm.rank << " " << local_force_sum[1] << std::endl;
+    std::cout << comm.rank << " " << local_force_sum[2] << std::endl;
+    std::cout << comm.rank << " " << global_forces_sum[0] << std::endl;
+    std::cout << comm.rank << " " << global_forces_sum[1] << std::endl;
+    std::cout << comm.rank << " " << global_forces_sum[2] << std::endl;
+#endif
+
+}
+
+
+void lsms::gatherForces(const LSMSCommunication &comm,
+                        const LSMSSystemParameters &lsms,
+                        const LocalTypeInfo &local,
+                        const CrystalParameters &crystal,
+                        std::vector<std::array<Real, 3>> &global_forces,
+                        int root) {
+
+    //  Number of local atoms
+    auto num_local_atoms = local.num_local;
+    // Gives the total number of atoms
+    auto num_atoms = lsms.num_atoms;
+
+    MPI_Datatype mpi_force_type;
+    auto status = MPI_Type_contiguous(3, MPI_DOUBLE, &mpi_force_type);
+    MPI_Type_commit(&mpi_force_type);
+
+    /*
+     * Create array of local forces that is contiguous
+     */
+    std::vector<std::array<double, 3>> local_forces(num_local_atoms);
+    global_forces.resize(num_atoms);
+
+    for (int i_local = 0; i_local < num_local_atoms; i_local++) {
+        //std::copy(local.atom[i_local].force.begin(),
+        //          local.atom[i_local].force.end(),
+        //          local_forces[i_local]);
+        local_forces[i_local][0] = local.atom[i_local].force[0];
+        local_forces[i_local][1] = local.atom[i_local].force[1];
+        local_forces[i_local][2] = local.atom[i_local].force[2];
+    }
+
+    // number of elements in the message to receive from each process
+    std::vector<int> rcounts(comm.size);
+    std::vector<int> displs(comm.size, 0);
+
+    gatherStructure(comm,
+                    lsms,
+                    crystal,
+                    rcounts,
+                    displs);
+
+    status = MPI_Gatherv(local_forces.data(),
+                         num_local_atoms,
+                         mpi_force_type,
+                         global_forces.data(),
+                         rcounts.data(),
+                         displs.data(),
+                         mpi_force_type,
+                         root,
+                         comm.comm);
+
+#ifdef DEBUG
+    if (comm.rank == root) {
+        for (auto &force : global_forces) {
+            std::cout << " ***** " << std::endl;
+            std::cout << force[0] << std::endl;
+            std::cout << force[1] << std::endl;
+            std::cout << force[2] << std::endl;
+        }
+    }
+#endif
+
+    status = MPI_Type_free(&mpi_force_type);
+}
 
 
 void lsms::calculateForces(const LSMSCommunication &comm,
@@ -118,7 +263,7 @@ void lsms::calculateForces(const LSMSCommunication &comm,
     for (int i_local = 0; i_local < num_local_atoms; i_local++) {
 
         auto &atom_i = local.atom[i_local];
-        auto charge_i = local_charges[i_local];
+        auto charge_i = atom_i.ztotss;
 
         for (int j_global = 0; j_global < num_atoms; j_global++) {
             auto &atom_j = local.atom[j_global];
@@ -293,24 +438,48 @@ void lsms::calculateForces(const LSMSCommunication &comm,
 }
 
 
-void lsms::displayForces(const LocalTypeInfo &local, const CrystalParameters &crystal) {
+void lsms::displayForces(const LSMSCommunication &comm,
+                         const LSMSSystemParameters &lsms,
+                         const LocalTypeInfo &local,
+                         const CrystalParameters &crystal,
+                         int rank) {
 
+    std::vector<std::array<Real, 3>> global_forces(crystal.num_atoms);
 
-    std::string filler_string(80, '*');
+    gatherForces(comm, lsms, local, crystal, global_forces);
 
-    std::printf("%s\n", filler_string.c_str());
+    if (comm.rank == 0) {
 
+        std::string filler_string(80, '*');
 
-    for (int i = 0; i < local.num_local; i++) {
-        auto &atom = local.atom[i];
+        std::printf("%s\n", filler_string.c_str());
 
-        std::printf("** Atom: %4d\n", i);
-        std::printf("** Force x: %24.16f\n", atom.force[0]);
-        std::printf("** Force y: %24.16f\n", atom.force[1]);
-        std::printf("** Force z: %24.16f\n", atom.force[2]);
+        std::array<Real, 3> global_forces_sum{0.0};
+
+        for (int i_global = 0; i_global < crystal.num_atoms; i_global++) {
+
+            auto &force = global_forces[i_global];
+
+            for (int i_vec = 0; i_vec < 3; i_vec++) {
+                global_forces_sum[i_vec] += force[i_vec];
+            }
+
+            std::printf("* Atom: %4d\n", i_global);
+            std::printf("* Force x: %24.16f\n", force[0]);
+            std::printf("* Force y: %24.16f\n", force[1]);
+            std::printf("* Force z: %24.16f\n", force[2]);
+        }
+
+        std::printf("%s\n", filler_string.c_str());
+
+        std::printf("* Global force sum\n");
+        std::printf("* Force x: %24.16f\n", global_forces_sum[0]);
+        std::printf("* Force y: %24.16f\n", global_forces_sum[1]);
+        std::printf("* Force z: %24.16f\n", global_forces_sum[2]);
+
+        std::printf("%s\n", filler_string.c_str());
+
     }
-
-    std::printf("%s\n", filler_string.c_str());
 
 
 }

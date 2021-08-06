@@ -35,6 +35,13 @@ int main(int argc, char *argv[]) {
         std::cout << "R: " << rank << ": " << a << std::endl;
     }
 
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    /*
+     * Test gathering of structs
+     */
+
+
     /*
      *
      */

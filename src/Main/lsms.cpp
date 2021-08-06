@@ -713,7 +713,6 @@ int main(int argc, char *argv[]) {
                                        local,
                                        higherOrderMadelung);
 
-
     lsms::calculateForces(comm,
                           lsms,
                           local,
@@ -721,7 +720,12 @@ int main(int argc, char *argv[]) {
                           higherOrderMadelung,
                           lsms.forceParams);
 
-    lsms::displayForces(local, crystal);
+    lsms::normalizeForces(comm,
+                          lsms,
+                          local,
+                          crystal);
+
+    lsms::displayForces(comm, lsms, local, crystal, 0);
 
     /*
      * End of force calculation

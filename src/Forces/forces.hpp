@@ -8,6 +8,20 @@
 
 namespace lsms {
 
+    /**
+     * @brief get the counts and the displacement vectors for the gather operations
+     *
+     * @param comm
+     * @param lsms
+     * @param local
+     * @param rcounts
+     * @param displs
+     */
+    void gatherStructure(const LSMSCommunication &comm,
+                         const LSMSSystemParameters &lsms,
+                         const CrystalParameters &crystal,
+                         std::vector<int> &rcounts,
+                         std::vector<int> &displs);
 
     /**
      * @brief prints charges on each atom to the screen
@@ -31,8 +45,42 @@ namespace lsms {
      * @param local
      * @param crystal
      */
-    void displayForces(const LocalTypeInfo &local,
-                       const CrystalParameters &crystal
+    void displayForces(const LSMSCommunication &comm,
+                       const LSMSSystemParameters &lsms,
+                       const LocalTypeInfo &local,
+                       const CrystalParameters &crystal,
+                       int rank = 0);
+
+
+    /**
+     * @brief normalize the forces within the unitcell
+     *
+     * @param comm
+     * @param lsms
+     * @param local
+     * @param crystal
+     */
+    void normalizeForces(const LSMSCommunication &comm,
+                         const LSMSSystemParameters &lsms,
+                         LocalTypeInfo &local,
+                         const CrystalParameters &crystal);
+
+    /**
+     * @brief Gathers all forces form all processes
+     *
+     * @param comm
+     * @param lsms
+     * @param local
+     * @param crystal
+     * @param global_forces
+     * @param root
+     */
+    void gatherForces(const LSMSCommunication &comm,
+                      const LSMSSystemParameters &lsms,
+                      const LocalTypeInfo &local,
+                      const CrystalParameters &crystal,
+                      std::vector<std::array<Real, 3>> &global_forces,
+                      int root = 0
     );
 
 

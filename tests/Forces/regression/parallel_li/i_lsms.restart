@@ -20,7 +20,7 @@ ipcore=30
 
 infoEvecFileOut="info_evec_out"
 
-gpu_threads=1
+gpu_threads=8
 num_atoms=4
 relativity="none"
 core_relativity="none"

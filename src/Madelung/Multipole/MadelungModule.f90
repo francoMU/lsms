@@ -697,7 +697,7 @@ contains
       call createLattice(vbrar, rscut, nm1, nm2, nm3, vec_x, vec_y, vec_z, vecsq, nr, ipmax)
       !  -------------------------------------------------------------------
       !
-      if(PrintLevel.ge.0) then
+      if(PrintLevel.ge.1) then
          write(6, '(/,'' Real Space Lattice:: nm1,nm2,nm3   = '',3i5)')nm1, nm2, nm3
          write(6, '(  ''                      Rs cut radius = '',1f10.5)') rscut
          write(6, '(  ''                      Number of Rs  = '',i5)') nrslat
@@ -734,7 +734,7 @@ contains
       call createLattice(vbrak, kncut, nm1, nm2, nm3, vec_x, vec_y, vec_z, vecsq, nk, ipmax)
       !  -------------------------------------------------------------------
       !
-      if(PrintLevel.ge.0) then
+      if(PrintLevel.ge.1) then
          write(6, '(/,'' Reciprocal Lattice:: nm1,nm2,nm3   = '',3i5)')nm1, nm2, nm3
          write(6, '(  ''                      Kn cut radius = '',1f10.5)') kncut
          write(6, '(  ''                      Number of Kn  = '',i5)') nknlat

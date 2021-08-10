@@ -8,14 +8,14 @@
 
 namespace lsms {
 
-   class RosenbrockFunction : public BaseFunction<double> {
+    class RosenbrockFunction : public BaseFunction<double> {
 
-      void evaluate(const std::vector<double> &values,
-                    double &result,
-                    std::vector<double> &gradient) override;
+        void evaluate(const std::vector<double> &values,
+                      double &result,
+                      std::vector<double> &gradient) override;
 
 
-   };
+    };
 }
 
 

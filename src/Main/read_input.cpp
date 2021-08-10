@@ -1,4 +1,7 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
+
+#include "read_input.h"
+
 #include <stdlib.h>
 
 #include "lua.hpp"

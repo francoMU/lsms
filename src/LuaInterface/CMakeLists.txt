@@ -4,6 +4,7 @@
 target_sources(lsmscore
         PUBLIC
         LuaInterface.cpp
+        LuaInterface.hpp
         LuaSupport.hpp
         LuaSupport.cpp
         )

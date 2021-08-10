@@ -195,8 +195,8 @@ void lsms::calculateForces(const LSMSCommunication &comm,
 
         // Charge multipole memonent i
         auto charge_i = atom_i.ztotss   // nucleus charge
-                        - atom_i.qtotws // electron charge
-                        + atom_i.rhoInt * atom_i.omegaWS;
+                        - atom_i.qtotmt // electron charge
+                        + atom_i.rhoInt * atom_i.omegaMT;
 
         local_charges[i_local] = charge_i;
 
@@ -277,6 +277,8 @@ void lsms::calculateForces(const LSMSCommunication &comm,
 #endif
 
             auto charge_j = global_charges[j_global];
+
+            charge_j *= std::sqrt(4.0 * M_PI);
 
             /*
              * F^(i)_x = - q^(i)_{eff} * sqrt(3 / (2 * M_PI)) *
@@ -450,9 +452,10 @@ void lsms::displayForces(const LSMSCommunication &comm,
 
     if (comm.rank == 0) {
 
-        std::string filler_string(80, '*');
+        //std::string filler_string(80, '*');
+        //std::printf("%s\n", filler_string.c_str());
 
-        std::printf("%s\n", filler_string.c_str());
+        std::printf("\nForces:\n");
 
         std::array<Real, 3> global_forces_sum{0.0};
 
@@ -464,20 +467,20 @@ void lsms::displayForces(const LSMSCommunication &comm,
                 global_forces_sum[i_vec] += force[i_vec];
             }
 
-            std::printf("* Atom: %4d\n", i_global);
-            std::printf("* Force x: %24.16f\n", force[0]);
-            std::printf("* Force y: %24.16f\n", force[1]);
-            std::printf("* Force z: %24.16f\n", force[2]);
+            std::printf("%6d: %24.16f %24.16f %24.16f\n",
+                        i_global,
+                        force[0],
+                        force[1],
+                        force[2]);
         }
 
-        std::printf("%s\n", filler_string.c_str());
+        std::printf("%7s %24.16f %24.16f %24.16f\n",
+                    "Global:",
+                    global_forces_sum[0],
+                    global_forces_sum[1],
+                    global_forces_sum[2]);
 
-        std::printf("* Global force sum\n");
-        std::printf("* Force x: %24.16f\n", global_forces_sum[0]);
-        std::printf("* Force y: %24.16f\n", global_forces_sum[1]);
-        std::printf("* Force z: %24.16f\n", global_forces_sum[2]);
-
-        std::printf("%s\n", filler_string.c_str());
+        //std::printf("%s\n", filler_string.c_str());
 
     }
 

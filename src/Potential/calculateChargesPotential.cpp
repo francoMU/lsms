@@ -224,7 +224,7 @@ void calculateLocalCharges(LSMSSystemParameters &lsms, LocalTypeInfo &local, int
             }
         }
 
-        if (lsms.global.iprint >= 0) {
+        if (lsms.global.iprint > 0) {
             printf("\n");
             printf(" GENPOT / calculateLocalCharges: \n");
             printf(" Total charge and moment in W-S cell:\n");
@@ -421,7 +421,7 @@ calculateCharges(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeI
             }
         }
 
-        if (lsms.global.iprint >= 0) {
+        if (lsms.global.iprint >= 1) {
             printf("\n");
             printf(" GENPOT / calculateCharges: \n");
             printf(" Total charge and moment in W-S cell:\n");
@@ -578,7 +578,7 @@ calculateCharges(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeI
                 local.atom[i].mIntComponent[1] = qmIntTotal[2];
                 local.atom[i].mIntComponent[2] = qmIntTotal[3];
 
-                if (lsms.global.iprint >= 0) {
+                if (lsms.global.iprint > 0) {
                     printf("Total interstitial charge = %18.11f\n", local.atom[i].qInt);
                     printf("Total interstitial moment = %18.11f\n", local.atom[i].mInt);
                 }
@@ -709,7 +709,9 @@ void calculatePotential(LSMSCommunication &comm, LSMSSystemParameters &lsms, Loc
         vmtSum += vmt * local.n_per_type[i];
         u0Sum += u0 * local.n_per_type[i];
 
-        printf("Madelung contribution atom: %d x %d = %f\n", i, local.n_per_type[i], u0);
+        if (lsms.global.iprint >= 1) {
+            printf("Madelung contribution atom: %d x %d = %f\n", i, local.n_per_type[i], u0);
+        }
 
         local.atom[i].localMadelungEnergy = u0;
     }
@@ -808,7 +810,10 @@ C        dz=mint/qint
                 vmt = vmtSum / lsms.volumeInterstitial;
                 lsms.u0 = u0Sum;
 
-                printf("Madelung constant: %f\n", u0Sum);
+                if (lsms.global.iprint >= 1) {
+                    printf("Madelung constant: %f\n", u0Sum);
+                }
+
 
 /*
         ===============================================================

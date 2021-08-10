@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string>
 #include "SystemParameters.hpp"
-#include "LSMSMode.hpp"
 #include "Potential/getXCName.hpp"
 #include "MultipleScattering/linearSolvers.hpp"
 #include "MultipleScattering/buildKKRMatrix.hpp"
@@ -56,7 +55,7 @@ void printLSMSSystemParameters(FILE *f, LSMSSystemParameters &lsms) {
         default:
             fprintf(f, "!!!!UNKNOWN!!!!\n");
     }
-    fprintf(f,"LSMS Mode : %s\n",lsmsModeToString(lsms.lsmsMode));fprintf(f, "xcFunctional:");
+    fprintf(f, "xcFunctional:");
     for (int i = 0; i < numFunctionalIndices; i++) fprintf(f, " %d", lsms.xcFunctional[i]);
     std::string name;
     getXCName(lsms, name);

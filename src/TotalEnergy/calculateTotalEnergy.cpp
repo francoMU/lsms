@@ -23,7 +23,7 @@ void calculateTotalEnergy(LSMSCommunication &comm, LSMSSystemParameters &lsms, L
     if (use_old_energy_calculation)
         rhoTotal = new Real[lsms.global.iprpts];
 
-    if (lsms.global.iprint >= 0)
+    if (lsms.global.iprint > 0)
         printf("\ncalculateTotalEnergy:  ==============================================\n");
 
     for (int i = 0; i < local.num_local; i++) {
@@ -35,7 +35,7 @@ void calculateTotalEnergy(LSMSCommunication &comm, LSMSSystemParameters &lsms, L
 
         int isold;
 
-        if (lsms.global.iprint >= 0)
+        if (lsms.global.iprint > 0)
             printf("Total Energy contribution from atom %d.%d:\n", comm.rank, i);
 
         if (use_old_energy_calculation) {
@@ -154,7 +154,9 @@ void calculateTotalEnergy(LSMSCommunication &comm, LSMSSystemParameters &lsms, L
                     spinFactor * (local.atom[i].qInt + spin * local.atom[i].mInt) * local.atom[i].exchangeCorrelationE;
             emadp[is] = -spinFactor * (local.atom[i].qInt + spin * local.atom[i].mInt) * 3.0 *
                         (local.atom[0].exchangeCorrelationE - local.atom[i].exchangeCorrelationV[is]);
-            printf("is, emad, emadp = %5d %35.25f %35.25f\n", is, emad[is], emadp[is]);
+            if (lsms.global.iprint > 0) {
+                printf("is, emad, emadp = %5d %35.25f %35.25f\n", is, emad[is], emadp[is]);
+            }
         }
 
         totalEnergy += emad[is];
@@ -164,7 +166,7 @@ void calculateTotalEnergy(LSMSCommunication &comm, LSMSSystemParameters &lsms, L
         for (int is = 0; is < lsms.n_spin_pola; is++) {
             local.atom[i].localEnergy += emad[is] / Real(lsms.num_atoms);
 
-            if (lsms.global.iprint >= 0) {
+            if (lsms.global.iprint > 0) {
                 printf("Interstitial:  ----------------------------------------------\n");
                 printf("XC: %35.25lf Ry\n", emad[is] / Real(lsms.num_atoms));
                 printf("==================================================================\n");
@@ -172,7 +174,7 @@ void calculateTotalEnergy(LSMSCommunication &comm, LSMSSystemParameters &lsms, L
         }
     }
 
-    if (lsms.global.iprint >= 0) {
+    if (lsms.global.iprint > 0) {
         printf("Interstitial:  ----------------------------------------------\n");
         printf("Madelung: %35.25lf Ry\n", lsms.u0);
         printf("==================================================================\n");
@@ -181,7 +183,7 @@ void calculateTotalEnergy(LSMSCommunication &comm, LSMSSystemParameters &lsms, L
     totalEnergy += lsms.u0;
     totalPressure += lsms.u0;
 
-    if (lsms.global.iprint >= 0) {
+    if (lsms.global.iprint > 0) {
         printf("calculateTotalEnergy:  ----------------------------------------------\n");
         printf("Total Energy              = %35.25lf Ry\n", totalEnergy);
         printf("Pressure                  = %35.25lf Ry\n", totalPressure);

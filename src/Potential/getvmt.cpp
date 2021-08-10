@@ -22,7 +22,9 @@ void getvmt(LSMSSystemParameters lsms, AtomData &atom, CrystalParameters &crysta
     for (int i = 0; i < crystal.num_types; i++) {
         vmt1 += atom.madelungMatrix[i] * qsub[i];
         u0 += atom.madelungMatrix[i] * qsub[i] * qsub[mytype];
-        printf("Contribution mad: %d %f %f %f\n", i, u0, qsub[i], qsub[mytype]);
+        if (lsms.global.iprint >= 1) {
+            printf("Contribution mad: %d %f %f %f\n", i, u0, qsub[i], qsub[mytype]);
+        }
     }
 
     vmt1 *= 2.0;

@@ -40,8 +40,16 @@ void finalizeCommunication(void);
 
 void exitLSMS(LSMSCommunication &comm, int errorCode);
 
-void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
-                           CrystalParameters &crystal, MixingParameters &mix, AlloyMixingDesc &alloyDesc);
+void communicateParameters(LSMSCommunication &comm,
+                           LSMSSystemParameters &lsms,
+                           CrystalParameters &crystal,
+                           MixingParameters &mix,
+                           AlloyMixingDesc &alloyDesc);
+
+void communicateParameters(LSMSCommunication &comm,
+                           LSMSSystemParameters &lsms,
+                           CrystalParameters &crystal,
+                           MixingParameters &mix);
 
 void communicateSingleAtomData(LSMSCommunication &comm, int from, int to,
                                int &local_id, AtomData &atom, int tag = 0);

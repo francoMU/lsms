@@ -720,6 +720,8 @@ int main(int argc, char *argv[]) {
                           higherOrderMadelung,
                           lsms.forceParams);
 
+    lsms::displayForces(comm, lsms, local, crystal, 0);
+
     lsms::normalizeForces(comm,
                           lsms,
                           local,

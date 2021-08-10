@@ -174,7 +174,7 @@ void calculateChargeDensity(LSMSSystemParameters &lsms, AtomData &atom, Real edo
         qvalmt += w1_r_sph;
     }
 
-    if (lsms.global.iprint >= 0) printf("Total valence charge = %25.20f\n", qvalmt);
+    if (lsms.global.iprint > 0) printf("Total valence charge = %25.20f\n", qvalmt);
 
     // add velence electron density and core and semi-core densities
     if (lsms.n_spin_pola != 2) {

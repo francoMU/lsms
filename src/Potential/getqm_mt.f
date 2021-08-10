@@ -53,7 +53,7 @@ c        mtotmt=mtotmt+(n_spin_pola-1)*(3.0d0-2.0d0*is)*rhot(ilast,2)
          mtotmt=mtotmt+(n_spin_pola-1)*(3.0d0-2.0d0*is)*qmtis
       enddo
 c
-      if(iprint.ge.0) then
+      if(iprint.ge.1) then
          write(6,'(/,'' GETQM_MT:: r_sph charge,w'',t40,''='',
      >   3f18.11,2i5)')qtotmt,width,sqr(ilast)**2,ilast,i_smooth_rsmo
          write(6,'(''            muffin-tin moment'',t40,''='',

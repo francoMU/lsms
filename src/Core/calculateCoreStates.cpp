@@ -11,7 +11,7 @@ const bool useNewGetCoreStates = true;
 void calculateCoreStates(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeInfo &local) {
     for (int i = 0; i < local.num_local; i++) {
         // dprintf("-- LSMS %d: Calculating core levels for local atom %d.\n", comm.rank, i);
-        if (lsms.global.iprint >= 0) printf("\ncalculateCoreState %d.%d\n", comm.rank, i);
+        if (lsms.global.iprint > 0) printf("\ncalculateCoreState %d.%d\n", comm.rank, i);
         if (useNewGetCoreStates) {
             getCoreStates(lsms, local.atom[i]);
         } else {
@@ -55,7 +55,7 @@ void calculateCoreStates(LSMSCommunication &comm, LSMSSystemParameters &lsms, Lo
     globalMax(comm, etopcor);
 
     lsms.largestCorestate = etopcor;
-    if (lsms.global.iprint >= 0)
+    if (lsms.global.iprint > 0)
         printf("Maximal Core State = %gRy\n", lsms.largestCorestate);
 /*
       if(etopcor+0.1d0 .gt. ebot) then
@@ -78,7 +78,7 @@ void calculateCoreStates(LSMSCommunication &comm, LSMSSystemParameters &lsms, Al
 
             int local_iprpts = atom.vr.l_dim();
             int local_ipcore = atom.ec.l_dim();
-            if (lsms.global.iprint >= 0) printf("\nalloy bank : calculateCoreState %d.%d\n", comm.rank, i);
+            if (lsms.global.iprint > 0) printf("\nalloy bank : calculateCoreState %d.%d\n", comm.rank, i);
             getcor_(&lsms.n_spin_pola, &lsms.mtasa,
                     &atom.jmt, &atom.jws, &atom.r_mesh[0], &atom.h, &atom.xstart,
                     &atom.vr(0, 0),

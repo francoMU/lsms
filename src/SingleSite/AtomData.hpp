@@ -469,8 +469,8 @@ public:
     bool spinFlipped{false};                   // Flag for antiferromagnetic condition
 
 // local energy
-    Real localEnergy;
-    Real localMadelungEnergy;
+    Real localEnergy {0.0};
+    Real localMadelungEnergy {0.0};
 
 // Alloy Class
     int alloy_class;

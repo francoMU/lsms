@@ -1,8 +1,12 @@
 
 target_sources(lsmscore
         PUBLIC
-        SystemParameters.cpp read_input.cpp PotentialIO.cpp
+        SystemParameters.cpp
+        read_input.h
+        read_input.cpp
+        PotentialIO.cpp
         buildLIZandCommLists.cpp
+        buildLIZandCommLists.hpp
         energyContourIntegration.cpp solveSingleScatterers.cpp
         calculateDensities.cpp calculateChemPot.cpp checkConsistency.cpp
         lsmsClass.cpp calculateEvec.cpp initializeAtom.cpp mixing.cpp
@@ -49,16 +53,14 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+
+#
+#
+#
 target_sources(lsms_main
         PUBLIC
         lsms.cpp)
 
-set_target_properties(lsms_main
-        PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-        )
 
-target_link_libraries(lsms_main
-        PUBLIC lsmscore)
 
 

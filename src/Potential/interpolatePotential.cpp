@@ -70,7 +70,5 @@ void interpolatePotential(LSMSSystemParameters &lsms, AtomData &atom)
     }
   }
 
-return;
-
 }
 

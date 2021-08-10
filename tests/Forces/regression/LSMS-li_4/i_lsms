@@ -1,0 +1,82 @@
+systemid="bcc"
+system_title = "primitive bcc Test for LSMS 3"
+pot_in_type=1
+
+-- write potential out. Use this only when xRepeat, yRepeat and zRepeat = 1
+pot_out_type=1
+num_atoms=2
+
+relativity="none"
+core_relativity="none"
+
+nspin=1
+mtasa=0
+
+xcFunctional={0,1} -- von Barth Hedin (LSMS_1)
+
+iprint=0
+default_iprint=-1
+print_node=0
+istop="main"
+
+nscf=40
+rmsTolerance=1.e-8
+
+xRepeat=1
+yRepeat=1
+zRepeat=1
+makeTypesUnique=1
+
+xForceRepeat=220
+yForceRepeat=220
+zForceRepeat=220
+radiusForce=1500.0
+
+energyContour = {npts=30,grid=2,ebot=-0.5,etop=0.0,eitop=0.825,eibot=0.0025}
+
+a=6.8
+
+bravais = {}
+bravais[1]={ 1.0*a, 0.0, 0.0}
+bravais[2]={ 0.0, 1.0*a, 0.0}
+bravais[3]={ 0.0, 0.0, 1.0*a}
+
+site_default={lmax=3,rLIZ=11.5,rsteps={89.5,91.5,93.2,99.9},atom="Li",Z=3,Zc=2,Zs=0,Zv=1,rad=2.5}
+
+mixing = { {quantity = "potential", algorithm = "broyden", mixing_parameter = 0.05} }
+
+numberOfMixQuantities = 0
+for k,v in pairs(mixing) do
+  numberOfMixQuantities = numberOfMixQuantities + 1
+end
+
+site = {}
+for i =1,num_atoms do site[i]={} end
+
+site[1].pos={0.0,0.0,0.0}
+site[1].evec={0,0,1}
+site[1].pot_in_idx=0
+site[1].atom="Li"
+site[1].Z=3
+site[1].Zc=2
+site[1].Zs=0
+site[1].Zv=1
+site[1].rad=2.5
+
+site[2].pos={0.515,0.515,0.515}
+site[2].evec={0,0,1}
+site[2].pot_in_idx=0
+site[2].atom="Li"
+site[2].Z=3
+site[2].Zc=2
+site[2].Zs=0
+site[2].Zv=1
+site[2].rad=2.5
+
+for i =1,num_atoms do
+  for k,v in pairs(site_default) do
+    if(site[i][k]==nil) then site[i][k]=v end
+  end
+end
+
+

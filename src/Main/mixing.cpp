@@ -75,13 +75,13 @@ void setupMixing(MixingParameters &mix, Mixing *&mixing, int iprint) {
         !mix.quantity[MixingParameters::moment_magnitude] &&
         !mix.quantity[MixingParameters::moment_direction]) {
         mixing = new FrozenPotential;
-        if (iprint >= 0)
+        if (iprint >= 1)
             printf("Mixing method     : frozen potential (default)\n");
     }
         // no mixing
     else if (mix.quantity[MixingParameters::no_mixing]) {
         mixing = new NoMixing;
-        if (iprint >= 0)
+        if (iprint >= 1)
             printf("Mixing method     : no mixing\n");
     }
         // charge mixing
@@ -93,20 +93,20 @@ void setupMixing(MixingParameters &mix, Mixing *&mixing, int iprint) {
         switch (mix.algorithm[MixingParameters::charge]) {
             case 1 :
                 mixing = new SimpleChargeDensityMixing(mix.mixingParameter[MixingParameters::charge]);
-                if (iprint >= 0)
+                if (iprint >= 1)
                     printf("Mixing method     : simple\n");
                 break;
             case 2 :
                 mixing = new BroydenChargeDensityMixing(mix.mixingParameter[MixingParameters::charge]);
-                if (iprint >= 0)
+                if (iprint >= 1)
                     printf("Mixing method     : broyden\n");
                 break;
             default :
                 mixing = new NoMixing;
-                if (iprint >= 0)
+                if (iprint >= 1)
                     printf("Mixing method     : no mixing\n");
         }
-        if (iprint >= 0) {
+        if (iprint >= 1) {
             printf("Mixing quantity   : charge\n");
             printf("Mixing parameters : %4.2f\n", mix.mixingParameter[MixingParameters::charge]);
         }
@@ -121,30 +121,30 @@ void setupMixing(MixingParameters &mix, Mixing *&mixing, int iprint) {
             case 1 :
                 if (mix.mixingParameter[MixingParameters::potential] == 0.0) {
                     mixing = new FrozenPotential;
-                    if (iprint >= 0)
+                    if (iprint >= 1)
                         printf("Mixing method     : frozen potential\n");
                 } else {
                     mixing = new SimplePotentialMixing(mix.mixingParameter[MixingParameters::potential]);
-                    if (iprint >= 0)
+                    if (iprint >= 1)
                         printf("Mixing method     : simple\n");
                 }
                 break;
             case 2 :
                 mixing = new BroydenPotentialMixing(mix.mixingParameter[MixingParameters::potential]);
-                if (iprint >= 0)
+                if (iprint >= 1)
                     printf("Mixing method     : broyden\n");
                 break;
             default :
                 mixing = new FrozenPotential;
-                if (iprint >= 0)
+                if (iprint >= 1)
                     printf("Mixing method     : frozen potential\n");
         }
-        if (iprint >= 0) {
+        if (iprint >= 1) {
             printf("Mixing quantity   : potential\n");
             printf("Mixing parameters : %4.2f\n", mix.mixingParameter[MixingParameters::potential]);
         }
     } else {
-        if (iprint >= 0) {
+        if (iprint >= 1) {
             printf("Type of mixing is not supported.\n");
             for (int i = 0; i < mix.numQuantities; i++) {
                 printf("quantity = %5d, algorithm = %5d, mixing parameter = %6.3f\n",

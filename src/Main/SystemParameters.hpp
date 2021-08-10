@@ -141,9 +141,11 @@ public:
 
 extern const char *potentialTypeName[];
 
+constexpr int DEFAULT_STORE_ID = -1;
+
 class AtomType {
 public:
-    AtomType() : pot_in_idx(-1), store_id(-1), forceZeroMoment(0) {}
+    AtomType() : pot_in_idx(-1), store_id(DEFAULT_STORE_ID), forceZeroMoment(0) {}
 
     char name[4];
     int lmax, Z, Zc, Zs, Zv;
@@ -181,10 +183,9 @@ public:
 };
 
 class LocalTypeInfo {
+
 public:
-    //LocalTypeInfo() : num_local(0), atom(0) {}
-    //~LocalTypeInfo() { //if(num_local) delete[] atom;}
-    // void setNumLocal(int n) {num_local=n; atom = new AtomData[n]; global_id.resize(n);}
+
     void setNumLocal(int n) {
         num_local = n;
         atom.resize(n, AtomData());
@@ -206,26 +207,29 @@ public:
 
     void setMaxCore(int n) { for (int i = 0; i < num_local; i++) atom[i].resizeCore(n); }
 
-    int maxNrmat(void) {
+    // Check
+    int maxNrmat() const {
         int v = 0;
         for (int i = 0; i < num_local; i++) if (atom[i].nrmat > v) v = atom[i].nrmat;
         return v;
     }
 
-    int maxjws(void) {
+    // Check
+    int maxjws() const {
         int m = 0;
         for (int i = 0; i < num_local; i++) if (atom[i].jws > m) m = atom[i].jws;
         return m;
     }
 
-    int num_local;
-    std::vector<int> global_id;
+    int num_local; // Check
+    std::vector<int> global_id; // Check
     std::vector<AtomData> atom;
-    std::vector<int> n_per_type;
+    std::vector<int> n_per_type; // Check
 
-    int lDimTmatStore, blkSizeTmatStore;
+    int lDimTmatStore; // Check
+    int blkSizeTmatStore; // Check
     Matrix<Complex> tmatStore;
-    std::vector<int> tmatStoreGlobalIdx;
+    std::vector<int> tmatStoreGlobalIdx; // Check
 
     Real qrms[2];
     Real vrms[2];
@@ -243,6 +247,8 @@ void printLSMSGlobals(FILE *f, LSMSSystemParameters &lsms);
 void printLSMSSystemParameters(FILE *f, LSMSSystemParameters &lsms);
 
 void printCrystalParameters(FILE *f, CrystalParameters &crystal);
+
+void printCompressedCrystalParameters(FILE *f, CrystalParameters &crystal, int rank = 0);
 
 void printAlloyParameters(FILE *f, AlloyMixingDesc &alloyDesc);
 

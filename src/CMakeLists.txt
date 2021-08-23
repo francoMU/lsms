@@ -45,21 +45,6 @@ target_include_directories(
 )
 
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(
-            lsmscore
-            PUBLIC
-            "-cpp"
-    )
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    target_compile_options(
-            lsmscore
-            PUBLIC
-            "-fpp"
-    )
-endif()
-
-
 target_link_libraries(
         lsmscore
         PUBLIC

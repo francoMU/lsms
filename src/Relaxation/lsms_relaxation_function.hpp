@@ -13,28 +13,38 @@
 
 namespace lsms {
 
-    class LsmsRelaxationFunction : public BaseFunction<Real> {
+   class LsmsRelaxationFunction : public BaseFunction<Real> {
 
-    public:
+   private:
 
-        LsmsRelaxationFunction(LSMSSystemParameters &lsms,
-                               LSMSCommunication &comm,
-                               CrystalParameters &crystal,
-                               LocalTypeInfo &local,
-                               MixingParameters &mix);
+      int number_of_evaluations {0};
+      bool write_to_file {false};
 
-        void evaluate(const std::vector<Real> &coordinates_vector,
-                      double &result,
-                      std::vector<Real> &gradient) override;
+      void writeStructureToFile() const;
 
-        LSMSSystemParameters &lsms;
-        LSMSCommunication &comm;
-        CrystalParameters &crystal;
-        LocalTypeInfo &local;
-        MixingParameters &mix;
+      std::string generateFileName() const;
+
+   public:
+
+      LsmsRelaxationFunction(LSMSSystemParameters &lsms,
+                             LSMSCommunication &comm,
+                             CrystalParameters &crystal,
+                             LocalTypeInfo &local,
+                             MixingParameters &mix,
+                             bool write_to_file = false);
+
+      void evaluate(const std::vector<Real> &coordinates_vector,
+                    double &result,
+                    std::vector<Real> &gradient) override;
+
+      LSMSSystemParameters &lsms;
+      LSMSCommunication &comm;
+      CrystalParameters &crystal;
+      LocalTypeInfo &local;
+      MixingParameters &mix;
 
 
-    };
+   };
 
 }
 

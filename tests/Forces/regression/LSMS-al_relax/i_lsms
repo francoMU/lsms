@@ -11,6 +11,10 @@ core_relativity="none"
 num_atoms=4
 nspin=2
 
+--- Relaxations parameter
+write_to_file=false
+max_iterations=10
+
 mtasa=0
 
 xcFunctional={0,1} -- von Barth Hedin (LSMS_1)
@@ -27,11 +31,6 @@ xRepeat=1
 yRepeat=1
 zRepeat=1
 makeTypesUnique=1
-
-xForceRepeat=220
-yForceRepeat=220
-zForceRepeat=220
-radiusForce=1500.0
 
 energyContour = {npts=31,grid=2,ebot=-0.3,etop=0.0,eitop=0.825,eibot=0.0025}
 

@@ -8,13 +8,13 @@
 
 namespace lsms {
 
-    void printLocalTypeInfo(const LSMSCommunication &comm,
-                            const LocalTypeInfo &local,
-                            int rank = 0);
+   void printLocalTypeInfo(const LSMSCommunication &comm,
+                           const LocalTypeInfo &local,
+                           int rank = 0);
 
-    void printKKRMatrix(Matrix<Complex> &kkr_matrix,
-                        std::string name,
-                        int rank = 0);
+   void printKKRMatrix(Matrix<Complex> &kkr_matrix,
+                       std::string name,
+                       int rank = 0);
 
 }
 

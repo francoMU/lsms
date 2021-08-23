@@ -5,7 +5,6 @@
 #ifndef LSMS_POSCARSTRUCTURETYPE_HPP
 #define LSMS_POSCARSTRUCTURETYPE_HPP
 
-#include <map>
 
 namespace lsms {
 

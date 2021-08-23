@@ -394,9 +394,20 @@ void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsm
         double timeCalcDensities = MPI_Wtime();
         if (lsms.relativity != full) {
 // openMP here
-#pragma omp parallel for default(none) \
-        shared(local, lsms, dos, dosck, green, dipole, solutionNonRel, gauntCoeficients, dele1, tau00_l) \
+#if defined(__INTEL_COMPILER)
+// intel compiler has problems with the static members in openmp
+#pragma omp parallel for \
+        shared(local, lsms, dos, dosck, green, dipole, \
+        solutionNonRel, dele1, tau00_l) \
         firstprivate(ie, iie, pnrel, energy, nume)
+#else
+// static member are always shared by default and cannot be defined otherwise in GCC
+// change was done do satisfy GCC and Intel
+#pragma omp parallel for default(none) \
+shared(local, lsms, dos, dosck, green, dipole, solutionNonRel, dele1, tau00_l) \
+        firstprivate(ie, iie, pnrel, energy, nume)
+#endif
+
           for (int i = 0; i < local.num_local; i++) {
             //Real r_sph=local.atom[i].r_mesh[local.atom[i].jws];
             //if (lsms.mtasa==0) r_sph=local.atom[i].r_mesh[local.atom[i].jmt];
@@ -418,7 +429,7 @@ void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsm
                             &pnrel, &tau00_l(0, i), &solutionNonRel[iie][i].matom(0, 0),
                             &solutionNonRel[iie][i].zlr(0, 0, 0), &solutionNonRel[iie][i].jlr(0, 0, 0),
                             &nprpts, &nplmax,
-                            &lsms.ngaussr, &gauntCoeficients.cgnt(0, 0, 0), &gauntCoeficients.lmax,
+                            &lsms.ngaussr, &GauntCoeficients::cgnt(0, 0, 0), &GauntCoeficients::lmax,
                             &dos(0, i), &dosck(0, i), &green(0, 0, i), &dipole(0, 0, i),
                             &local.atom[i].voronoi.ncrit, &local.atom[i].voronoi.grwylm(0, 0),
                             &local.atom[i].voronoi.gwwylm(0, 0), &local.atom[i].voronoi.wylm(0, 0, 0),
@@ -433,7 +444,7 @@ void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsm
                               &solutionNonRel[iie][i].matom(0, 1),
                               &solutionNonRel[iie][i].zlr(0, 0, 1), &solutionNonRel[iie][i].jlr(0, 0, 1),
                               &nprpts, &nplmax,
-                              &lsms.ngaussr, &gauntCoeficients.cgnt(0, 0, 0), &gauntCoeficients.lmax,
+                              &lsms.ngaussr, &GauntCoeficients::cgnt(0, 0, 0), &GauntCoeficients::lmax,
                               &dos(1, i), &dosck(1, i), &green(0, 1, i), &dipole(0, 0, i),
                               &local.atom[i].voronoi.ncrit, &local.atom[i].voronoi.grwylm(0, 0),
                               &local.atom[i].voronoi.gwwylm(0, 0), &local.atom[i].voronoi.wylm(0, 0, 0),
@@ -496,7 +507,7 @@ void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsm
                                 &solutionRel[iie][i].gj(0, 0, 0), &solutionRel[iie][i].fj(0, 0, 0),
                                 &solutionRel[iie][i].nuz[0], &solutionRel[iie][i].indz(0, 0),
                                 &nprpts,
-                                &lsms.ngaussr, &gauntCoeficients.cgnt(0, 0, 0), &gauntCoeficients.lmax,
+                                &lsms.ngaussr, &GauntCoeficients::cgnt(0, 0, 0), &GauntCoeficients::lmax,
                                 &dos(0, i), &dosck(0, i), &green(0, 0, i), &dipole(0, 0, i),
                                 &dos_orb(0, i), &dosck_orb(0, i), &dens_orb(0, 0, i),
                                 &lsms.global.iprint, lsms.global.istop, 32);

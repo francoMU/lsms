@@ -7,10 +7,19 @@ target_sources(lsmscore
         PotentialIO.cpp
         buildLIZandCommLists.cpp
         buildLIZandCommLists.hpp
-        energyContourIntegration.cpp solveSingleScatterers.cpp
-        calculateDensities.cpp calculateChemPot.cpp checkConsistency.cpp
-        lsmsClass.cpp calculateEvec.cpp initializeAtom.cpp mixing.cpp
-        ReplicaExchangeWL.cpp AlloyBankIO.cpp rotateToGlobal.cpp
+        energyContourIntegration.cpp
+        solveSingleScatterers.hpp
+        solveSingleScatterers.cpp
+        calculateDensities.cpp
+        calculateChemPot.cpp
+        checkConsistency.cpp
+        lsmsClass.cpp
+        calculateEvec.cpp
+        initializeAtom.cpp
+        mixing.cpp
+        ReplicaExchangeWL.cpp
+        AlloyBankIO.cpp
+        rotateToGlobal.cpp
         write_restart.cpp
         mixing_params.hpp
         mixing_params.cpp

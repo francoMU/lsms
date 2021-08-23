@@ -1,6 +1,6 @@
 
-#ifndef MUST_MIXING_PARAMS_HPP
-#define MUST_MIXING_PARAMS_HPP
+#ifndef LSMS_MIXING_PARAMS_HPP
+#define LSMS_MIXING_PARAMS_HPP
 
 #include "Real.hpp"
 
@@ -28,13 +28,6 @@ struct MixingParameters {
 
 };
 
-#include <vector>
-#include <deque>
-#include <cmath>
-#include "Real.hpp"
-#include "SystemParameters.hpp"
-#include "SingleSite/AtomData.hpp"
-#include "Communication/LSMSCommunication.hpp"
-#include "LAPACK.hpp"
 
-#endif //MUST_MIXING_PARAMS_HPP
+
+#endif //LSMS_MIXING_PARAMS_HPP

@@ -2,17 +2,20 @@
 // this replaces zplanint from LSMS_1.9
 
 #include <vector>
-#include <mpi.h>
 #include <complex>
+
+#include <mpi.h>
+
 #include "Complex.hpp"
 
 #include "Communication/LSMSCommunication.hpp"
 #include "SingleSite/SingleSiteScattering.hpp"
 #include "Main/solveSingleScatterers.hpp"
+#include "Main/rotateToGlobal.hpp"
 #include "MultipleScattering/MultipleScattering.hpp"
 #include "EnergyContourIntegration.hpp"
 #include "Misc/Coeficients.hpp"
-#include "calculateDensities.hpp"
+#include "Main/calculateDensities.hpp"
 #include "MultipleScattering/linearSolvers.hpp"
 
 #ifdef USE_NVTX
@@ -33,10 +36,6 @@ extern std::vector<DeviceConstants> deviceConstants;
 extern DeviceStorage *deviceStorage;
 #endif
 
-
-void rotateToGlobal(AtomData &atom, Matrix<Complex> &dos, Matrix<Complex> &dosck,
-                    Matrix<Complex> &dos_orb, Matrix<Complex> &dosck_rob,
-                    Array3d<Complex> &green, Array3d<Complex> &dens_orb, int i);
 
 extern "C"
 {

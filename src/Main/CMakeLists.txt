@@ -20,9 +20,9 @@ target_sources(lsmscore
         ReplicaExchangeWL.cpp
         AlloyBankIO.cpp
         rotateToGlobal.cpp
+        rotateToGlobal.hpp
         write_restart.cpp
         mixing_params.hpp
-        mixing_params.cpp
         )
 
 target_sources(lsmscore

@@ -4,31 +4,32 @@
 
 namespace lsms {
 
-    void run_dft_calculation(LSMSSystemParameters &lsms,
-                             LSMSCommunication &comm,
-                             CrystalParameters &crystal,
-                             LocalTypeInfo &local,
-                             MixingParameters &mix);
+   void run_dft_calculation(LSMSSystemParameters &lsms,
+                            LSMSCommunication &comm,
+                            CrystalParameters &crystal,
+                            LocalTypeInfo &local,
+                            MixingParameters &mix,
+                            bool reload_potentials);
 
 
-    Real extractTotalEnergy(LSMSSystemParameters &lsms);
+   Real extractTotalEnergy(LSMSSystemParameters &lsms);
 
-    void VectorToCoordinates(LSMSSystemParameters &lsms,
-                                LSMSCommunication &comm,
-                                CrystalParameters &crystal,
-                                LocalTypeInfo &local,
-                                const std::vector<Real> &coordinates);
+   void VectorToCoordinates(LSMSSystemParameters &lsms,
+                            LSMSCommunication &comm,
+                            CrystalParameters &crystal,
+                            LocalTypeInfo &local,
+                            const std::vector<Real> &coordinates);
 
-    void CoordinatesToVector(LSMSSystemParameters &lsms,
-                             LSMSCommunication &comm,
-                             CrystalParameters &crystal,
-                             std::vector<Real> &coordinates);
+   void CoordinatesToVector(LSMSSystemParameters &lsms,
+                            LSMSCommunication &comm,
+                            CrystalParameters &crystal,
+                            std::vector<Real> &coordinates);
 
-    void ForcesToGradientVector(LSMSSystemParameters &lsms,
-                                LSMSCommunication &comm,
-                                CrystalParameters &crystal,
-                                LocalTypeInfo &local,
-                                std::vector<Real> &gradient);
+   void ForcesToGradientVector(LSMSSystemParameters &lsms,
+                               LSMSCommunication &comm,
+                               CrystalParameters &crystal,
+                               LocalTypeInfo &local,
+                               std::vector<Real> &gradient);
 
 }
 

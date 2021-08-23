@@ -2,7 +2,6 @@ systemid="al"
 system_title = "Aluminium test for LSMS 3"
 pot_in_type=1
 
--- write potential out. Use this only when xRepeat, yRepeat and zRepeat = 1
 pot_out_type=1
 
 relativity="none"
@@ -10,10 +9,6 @@ core_relativity="none"
 
 num_atoms=4
 nspin=2
-
---- Relaxations parameter
-write_to_file=false
-max_iterations=10
 
 mtasa=0
 
@@ -32,6 +27,16 @@ yRepeat=1
 zRepeat=1
 makeTypesUnique=1
 
+xForceRepeat=220
+yForceRepeat=220
+zForceRepeat=220
+radiusForce=1500.0
+
+max_iterations = 10
+tolerance = 1e-6
+initial_sigma = 0.0001
+
+
 energyContour = {npts=31,grid=2,ebot=-0.3,etop=0.0,eitop=0.825,eibot=0.0025}
 
 a = 4.05 / 0.529177
@@ -41,7 +46,7 @@ bravais[1]={ 1.0*a, 0.0, 0.0}
 bravais[2]={ 0.0, 1.0*a, 0.0}
 bravais[3]={ 0.0, 0.0, 1.0*a}
 
-site_default={lmax=2,rLIZ=9.5,rsteps={89.5,91.5,93.2,99.9},atom="Al",Z=13,Zc=2,Zs=8,Zv=3,rad=2}
+site_default={lmax=2,rLIZ=8.5,rsteps={89.5,91.5,93.2,99.9},atom="Al",Z=13,Zc=2,Zs=8,Zv=3,rad=2}
 
 mixing = { {quantity = "potential", algorithm = "broyden", mixing_parameter = 0.05} }
 

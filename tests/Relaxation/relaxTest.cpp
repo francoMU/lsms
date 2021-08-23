@@ -8,7 +8,7 @@
 #include <cmath>
 #include <vector>
 
-#include "relaxation.hpp"
+#include "nl_optimization.hpp"
 #include "rosenbrockFunction.hpp"
 
 
@@ -183,7 +183,7 @@ namespace TestRelaxation {
         lsms::RosenbrockFunction function;
 
 
-        lsms::Relaxation relaxation(
+        lsms::NLOptimization relaxation(
                 function,
                 {{0.0, 0.1}});
 
@@ -225,7 +225,7 @@ namespace TestRelaxation {
 
         lsms::RosenbrockFunction function;
 
-        lsms::Relaxation relaxation(
+        lsms::NLOptimization relaxation(
                 function,
                 {{0.0, 0.1}},
                 10000);

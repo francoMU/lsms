@@ -33,6 +33,7 @@ int loadPotentials(LSMSCommunication &comm,
         jwsIn[i] = local.atom[i].jws;
     }
 
+
     if (comm.rank == 0) {
         hid_t fid, fid_1;
         int id, fname_l;

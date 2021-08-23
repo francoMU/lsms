@@ -5,17 +5,17 @@
 
 namespace lsms {
 
-    template<class T>
-    class BaseFunction {
+   template<class T>
+   class BaseFunction {
 
-    public:
+   public:
 
-        virtual void evaluate(const std::vector <T> &coordinates_vector,
-                         T & result,
-                         std::vector <T> &gradient) = 0;
+      virtual void evaluate(const std::vector<T> &coordinates_vector,
+                            T &result,
+                            std::vector<T> &gradient) = 0;
 
 
-    };
+   };
 
 }
 

@@ -55,6 +55,8 @@ add_subdirectory(Accelerator)
 
 add_subdirectory(Communication)
 
+add_subdirectory(IO)
+
 add_subdirectory(Core)
 
 add_subdirectory(LuaInterface)

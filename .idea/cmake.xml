@@ -3,6 +3,7 @@
   <component name="CMakeSharedSettings">
     <configurations>
       <configuration PROFILE_NAME="build_debug_lsms_9" ENABLED="true" CONFIG_NAME="Debug" TOOLCHAIN_NAME="WSL-gcc-9-cmake-3.19" GENERATION_OPTIONS="-DLUA_INCLUDE_DIR=/home/fmoitzi/Libraries/lua/include -DLUA_LIB_DIR=/home/fmoitzi/Libraries/lua/lib -DLibxc_DIR=/home/fmoitzi/Libraries/libxc-5.1.5 -DBLA_VENDOR=Intel10_64lp -DCMAKE_CXX_FLAGS=&quot;-Og -g -Wall -Wextra&quot; -DCMAKE_Fortran_FLAGS=&quot;-Wall -Wextra -Og -fbacktrace -cpp&quot;" />
+      <configuration PROFILE_NAME="build_release_lsms_9" ENABLED="true" CONFIG_NAME="Release" TOOLCHAIN_NAME="WSL-gcc-9-cmake-3.19" GENERATION_OPTIONS="-DLUA_INCLUDE_DIR=/home/fmoitzi/Libraries/lua/include -DLUA_LIB_DIR=/home/fmoitzi/Libraries/lua/lib -DLibxc_DIR=/home/fmoitzi/Libraries/libxc-5.1.5 -DBLA_VENDOR=Intel10_64lp -DCMAKE_CXX_FLAGS=&quot;-O3 -mtune=native -Wall -Wextra&quot; -DCMAKE_Fortran_FLAGS=&quot;-O3 -mtune=native -Wall -Wextra -Og -fbacktrace -cpp&quot;" />
     </configurations>
   </component>
 </project>

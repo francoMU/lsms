@@ -9,6 +9,7 @@
 #define PSIMAG_LAPACK
 
 #include <complex>
+#include "Complex.hpp"
 
 /** \file LAPACK
  *  \author Thomas C. Schulthess, MSS

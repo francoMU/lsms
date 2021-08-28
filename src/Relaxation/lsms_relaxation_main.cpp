@@ -315,6 +315,11 @@ int main(int argc, char *argv[]) {
       }
    }
 
+   if (lsms.pot_out_type >= 0) {
+      if (comm.rank == 0) {
+         std::cout << "Simulation is done!!!!" << std::endl;
+      }
+   }
 
 #ifdef BUILDKKRMATRIX_GPU
    // for(int i=0; i<local.num_local; i++) freeDConst(deviceConstants[i]);

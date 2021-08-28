@@ -136,7 +136,6 @@ public:
 
   lsms::ForceParameters forceParams{};
 
-
 // repeat the MPI rank from comm for reporting purposes
   int commRank;
 

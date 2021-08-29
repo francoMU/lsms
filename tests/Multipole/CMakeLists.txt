@@ -3,9 +3,7 @@
 #add_must_test(lsmscore multipole_madlung)
 
 
-#
 # Test for replaceing the madelung structure
-#
 
 add_executable(test_madelung_improved)
 
@@ -20,10 +18,21 @@ target_link_libraries(
         PUBLIC
         multipole_madelung)
 
+# Test integer factors
 
-#
-#
-#
+add_executable(test_integer_factors)
+
+target_sources(
+        test_integer_factors
+        PUBLIC
+        test_integer_factors.f90
+)
+
+target_link_libraries(
+        test_integer_factors
+        PUBLIC
+        multipole_madelung)
+
 
 #add_executable(test_multipole_madelung)
 

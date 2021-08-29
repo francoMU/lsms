@@ -29,3 +29,5 @@ target_include_directories(
 
 add_subdirectory(Multipole)
 
+add_subdirectory(MultipoleImproved)
+

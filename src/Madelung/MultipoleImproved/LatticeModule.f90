@@ -2,11 +2,12 @@ module LatticeModule
    implicit none
 contains
 
+   !*******************************************************************
+   !  Calculates number of lattice vectors, for the given cutoff radius..
+   !*******************************************************************
    subroutine numlat(vbra, vcut, nm1, nm2, nm3, nv)
       use KindParamModule, only : IntKind, RealKind
       use MathParamModule, only : TEN2m6
-      !
-      implicit none
       !
       integer (kind=IntKind), intent(in) :: nm1
       integer (kind=IntKind), intent(in) :: nm2
@@ -28,9 +29,7 @@ contains
       real (kind=RealKind) :: vnsq
       real (kind=RealKind) :: vcut
       real (kind=RealKind) :: vcut2
-      !  *******************************************************************
-      !  Calculates number of lattice vectors, for the given cutoff radius..
-      !  *******************************************************************
+
       nv=0
       vcut2=vcut * vcut + TEN2m6
       tn1p1=2 * nm1 + 1

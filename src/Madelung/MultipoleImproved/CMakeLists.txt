@@ -9,6 +9,7 @@ if (BUILD_MADELUNG_TEST)
             multipole_madelung
             PUBLIC
             integer_factors.f90
+            madelung_module.f90
     )
 
 endif ()

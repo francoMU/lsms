@@ -13,7 +13,7 @@ target_sources(
         MadelungModule.f90
         ErrorHandlerModule.f90
         GauntFactorsModule.f90
-        LegendreModule.f90
+        legendre.f90
         SphericalHarmonicsModule.f90
         MathParamModule.f90
         LatticeModule.f90
@@ -49,7 +49,7 @@ if (BUILD_MADELUNG_TEST)
             MadelungModule.f90
             ErrorHandlerModule.f90
             GauntFactorsModule.f90
-            LegendreModule.f90
+            legendre.f90
             SphericalHarmonicsModule.f90
             MathParamModule.f90
             LatticeModule.f90

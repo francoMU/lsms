@@ -39,6 +39,11 @@ if (BUILD_MADELUNG_TEST)
     target_sources(
             multipole_madelung
             PUBLIC
+            # calcHigherOrderMadelung.hpp
+            # calcHigherOrderMadelung.cpp
+            # higherOrderMadelung.hpp
+            # higherOrderMadelung.cpp
+            multipole_madelung.h
             IntegerFactorsModule.f90
             KindParamModule.f90
             MadelungModule.f90
@@ -48,12 +53,10 @@ if (BUILD_MADELUNG_TEST)
             SphericalHarmonicsModule.f90
             MathParamModule.f90
             LatticeModule.f90
-            createLattice.f90
             gaussq.f90
             breakLine.f90
             CMadelungModule.f90
             ord3v.f90
-            multipole_madelung.h
     )
 
     target_compile_options(

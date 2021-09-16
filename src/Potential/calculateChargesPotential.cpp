@@ -1093,11 +1093,22 @@ C        dz=mint/qint
           *
           */
 
+
+         auto moment_mag = std::sqrt(
+               local.atom[i].evecOut[0] * local.atom[i].evecOut[0]
+               + local.atom[i].evecOut[1] * local.atom[i].evecOut[1]
+               + local.atom[i].evecOut[2] * local.atom[i].evecOut[2]);
+
+         // DEBUG
+         std::cout << comm.rank << " " << i << " : "
+                   << local.atom[i].evecOut[0] << " "
+                   << local.atom[i].evecOut[1] << " "
+                   << local.atom[i].evecOut[2] << std::endl;
+
+
          for (int ir = 0; ir < local.atom[0].r_mesh.size(); ir++) {
             local.atom[i].vrNew(ir, is) = local.atom[i].lsf_functional.exchange_field(1.0);
          }
-
-
 
 
       }

@@ -136,7 +136,6 @@ public:
 
   lsms::ForceParameters forceParams{};
 
-
 // repeat the MPI rank from comm for reporting purposes
   int commRank;
 
@@ -163,6 +162,9 @@ public:
   int pot_in_idx;
   Real conc;
   int alloy_class;
+
+  int lsf_functional{0};
+
 };
 
 class CrystalParameters {

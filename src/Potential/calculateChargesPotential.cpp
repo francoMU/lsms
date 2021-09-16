@@ -585,7 +585,6 @@ calculateCharges(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeI
             }
     }
 
-
     for (int i = 0; i < local.num_local; i++) {
         switch (lsms.n_spin_cant) {
             case 2:
@@ -814,7 +813,6 @@ C        dz=mint/qint
                     printf("Madelung constant: %f\n", u0Sum);
                 }
 
-
 /*
         ===============================================================
         calculate the exchange-correlation potential related parameters
@@ -932,7 +930,6 @@ C        dz=mint/qint
                                                     &local.atom[i].exchangeCorrelationE, &local.atom[i].exchangeCorrelationV[0]);
               }
             }
-
 #else
             printf("LSMS was not built with libxc support!!\n");
             MPI_Abort(comm.comm, 1);
@@ -1085,7 +1082,41 @@ C        dz=mint/qint
                 }
             }
 
-        }
+        /*
+          * Phenomenological longitudinal spin fluctuations
+          *
+          * https://doi.org/10.1103/PhysRevB.75.054402
+          * https://doi.org/10.1103/PhysRevB.102.014402
+          *
+          */
+
+
+         auto moment_mag = std::sqrt(
+               local.atom[i].evecOut[0] * local.atom[i].evecOut[0]
+               + local.atom[i].evecOut[1] * local.atom[i].evecOut[1]
+               + local.atom[i].evecOut[2] * local.atom[i].evecOut[2]);
+
+         // DEBUG
+         std::cout << comm.rank << " " << i << " : "
+                   << local.atom[i].evecOut[0] << " "
+                   << local.atom[i].evecOut[1] << " "
+                   << local.atom[i].evecOut[2] << std::endl;
+
+
+         for (int ir = 0; ir < local.atom[0].r_mesh.size(); ir++) {
+            local.atom[i].vrNew(ir, is) = local.atom[i].lsf_functional.exchange_field(1.0);
+         }
+
+
+      }
+
+
+
+
+
+      /*
+       *
+       */
 
         calculateMTZeroPotDiff(lsms, local, chargeSwitch);
 

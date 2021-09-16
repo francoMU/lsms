@@ -66,17 +66,20 @@ target_link_libraries(lsmscore PUBLIC mjson)
 if (NOT DEFINED Libxc_DIR)
     message(FATAL_ERROR "Libxc_DIR is not defined")
 endif ()
-message(STATUS "LibXC: ${Libxc_DIR}")
 find_library(LIBXC xc
         PATHS ${Libxc_DIR}/lib
         NO_DEFAULT_PATH
         REQUIRED
         )
 
-target_include_directories(lsmscore PRIVATE ${Libxc_DIR}/include)
-target_link_directories(lsmscore PRIVATE ${Libxc_DIR}/lib)
-target_compile_definitions(lsmscore PRIVATE USE_LIBXC)
-target_link_libraries(lsmscore PUBLIC ${LIBXC_LIBRARIES})
+message(STATUS "LibXC directory: " ${Libxc_DIR})
+message(STATUS "LibXC library:   " ${LIBXC})
+message(STATUS "LibXC headers:   " ${Libxc_DIR}/include)
+
+target_compile_definitions(lsmscore PUBLIC "USE_LIBXC")
+target_include_directories(lsmscore PUBLIC ${Libxc_DIR}/include)
+target_link_directories(lsmscore PUBLIC ${Libxc_DIR}/lib)
+target_link_libraries(lsmscore PUBLIC ${LIBXC})
 
 
 # DL

@@ -1,4 +1,6 @@
 
+#include <mpi.h>
+
 #include <Accelerator.hpp>
 #include <buildLIZandCommLists.hpp>
 #include <distributeAtoms.hpp>

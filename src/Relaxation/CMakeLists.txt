@@ -12,7 +12,6 @@ target_sources(lsmscore
 
 target_sources(lsms_relaxation_main
         PUBLIC
-        relax_params.cpp
         lsms_relaxation_main.cpp
         lsms_relaxation.cpp
         lsms_relaxation.hpp

@@ -814,7 +814,6 @@ C        dz=mint/qint
                printf("Madelung constant: %f\n", u0Sum);
             }
 
-
 /*
         ===============================================================
         calculate the exchange-correlation potential related parameters
@@ -932,7 +931,6 @@ C        dz=mint/qint
                                                  &local.atom[i].exchangeCorrelationE, &local.atom[i].exchangeCorrelationV[0]);
            }
          }
-
 #else
          printf("LSMS was not built with libxc support!!\n");
          MPI_Abort(comm.comm, 1);

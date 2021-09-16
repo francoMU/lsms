@@ -26,7 +26,7 @@ public:
   void setIstop(const char *c) {
     strncpy(istop, c, 32);
     for (int i = strlen(c); i < 32; i++) istop[i] = ' ';
-  }
+   }
 
   bool checkIstop(const char *c) { return (strncmp(istop, c, 32) == 0); }
 
@@ -37,13 +37,13 @@ public:
   unsigned int linearSolver; // use only least significant 2 bytes, the next bytes might be used for other solvers / kernel selection
 
 // for GPU only
-  int GPUThreads;
+   int GPUThreads;
 };
 
 class EnergyContourParameters {
 public:
-  int grid, npts;
-  Real ebot, etop, eitop, eibot;
+   int grid, npts;
+   Real ebot, etop, eitop, eibot;
 // Grouping of energies for single site solver
   int maxGroupSize;
 
@@ -60,19 +60,19 @@ enum Relativity : int {
 
 class LSMSSystemParameters {
 public:
-  char systemid[80];
-  char title[80];
-  LSMSMode lsmsMode;
-  int rank;
-  char potential_file_in[128];
-  char potential_file_out[128];
-  int pot_in_type, pot_out_type;
-  char alloy_file_in[128];
-  char alloy_file_out[128];
-  int alloy_in_type, alloy_out_type;
-  char infoEvecFileIn[128];
-  char infoEvecFileOut[128];
-  char localAtomDataFile[128];
+   char systemid[80];
+   char title[80];
+   LSMSMode lsmsMode;
+   int rank;
+   char potential_file_in[128];
+   char potential_file_out[128];
+   int pot_in_type, pot_out_type;
+   char alloy_file_in[128];
+   char alloy_file_out[128];
+   int alloy_in_type, alloy_out_type;
+   char infoEvecFileIn[128];
+   char infoEvecFileOut[128];
+   char localAtomDataFile[128];
 
   int mixing; // combines LSMS_1's mix_quant & mix_algor : -1 don't mix. mix_quant=mixing%4; mix_algor=mixing>>2;
   // mix_quant  0: charge, 1: potential
@@ -118,30 +118,29 @@ public:
    lsms::RelaxParams relaxParams{};
 
 // no. of Gaussian points for volume integration
-  int ngaussr, ngaussq;
+   int ngaussr, ngaussq;
 // prefered block size for zblock_lu: 0 use the default
-  int zblockLUSize;
+   int zblockLUSize;
 
 // Properties of the whole system:
-  Real chempot;                // Chemical potential
-  Real zvaltss;                // Total valence charge
-  Real volumeTotal;            // Total cell volume
-  Real volumeNorm;             // Volume renormalization factor
-  Real volumeInterstitial;     // Total interstitial volume
-  Real u0;                     // Contribution of the Muffin-tin zero potential to the Coulomb energy
-  Real totalEnergy;            // Total energy
-  Real electroStaticEnergy{0.0};
+   Real chempot;                // Chemical potential
+   Real zvaltss;                // Total valence charge
+   Real volumeTotal;            // Total cell volume
+   Real volumeNorm;             // Volume renormalization factor
+   Real volumeInterstitial;     // Total interstitial volume
+   Real u0;                     // Contribution of the Muffin-tin zero potential to the Coulomb energy
+   Real totalEnergy;            // Total energy
+   Real electroStaticEnergy{0.0};
   //Real pressure;               // Pressure
 
 
-  lsms::ForceParameters forceParams{};
-
+   lsms::ForceParameters forceParams{};
 
 // repeat the MPI rank from comm for reporting purposes
-  int commRank;
+   int commRank;
 
-  Real adjustContourBottom;    // if >0.0. set ebot to largestCorestate + adjustContourBottom
-  Real largestCorestate;       // maximum of the core levels
+   Real adjustContourBottom;    // if >0.0. set ebot to largestCorestate + adjustContourBottom
+   Real largestCorestate;       // maximum of the core levels
 };
 
 extern const char *potentialTypeName[];
@@ -150,7 +149,7 @@ constexpr int DEFAULT_STORE_ID = -1;
 
 class AtomType {
 public:
-  AtomType() : pot_in_idx(-1), store_id(DEFAULT_STORE_ID), forceZeroMoment(0) {}
+   AtomType() : pot_in_idx(-1), store_id(DEFAULT_STORE_ID), forceZeroMoment(0) {}
 
   char name[4];
   int lmax, Z, Zc, Zs, Zv;
@@ -165,7 +164,6 @@ public:
   int alloy_class;
 
   int lsf_functional{0};
-
 };
 
 class CrystalParameters {
@@ -194,17 +192,17 @@ class LocalTypeInfo {
 
 public:
 
-  void setNumLocal(int n) {
+   void setNumLocal(int n) {
     num_local = n;
     atom.resize(n, AtomData());
-    global_id.resize(n);
+      global_id.resize(n);
     n_per_type.resize(n);
     for (int i = 0; i < num_local; i++) atom[i].reset();
   }
 
   void setGlobalId(int rank, CrystalParameters &crystal) {
     for (int i = 0; i < crystal.num_types; i++) {
-      if (rank == crystal.types[i].node) {
+         if (rank == crystal.types[i].node) {
         global_id[crystal.types[i].local_id] = i;
         n_per_type[crystal.types[i].local_id] = crystal.types[i].number_of_instances;
       }
@@ -216,31 +214,31 @@ public:
   void setMaxCore(int n) { for (int i = 0; i < num_local; i++) atom[i].resizeCore(n); }
 
   // Check
-  int maxNrmat() const {
+   int maxNrmat() const {
     int v = 0;
     for (int i = 0; i < num_local; i++) if (atom[i].nrmat > v) v = atom[i].nrmat;
     return v;
-  }
+   }
 
   // Check
   int maxjws() const {
     int m = 0;
     for (int i = 0; i < num_local; i++) if (atom[i].jws > m) m = atom[i].jws;
     return m;
-  }
+   }
 
   int num_local; // Check
   std::vector<int> global_id; // Check
   std::vector<AtomData> atom;
   std::vector<int> n_per_type; // Check
 
-  int lDimTmatStore; // Check
+   int lDimTmatStore; // Check
   int blkSizeTmatStore; // Check
   Matrix<Complex> tmatStore;
   std::vector<int> tmatStoreGlobalIdx; // Check
 
-  Real qrms[2];
-  Real vrms[2];
+   Real qrms[2];
+   Real vrms[2];
 };
 
 // for Wang-Landau for metallic alloys

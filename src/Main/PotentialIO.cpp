@@ -145,12 +145,15 @@ int loadPotentials(LSMSCommunication &comm,
         local.atom[i].lmax = crystal.types[local.global_id[i]].lmax;
         local.atom[i].kkrsz = (local.atom[i].lmax + 1) *
                               (local.atom[i].lmax + 1);
-        if (lsms.fixRMT == 0) {
+        // LSF
+      auto lsf_functional = crystal.types[local.global_id[i]].lsf_functional;
+      local.atom[i].lsf_functional = lsms::LSFFunctional(
+            lsms.temperature, lsms::LSFTypeMap[lsf_functional]);if (lsms.fixRMT == 0) {
             local.atom[i].rmt = local.atom[i].rInscribed;
         }
         if (lsms.mtasa == 1) {
-            local.atom[i].jmt = local.atom[i].jws;
-        }
+            local.atom[i].jmt = local.atom[i].jws;}
+
 // define potential past old grid as constant
         for (int is = 0; is < lsms.n_spin_pola; is++) {
             Real vc = local.atom[i].vr(local.atom[i].jmt - 1, is) / local.atom[i].r_mesh[local.atom[i].jmt];

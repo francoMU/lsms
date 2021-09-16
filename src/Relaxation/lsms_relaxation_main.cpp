@@ -286,13 +286,13 @@ int main(int argc, char *argv[]) {
       }
    }
 
-
    // Update last step to coordinates in crystal
    lsms::VectorToCoordinates(lsms,
                              comm,
                              crystal,
                              local,
                              x_1);
+
 
    if (lsms.global.iprint >= 0) {
 
@@ -305,9 +305,6 @@ int main(int argc, char *argv[]) {
       printCompressedCrystalParameters(stdout, crystal);
       relaxation.printRelaxationHistory();
    }
-
-   /*
-    */
 
    if (lsms.pot_out_type >= 0) {
       if (comm.rank == 0) std::cout << "Writing new potentials.\n";

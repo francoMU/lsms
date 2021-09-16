@@ -54,7 +54,8 @@ site_default={ lmax=2,
                Zc=10,
                Zs=8,
                Zv=10,
-               rad=2}
+               rad=2,
+               lsf=3}
 
 mixing = { {quantity = "potential", algorithm = "broyden", mixing_parameter = 0.05} }
 

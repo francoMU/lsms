@@ -114,6 +114,9 @@ public:
   AngularMomentumIndices angularMomentumIndices;
   EnergyContourParameters energyContour;
 
+// Paramters for the relaxations
+   lsms::RelaxParams relaxParams{};
+
 // no. of Gaussian points for volume integration
   int ngaussr, ngaussq;
 // prefered block size for zblock_lu: 0 use the default
@@ -133,7 +136,6 @@ public:
 
   lsms::ForceParameters forceParams{};
 
-  lsms::RelaxParams relaxParams{};
 
 // repeat the MPI rank from comm for reporting purposes
   int commRank;

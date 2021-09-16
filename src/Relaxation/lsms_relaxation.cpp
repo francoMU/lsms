@@ -27,7 +27,6 @@
 #include "Communication/LSMSCommunication.hpp"
 #include "mixing.hpp"
 
-
 static void prepareSpinOnAtoms(const LSMSSystemParameters &lsms,
                                LocalTypeInfo &local) {
    if (lsms.n_spin_cant > 1) {
@@ -64,7 +63,7 @@ void lsms::ForcesToGradientVector(LSMSSystemParameters &lsms,
 
    MPI_Bcast(gradient.data(),
              gradient.size(),
-             MPI::DOUBLE,
+             MPI_DOUBLE,
              0,
              comm.comm);
 

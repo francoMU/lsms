@@ -32,6 +32,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
     const int s = sizeof(LSMSSystemParameters) + 9 * sizeof(Real) + sizeof(int)
                   + 10 + sizeof(MixingParameters) + 5 * sizeof(int)
                   + sizeof(int); // <-- +1 for no. alloy classes
+
     char buf[s];
     int nalloy_classes;
 
@@ -64,6 +65,13 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
         MPI_Pack(&lsms.temperature, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.clight, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
 
+        // Relaxation Parameters
+        MPI_Pack(&lsms.relaxParams.max_iterations, 1, MPI_INT, buf, s, &pos, comm.comm);
+        MPI_Pack(&lsms.relaxParams.tolerance, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
+        MPI_Pack(&lsms.relaxParams.initial_sigma, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
+        MPI_Pack(&lsms.relaxParams.write_to_file, 1, MPI_C_BOOL, buf, s, &pos, comm.comm);
+
+        // Contour Parameters
         MPI_Pack(&lsms.energyContour.grid, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.energyContour.npts, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.energyContour.ebot, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
@@ -139,6 +147,13 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
         MPI_Unpack(buf, s, &pos, &lsms.temperature, 1, MPI_DOUBLE, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.clight, 1, MPI_DOUBLE, comm.comm);
 
+        // Relaxation Parameters
+        MPI_Unpack(buf, s, &pos, &lsms.relaxParams.max_iterations, 1, MPI_INT, comm.comm);
+        MPI_Unpack(buf, s, &pos, &lsms.relaxParams.tolerance, 1, MPI_DOUBLE, comm.comm);
+        MPI_Unpack(buf, s, &pos, &lsms.relaxParams.initial_sigma, 1, MPI_DOUBLE, comm.comm);
+        MPI_Unpack(buf, s, &pos, &lsms.relaxParams.write_to_file, 1, MPI_C_BOOL, comm.comm);
+
+        // Contour parameters
         MPI_Unpack(buf, s, &pos, &lsms.energyContour.grid, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.energyContour.npts, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.energyContour.ebot, 1, MPI_DOUBLE, comm.comm);

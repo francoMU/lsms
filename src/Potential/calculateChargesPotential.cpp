@@ -8,7 +8,9 @@
 #include "getvmt.hpp"
 
 #ifdef USE_LIBXC
+
 #include "libxcInterface.hpp"
+
 #endif
 
 
@@ -907,29 +909,30 @@ C        dz=mint/qint
       } else if (lsms.xcFunctional[0] == 1)  // libxc functionals
       {
 #ifdef USE_LIBXC
-         switch (chargeSwitch)
-         {
-           case 1:
-           {
-             lsms.libxcFunctional.evaluate(local.atom[i].r_mesh, local.atom[i].rhotot,jmt,lsms.n_spin_pola,
-                                           local.atom[i].exchangeCorrelationEnergy,local.atom[i].exchangeCorrelationPotential);
-             Real rhoLocal[2];
-             rhoLocal[0]=0.5*(1.0+dz[i])*local.atom[i].rhoInt;
-             rhoLocal[1]=0.5*(1.0-dz[i])*local.atom[i].rhoInt;
-             lsms.libxcFunctional.evaluateSingle(&rhoLocal[0],lsms.n_spin_pola,
-                                                 &local.atom[i].exchangeCorrelationE, &local.atom[i].exchangeCorrelationV[0]);
-             break;
-           }
-           default:
-           {
-             lsms.libxcFunctional.evaluate(local.atom[i].r_mesh, local.atom[i].rhoNew,jmt,lsms.n_spin_pola,
-                                           local.atom[i].exchangeCorrelationEnergy,local.atom[i].exchangeCorrelationPotential);
-             Real rhoLocal[2];
-             rhoLocal[0]=0.5*(1.0+dz[i])*local.atom[i].rhoInt;
-             rhoLocal[1]=0.5*(1.0-dz[i])*local.atom[i].rhoInt;
-             lsms.libxcFunctional.evaluateSingle(&rhoLocal[0],lsms.n_spin_pola,
-                                                 &local.atom[i].exchangeCorrelationE, &local.atom[i].exchangeCorrelationV[0]);
-           }
+         switch (chargeSwitch) {
+            case 1: {
+               lsms.libxcFunctional.evaluate(local.atom[i].r_mesh, local.atom[i].rhotot, jmt, lsms.n_spin_pola,
+                                             local.atom[i].exchangeCorrelationEnergy,
+                                             local.atom[i].exchangeCorrelationPotential);
+               Real rhoLocal[2];
+               rhoLocal[0] = 0.5 * (1.0 + dz[i]) * local.atom[i].rhoInt;
+               rhoLocal[1] = 0.5 * (1.0 - dz[i]) * local.atom[i].rhoInt;
+               lsms.libxcFunctional.evaluateSingle(&rhoLocal[0], lsms.n_spin_pola,
+                                                   &local.atom[i].exchangeCorrelationE,
+                                                   &local.atom[i].exchangeCorrelationV[0]);
+               break;
+            }
+            default: {
+               lsms.libxcFunctional.evaluate(local.atom[i].r_mesh, local.atom[i].rhoNew, jmt, lsms.n_spin_pola,
+                                             local.atom[i].exchangeCorrelationEnergy,
+                                             local.atom[i].exchangeCorrelationPotential);
+               Real rhoLocal[2];
+               rhoLocal[0] = 0.5 * (1.0 + dz[i]) * local.atom[i].rhoInt;
+               rhoLocal[1] = 0.5 * (1.0 - dz[i]) * local.atom[i].rhoInt;
+               lsms.libxcFunctional.evaluateSingle(&rhoLocal[0], lsms.n_spin_pola,
+                                                   &local.atom[i].exchangeCorrelationE,
+                                                   &local.atom[i].exchangeCorrelationV[0]);
+            }
          }
 #else
          printf("LSMS was not built with libxc support!!\n");
@@ -1097,7 +1100,7 @@ C        dz=mint/qint
                + local.atom[i].evecOut[1] * local.atom[i].evecOut[1]
                + local.atom[i].evecOut[2] * local.atom[i].evecOut[2]);
 
-         // DEBUG
+         /*
          std::cout << comm.rank << " " << i << " : "
                    << local.atom[i].evecOut[0] << " "
                    << local.atom[i].evecOut[1] << " "
@@ -1107,6 +1110,7 @@ C        dz=mint/qint
          for (int ir = 0; ir < local.atom[0].r_mesh.size(); ir++) {
             local.atom[i].vrNew(ir, is) = local.atom[i].lsf_functional.exchange_field(1.0);
          }
+          */
 
 
       }

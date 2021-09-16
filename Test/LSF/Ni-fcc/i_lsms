@@ -81,5 +81,3 @@ for i =1,num_atoms do
     if(site[i][k]==nil) then site[i][k]=v end
   end
 end
-
-

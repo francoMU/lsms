@@ -1101,10 +1101,10 @@ C        dz=mint/qint
                + local.atom[i].evecOut[2] * local.atom[i].evecOut[2]);
 
 
-         std::cout << comm.rank << " " << i << " : "
-                   << local.atom[i].evecOut[0] << " "
-                   << local.atom[i].evecOut[1] << " "
-                   << local.atom[i].evecOut[2] << std::endl;
+         //std::cout << comm.rank << " " << i << " : "
+         //          << local.atom[i].evecOut[0] << " "
+         //          << local.atom[i].evecOut[1] << " "
+         //          << local.atom[i].evecOut[2] << std::endl;
 
          /*
          for (int ir = 0; ir < local.atom[0].r_mesh.size(); ir++) {

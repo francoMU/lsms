@@ -13,3 +13,7 @@ lsms::RelaxParams::RelaxParams(int maxIterations,
       tolerance(tolerance),
       initial_sigma(initialSigma),
       write_to_file(write_to_file) {}
+
+bool lsms::RelaxParams::isOptimizationRun() const {
+   return max_iterations != NO_OPTIMIZATION;
+}

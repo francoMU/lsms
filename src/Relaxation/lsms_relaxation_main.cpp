@@ -199,113 +199,116 @@ int main(int argc, char *argv[]) {
    lsms::LsmsRelaxationFunction relax_function(lsms, comm, crystal, local,
                                                mix, lsms.relaxParams.write_to_file);
 
-   /*
-    */
 
-   std::vector<double> coordinates(crystal.num_atoms * 3);
-   std::vector<double> gradient(crystal.num_atoms * 3);
+   if (lsms.relaxParams.isOptimizationRun()) {
+      /*
+       * Runs non-linear optimization on the coordinates
+       */
 
-   lsms::CoordinatesToVector(lsms,
-                             comm,
-                             crystal,
-                             coordinates);
+      std::vector<double> coordinates(crystal.num_atoms * 3);
+      std::vector<double> gradient(crystal.num_atoms * 3);
 
-   auto starting_coordinates = coordinates;
+      lsms::CoordinatesToVector(lsms, comm, crystal, coordinates);
 
-
-   /*
-    *
-    */
-
-   if (lsms.global.iprint >= 0) {
-      std::ofstream start_file;
-      auto file_name = lsms::LsmsRelaxationFunction::generateFileName(0);
-      start_file.open(file_name.c_str());
-      lsms::POSCARStructureIO io(lsms::POSCARStructureType::Cartesian);
-      io.writeToStream(start_file, lsms, crystal);
-      start_file.close();
-   }
-
-   /*
-    *
-    */
-
-   lsms::NLOptimization relaxation(relax_function,
-                                   starting_coordinates,
-                                   lsms.relaxParams.max_iterations,
-                                   lsms.relaxParams.tolerance,
-                                   lsms.relaxParams.initial_sigma);
-
-
-   auto x_0 = coordinates;
-   auto x_1 = coordinates;
-   auto grad_0 = gradient;
-   auto grad_1 = gradient;
-
-   int iters;
-
-   bool converged = false;
-
-   if (lsms.global.iprint >= 0) {
-      std::cout << " Start of iterations: " << std::endl;
-   }
-
-   relaxation.start(x_0, x_1, grad_0, grad_1);
-
-   // Update all internal convergence parameters
-   relaxation.update_step(x_0, x_1);
-
-   // Update the gradient to save one evaluation per step
-   grad_0 = grad_1;
-
-   for (iters = 0; iters <= lsms.relaxParams.max_iterations; iters++) {
+      auto starting_coordinates = coordinates;
 
       if (lsms.global.iprint >= 0) {
-         std::cout << std::endl << std::endl;
-         std::cout << " ------------------------------ " << std::endl;
-         std::cout << "           Iterations: " << iters << std::endl;
-         std::cout << " ------------------------------ " << std::endl;
-         std::cout << std::endl;
+         std::ofstream start_file;
+         auto file_name = lsms::LsmsRelaxationFunction::generateFileName(0);
+         start_file.open(file_name.c_str());
+         lsms::POSCARStructureIO io(lsms::POSCARStructureType::Cartesian);
+         io.writeToStream(start_file, lsms, crystal);
+         start_file.close();
       }
 
-      relaxation.iteration(x_0, x_1, grad_0, grad_1);
+      lsms::NLOptimization relaxation(relax_function,
+                                      starting_coordinates,
+                                      lsms.relaxParams.max_iterations,
+                                      lsms.relaxParams.tolerance,
+                                      lsms.relaxParams.initial_sigma);
 
-      if (relaxation.check_convergence(grad_1)) {
-         converged = true;
-         break;
+      auto x_0 = coordinates;
+      auto x_1 = coordinates;
+      auto grad_0 = gradient;
+      auto grad_1 = gradient;
+
+      int iters;
+      bool converged = false;
+
+      if (lsms.global.iprint >= 0) {
+         std::cout << " Start of iterations: " << std::endl;
       }
 
+      relaxation.start(x_0, x_1, grad_0, grad_1);
+      relaxation.update_step(x_0, x_1);
       grad_0 = grad_1;
-   }
 
-   if (lsms.global.iprint >= 0) {
-      if (converged) {
-         std::cout << " Optimization is converged " << std::endl;
-      } else {
-         std::cout << " Optimization is not converged " << std::endl;
+      for (iters = 0; iters <= lsms.relaxParams.max_iterations; iters++) {
+
+         if (lsms.global.iprint >= 0) {
+            std::cout << std::endl << std::endl;
+            std::cout << " ------------------------------ " << std::endl;
+            std::cout << "           Iterations: " << iters << std::endl;
+            std::cout << " ------------------------------ " << std::endl;
+            std::cout << std::endl;
+         }
+
+         relaxation.iteration(x_0, x_1, grad_0, grad_1);
+
+         if (relaxation.check_convergence(grad_1)) {
+            converged = true;
+            break;
+         }
+
+         grad_0 = grad_1;
       }
+
+      if (lsms.global.iprint >= 0) {
+         if (converged) {
+            std::cout << " Optimization is converged " << std::endl;
+         } else {
+            std::cout << " Optimization is not converged " << std::endl;
+         }
+      }
+
+      // Update last step to coordinates in crystal
+      lsms::VectorToCoordinates(lsms,
+                                comm,
+                                crystal,
+                                local,
+                                x_1);
+
+
+      if (lsms.global.iprint >= 0) {
+         std::ofstream end_file;
+         auto file_name = lsms::LsmsRelaxationFunction::generateFileName(
+               relax_function.getNumberOfEvaluations());
+         end_file.open(file_name.c_str());
+         lsms::POSCARStructureIO io(lsms::POSCARStructureType::Cartesian);
+         io.writeToStream(end_file, lsms, crystal);
+         end_file.close();
+
+         printCompressedCrystalParameters(stdout, crystal);
+         relaxation.printRelaxationHistory();
+      }
+
+   } else {
+
+      /*
+       * Simple run with debug output
+       */
+      std::vector<Real> coordinates(crystal.num_atoms * 3);
+      std::vector<Real> gradient(crystal.num_atoms * 3);
+
+      lsms::CoordinatesToVector(lsms, comm, crystal, coordinates);
+
+      Real total_energy;
+      relax_function.evaluate(coordinates,
+                              total_energy,
+                              gradient);
+
    }
 
-   // Update last step to coordinates in crystal
-   lsms::VectorToCoordinates(lsms,
-                             comm,
-                             crystal,
-                             local,
-                             x_1);
-
-
-   if (lsms.global.iprint >= 0) {
-      std::ofstream end_file;
-      auto file_name = lsms::LsmsRelaxationFunction::generateFileName(
-            relax_function.getNumberOfEvaluations());
-      end_file.open(file_name.c_str());
-      lsms::POSCARStructureIO io(lsms::POSCARStructureType::Cartesian);
-      io.writeToStream(end_file, lsms, crystal);
-      end_file.close();
-
-      printCompressedCrystalParameters(stdout, crystal);
-      relaxation.printRelaxationHistory();
-   }
 
    if (lsms.pot_out_type >= 0) {
       if (comm.rank == 0) std::cout << "Writing new potentials" << std::endl;
@@ -335,24 +338,16 @@ int main(int argc, char *argv[]) {
    GPTLpr(comm.rank);
 #endif
 
-
+   // Ordered output
    auto endTimeRelaxation = MPI_Wtime();
    auto totalTimeRelaxation = endTimeRelaxation - startTimeRelaxation;
-
-   if (lsms.global.iprint >= 0) {
-      std::cout << std::endl << std::endl;
-      std::printf("Total execution time [num_local=%d]: %lf sec\n",
-                  local.num_local, totalTimeRelaxation);
-      std::cout << std::endl << std::endl;
-   }
-
-   std::string executionTimeStr = std::string("Total execution time [num_local=")
-                                  + std::to_string(local.num_local)
-                                  + std::string("]: ")
+   std::string executionTimeStr = std::string("Total execution time: ")
                                   + std::to_string(totalTimeRelaxation)
                                   + std::string("sec\n");
+   if (lsms.pot_out_type >= 0) {
+      std::cout << executionTimeStr;
+   }
 
-   orderedPrint(executionTimeStr, comm);
 
    H5close();
    finalizeCommunication();

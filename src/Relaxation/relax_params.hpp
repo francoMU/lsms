@@ -12,6 +12,7 @@ namespace lsms {
    constexpr double TOLERANCE = 1e-8;
    constexpr double INITIAL_SIGMA = 0.0001;
    constexpr bool WRITE_TO_FILE = false;
+   constexpr int NO_OPTIMIZATION = -1;
 
    class RelaxParams {
 
@@ -31,7 +32,10 @@ namespace lsms {
 
       bool write_to_file;
 
+      bool isOptimizationRun() const;
+
    };
+
 
 }
 

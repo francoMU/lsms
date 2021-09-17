@@ -471,6 +471,8 @@ public:
 
 // local energy
     Real localEnergy {0.0};
+    Real siteLocalEnergy {0.0}; // No intersitital contribution
+    Real interstitialEnergy {0.0}; // Site normalized interstitial energy
     Real localMadelungEnergy {0.0};
 // Alloy Class
     int alloy_class;

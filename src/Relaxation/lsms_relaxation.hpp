@@ -2,6 +2,8 @@
 #ifndef LSMS_RELAXATION_H
 #define LSMS_RELAXATION_H
 
+#include "energyDebugMode.hpp"
+
 namespace lsms {
 
    void run_dft_calculation(LSMSSystemParameters &lsms,
@@ -9,7 +11,8 @@ namespace lsms {
                             CrystalParameters &crystal,
                             LocalTypeInfo &local,
                             MixingParameters &mix,
-                            bool reload_potentials);
+                            bool reload_potentials,
+                            EnergyDebugMode mode = EnergyDebugMode::Local);
 
 
    Real extractTotalEnergy(LSMSSystemParameters &lsms);
@@ -30,6 +33,7 @@ namespace lsms {
                                CrystalParameters &crystal,
                                LocalTypeInfo &local,
                                std::vector<Real> &gradient);
+
 
 }
 

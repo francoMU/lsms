@@ -22,6 +22,7 @@ target_sources(lsms_relaxation_main
         base_function.hpp
         utils.cpp
         utils.hpp
+        energyDebugMode.hpp
         )
 
 

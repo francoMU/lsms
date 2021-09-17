@@ -26,6 +26,8 @@
 #include "PotentialIO.hpp"
 #include "Communication/LSMSCommunication.hpp"
 #include "mixing.hpp"
+#include "energyDebugMode.hpp"
+#include "orderedPrint.hpp"
 
 static void prepareSpinOnAtoms(const LSMSSystemParameters &lsms,
                                LocalTypeInfo &local) {
@@ -109,7 +111,9 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
                                CrystalParameters &crystal,
                                LocalTypeInfo &local,
                                MixingParameters &mix,
-                               bool reload_potentials) {
+                               bool reload_potentials,
+                               EnergyDebugMode mode
+) {
 
    // Ensure that the store id is set to default value
    for (int i = 0; i < crystal.num_atoms; i++) {
@@ -396,6 +400,61 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
 
    delete mixing;
+
+   /*
+    * Print local energies
+    */
+
+   if (mode == EnergyDebugMode::Local) {
+
+      /*
+       *  Total energy per atom
+       */
+
+      std::vector<double> global_energies;
+
+      lsms::gatherEnergies(comm, lsms, local, crystal, global_energies, 0);
+
+      if (lsms.global.iprint >= 0) {
+
+         std::cout << std::endl;
+
+         for(int i = 0; i < global_energies.size(); i++) {
+            std::printf("[%2d:%2d]     : %30.18lf Ry\n",
+                        crystal.types[i].node,
+                        crystal.types[i].local_id,
+                        global_energies[i]);
+         }
+
+      }
+
+      /*
+       * Total Interstitial
+       */
+
+      Real total_interstitial = 0.0;
+      for (int i = 0; i < local.num_local; i++) {
+         total_interstitial += local.atom[i].interstitialEnergy;
+      }
+
+      globalSum(comm, total_interstitial);
+
+      if (lsms.global.iprint >= 0) {
+
+         std::printf("Interstitial: %30.18lf Ry\n", total_interstitial);
+         std::printf("Madelung    : %30.18lf Ry\n", lsms.u0);
+         std::printf("Total Energy: %30.18lf Ry\n", lsms.totalEnergy);
+
+      }
+
+
+   }
+
+
+   /*
+    *
+    */
+
 
    /*
     * Forces

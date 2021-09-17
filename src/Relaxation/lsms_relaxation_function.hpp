@@ -37,7 +37,7 @@ namespace lsms {
                              bool write_to_file = false);
 
       void evaluate(const std::vector<Real> &coordinates_vector,
-                    double &result,
+                    Real &result,
                     std::vector<Real> &gradient) override;
 
       LSMSSystemParameters &lsms;

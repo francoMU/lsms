@@ -32,7 +32,7 @@ yForceRepeat=220
 zForceRepeat=220
 radiusForce=1500.0
 
-max_iterations = 1
+max_iterations = -1
 tolerance = 1e-6
 initial_sigma = 0.0001
 write_to_file = true

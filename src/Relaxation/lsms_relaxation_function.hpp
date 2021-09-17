@@ -17,8 +17,8 @@ namespace lsms {
 
    private:
 
-      int number_of_evaluations {0};
-      bool write_to_file {false};
+      int number_of_evaluations{1};
+      bool write_to_file{false};
 
       void writeStructureToFile() const;
 
@@ -42,6 +42,13 @@ namespace lsms {
       CrystalParameters &crystal;
       LocalTypeInfo &local;
       MixingParameters &mix;
+
+      static std::string generateFileName(int number,
+                                          const std::string &suffix = {"POSCAR"},
+                                          const std::string &prefix = {"step"});
+
+      int getNumberOfEvaluations() const;
+
 
 
    };

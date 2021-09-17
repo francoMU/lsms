@@ -7,6 +7,7 @@ target_sources(lsmscore
         POSCARStructureIO.hpp
         POSCARStructureIO.cpp
         POSCARStructureType.hpp
+        orderedPrint.hpp
         )
 
 target_include_directories(lsmscore

@@ -24,7 +24,7 @@ void lsms::LsmsRelaxationFunction::evaluate(const std::vector<Real> &coordinates
    }
 
    // Main DFT run
-   bool reload_potentials = number_of_evaluations == 0 ? true : false;
+   bool reload_potentials = number_of_evaluations == 0;
    lsms::run_dft_calculation(lsms, comm, crystal, local, mix, reload_potentials);
    number_of_evaluations++;
 
@@ -79,5 +79,19 @@ void lsms::LsmsRelaxationFunction::writeStructureToFile() const {
 }
 
 std::string lsms::LsmsRelaxationFunction::generateFileName() const {
-   return std::string("step.") + std::to_string(number_of_evaluations) + std::string(".POSCAR");
+   return generateFileName(number_of_evaluations);
 }
+
+std::string lsms::LsmsRelaxationFunction::generateFileName(int number,
+                                                           const std::string &suffix,
+                                                           const std::string &prefix) {
+   auto sep = std::string(".");
+   return prefix + sep + std::to_string(number) + sep + suffix;
+}
+
+int lsms::LsmsRelaxationFunction::getNumberOfEvaluations() const {
+   return number_of_evaluations;
+}
+
+
+

@@ -1,3 +1,8 @@
+/** @file lsms_relaxation_main.cpp
+ *  @brief Relaxation of structures using the non-linear optimization and forces
+ *
+ *  @author Franco P. Moitzi (francoMU)
+ */
 
 #include <cstdio>
 #include <cstdlib>
@@ -53,6 +58,7 @@
 #include "VORPOL/setupVorpol.hpp"
 #include "VORPOL/VORPOL.hpp"
 #include "buildLIZandCommLists.hpp"
+#include "IO/orderedPrint.hpp"
 
 
 #include "writeInfoEvec.cpp"
@@ -81,9 +87,6 @@ std::vector<DeviceConstants> deviceConstants;
 // void freeDConst(void *);
 #endif
 
-
-#define LSMS_RELAX_DEBUG
-
 int main(int argc, char *argv[]) {
 
    LSMSSystemParameters lsms;
@@ -96,8 +99,6 @@ int main(int argc, char *argv[]) {
    AlloyAtomBank alloyBank;
 
    char inputFileName[128];
-
-   Real eband;
 
    lua_State *L = luaL_newstate();
    luaL_openlibs(L);
@@ -187,6 +188,8 @@ int main(int argc, char *argv[]) {
       lsms.global.iprint = lsms.global.default_iprint;
    }
 
+   auto startTimeRelaxation = MPI_Wtime();
+
    // Setup up expansion coeffiencts
    lsms.angularMomentumIndices.init(2 * crystal.maxlmax);
    sphericalHarmonicsCoeficients.init(2 * crystal.maxlmax);
@@ -215,9 +218,12 @@ int main(int argc, char *argv[]) {
     *
     */
 
+   std::cout << "TEST" << std::endl;
+
    if (lsms.global.iprint >= 0) {
       std::ofstream start_file;
-      start_file.open("start.POSCAR");
+      auto file_name = lsms::LsmsRelaxationFunction::generateFileName(0);
+      start_file.open(file_name.c_str());
       lsms::POSCARStructureIO io(lsms::POSCARStructureType::Cartesian);
       io.writeToStream(start_file, lsms, crystal);
       start_file.close();
@@ -258,14 +264,11 @@ int main(int argc, char *argv[]) {
    for (iters = 0; iters <= lsms.relaxParams.max_iterations; iters++) {
 
       if (lsms.global.iprint >= 0) {
-
-         std::cout << std::endl;
-         std::cout << std::endl;
+         std::cout << std::endl << std::endl;
          std::cout << " ------------------------------ " << std::endl;
          std::cout << "           Iterations: " << iters << std::endl;
          std::cout << " ------------------------------ " << std::endl;
          std::cout << std::endl;
-
       }
 
       relaxation.iteration(x_0, x_1, grad_0, grad_1);
@@ -295,9 +298,10 @@ int main(int argc, char *argv[]) {
 
 
    if (lsms.global.iprint >= 0) {
-
       std::ofstream end_file;
-      end_file.open("end.POSCAR");
+      auto file_name = lsms::LsmsRelaxationFunction::generateFileName(
+            relax_function.getNumberOfEvaluations());
+      end_file.open(file_name.c_str());
       lsms::POSCARStructureIO io(lsms::POSCARStructureType::Cartesian);
       io.writeToStream(end_file, lsms, crystal);
       end_file.close();
@@ -307,7 +311,7 @@ int main(int argc, char *argv[]) {
    }
 
    if (lsms.pot_out_type >= 0) {
-      if (comm.rank == 0) std::cout << "Writing new potentials.\n";
+      if (comm.rank == 0) std::cout << "Writing new potentials" << std::endl;
       writePotentials(comm, lsms, crystal, local);
       if (comm.rank == 0) {
          std::cout << "Writing restart file.\n";
@@ -315,11 +319,6 @@ int main(int argc, char *argv[]) {
       }
    }
 
-   if (lsms.pot_out_type >= 0) {
-      if (comm.rank == 0) {
-         std::cout << "Simulation is done!!!!" << std::endl;
-      }
-   }
 
 #ifdef BUILDKKRMATRIX_GPU
    // for(int i=0; i<local.num_local; i++) freeDConst(deviceConstants[i]);
@@ -339,8 +338,29 @@ int main(int argc, char *argv[]) {
    GPTLpr(comm.rank);
 #endif
 
+
+   auto endTimeRelaxation = MPI_Wtime();
+   auto totalTimeRelaxation = endTimeRelaxation - startTimeRelaxation;
+
+   if (lsms.global.iprint >= 0) {
+      std::cout << std::endl << std::endl;
+      std::printf("Total execution time [num_local=%d]: %lf sec\n",
+                  local.num_local, totalTimeRelaxation);
+      std::cout << std::endl << std::endl;
+   }
+
+   std::string executionTimeStr = std::string("Total execution time [num_local=")
+                                  + std::to_string(local.num_local)
+                                  + std::string("]: ")
+                                  + std::to_string(totalTimeRelaxation)
+                                  + std::string("sec\n");
+
+   orderedPrint(executionTimeStr, comm);
+
    H5close();
    finalizeCommunication();
    lua_close(L);
+
+
    return 0;
 }

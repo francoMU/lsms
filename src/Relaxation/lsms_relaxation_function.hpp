@@ -13,11 +13,14 @@
 
 namespace lsms {
 
+
    class LsmsRelaxationFunction : public BaseFunction<Real> {
 
    private:
 
-      int number_of_evaluations{1};
+      constexpr static int STARTER_NUMBER_OF_EVALUATIONS = 1;
+
+      int number_of_evaluations{STARTER_NUMBER_OF_EVALUATIONS};
       bool write_to_file{false};
 
       void writeStructureToFile() const;

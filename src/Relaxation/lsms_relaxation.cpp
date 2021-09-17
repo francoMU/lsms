@@ -135,7 +135,6 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
    }
 
 
-
    auto num_local = distributeTypes(crystal, comm);
    local.setNumLocal(num_local);
    local.setGlobalId(comm.rank, crystal);
@@ -217,10 +216,6 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
    }
    fflush(stdout);
 
-
-   std::cout << "Voronoi" << std::endl;
-   MPI_Barrier(MPI_COMM_WORLD);
-
    if (lsms.global.iprint >= 1) {
       std::cout << "Setup voronoi polyhedras...." << std::endl;
    }
@@ -254,22 +249,13 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
       printLocalTypeInfo(stdout, local);
    }
 
-   std::cout << "Before Core" << std::endl << std::flush;
-   MPI_Barrier(MPI_COMM_WORLD);
-
    if (lsms.global.iprint >= 1) {
       std::cout << "Calculate core states...." << std::endl;
    }
+
    calculateCoreStates(comm, lsms, local);
 
-
-   std::cout << "After Core" << std::endl << std::flush;
-   MPI_Barrier(MPI_COMM_WORLD);
-
    prepareSpinOnAtoms(lsms, local);
-
-   std::cout << "Before SCF" << std::endl;
-   MPI_Barrier(MPI_COMM_WORLD);
 
    /*
     * SCF Cycle

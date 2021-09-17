@@ -180,12 +180,8 @@ int main(int argc, char *argv[]) {
       fflush(stdout);
    }
 
-
    // Parameters are communicated here
    communicateParameters(comm, lsms, crystal, mix, alloyDesc);
-
-   std::cout << local.num_local << std::endl;
-   MPI_Barrier(MPI_COMM_WORLD);
 
    if (comm.rank != lsms.global.print_node) {
       lsms.global.iprint = lsms.global.default_iprint;

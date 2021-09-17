@@ -48,9 +48,6 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
     */
     // Matrix<char> coreStateType(atom.numc,2);
 
-    std::cout << "CORE STATES " << std::endl << std::flush;
-    MPI_Barrier(MPI_COMM_WORLD);
-
     int numDeepStates = atom.zcorss;
     if (lsms.n_spin_pola == 2) numDeepStates = ((int) atom.zcorss + 1) / lsms.n_spin_pola;
     int last = atom.vr.l_dim();
@@ -74,21 +71,11 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
     atom.mcpsc_mt = atom.mcpsc_ws = 0.0;
     atom.movedToValence[0] = atom.movedToValence[1] = 0;
 
-    std::cout << "CORE STATES 0 " << std::endl << std::flush;
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    std::cout << atom.numc << std::endl << std::flush;
-    MPI_Barrier(MPI_COMM_WORLD);
-
-
     if (atom.numc <= 0) return;
     int local_iprpts = atom.vr.l_dim();
     std::vector<Real> f(local_iprpts + 2);
     std::vector<Real> rtmp(local_iprpts + 2);
     std::vector<Real> qmp(local_iprpts + 2);
-
-    std::cout << "CORE STATES 1 " << std::endl << std::flush;
-    MPI_Barrier(MPI_COMM_WORLD);
 
     int N = atom.vr.l_dim();
     std::vector<Real> P(N, 0);
@@ -101,8 +88,6 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
         Rp[i] = atom.r_mesh[i] * atom.h;
     }
 
-    std::cout << "CORE STATES 2 " << std::endl << std::flush;
-    MPI_Barrier(MPI_COMM_WORLD);
 
     for (int is = 0; is < lsms.n_spin_pola; is++) {
         ndeep = 0;
@@ -311,7 +296,7 @@ c        -------------------------------------------------------------
     atom.qcpsc_ws = qcorws + qsemws;
 
 
-    if (lsms.global.iprint >= 0) {
+    if (lsms.global.iprint >= 1) {
         printf("getCoreStates: Muffin-tin core charge        = %16.11f\n", qcormt);
         printf("               Muffin-tin semicore charge    = %16.11f\n", qsemmt);
         printf("               Muffin-tin core+semi moment   = %16.11f\n", atom.mcpsc_mt);

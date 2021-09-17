@@ -184,6 +184,9 @@ int main(int argc, char *argv[]) {
    // Parameters are communicated here
    communicateParameters(comm, lsms, crystal, mix, alloyDesc);
 
+   std::cout << local.num_local << std::endl;
+   MPI_Barrier(MPI_COMM_WORLD);
+
    if (comm.rank != lsms.global.print_node) {
       lsms.global.iprint = lsms.global.default_iprint;
    }
@@ -217,8 +220,6 @@ int main(int argc, char *argv[]) {
    /*
     *
     */
-
-   std::cout << "TEST" << std::endl;
 
    if (lsms.global.iprint >= 0) {
       std::ofstream start_file;

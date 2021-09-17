@@ -48,6 +48,9 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
     */
     // Matrix<char> coreStateType(atom.numc,2);
 
+    std::cout << "CORE STATES " << std::endl << std::flush;
+    MPI_Barrier(MPI_COMM_WORLD);
+
     int numDeepStates = atom.zcorss;
     if (lsms.n_spin_pola == 2) numDeepStates = ((int) atom.zcorss + 1) / lsms.n_spin_pola;
     int last = atom.vr.l_dim();
@@ -71,11 +74,21 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
     atom.mcpsc_mt = atom.mcpsc_ws = 0.0;
     atom.movedToValence[0] = atom.movedToValence[1] = 0;
 
+    std::cout << "CORE STATES 0 " << std::endl << std::flush;
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    std::cout << atom.numc << std::endl << std::flush;
+    MPI_Barrier(MPI_COMM_WORLD);
+
+
     if (atom.numc <= 0) return;
     int local_iprpts = atom.vr.l_dim();
     std::vector<Real> f(local_iprpts + 2);
     std::vector<Real> rtmp(local_iprpts + 2);
     std::vector<Real> qmp(local_iprpts + 2);
+
+    std::cout << "CORE STATES 1 " << std::endl << std::flush;
+    MPI_Barrier(MPI_COMM_WORLD);
 
     int N = atom.vr.l_dim();
     std::vector<Real> P(N, 0);
@@ -88,6 +101,8 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
         Rp[i] = atom.r_mesh[i] * atom.h;
     }
 
+    std::cout << "CORE STATES 2 " << std::endl << std::flush;
+    MPI_Barrier(MPI_COMM_WORLD);
 
     for (int is = 0; is < lsms.n_spin_pola; is++) {
         ndeep = 0;
@@ -115,38 +130,6 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
 
             int Z = (int) atom.ztotss; // NOLINT(cppcoreguidelines-narrowing-conversions)
 
-#ifdef NEW_SOLVER
-
-
-            dftatom_solve_radial_eigenproblem(&N,
-                                              &atom.nc(ic, is),
-                                              &atom.lc(ic, is),
-                                              &Ein,
-                                              &tol,
-                                              &nitmax,
-                                              atom.r_mesh.data(),
-                                              Rp.data(),
-                                              V.data(),
-                                              &Z,
-                                              &c,
-                                              &relat,
-                                              &perturb,
-                                              &Emin_init,
-                                              &Emax_init,
-                                              &converged,
-                                              &atom.ec(ic, is),
-                                              P.data(),
-                                              Q.data());
-
-            atom.ec(ic, is) *= 2;
-
-
-            printf("n: %3d  l: %3d  kappa: %3d  E: %14.12f\n", atom.nc(ic, is),
-                   atom.lc(ic, is),
-                   atom.kc(ic, is),
-                   atom.ec(ic, is));
-
-#else
             deepst_(&atom.nc(ic, is),
                     &atom.lc(ic, is),
                     &atom.kc(ic, is),
@@ -159,7 +142,6 @@ void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom) {
                     &c,
                     &nitmax, &tol, &atom.jws, &last, &iter, &local_iprpts, &ipdeq);
 
-#endif
 
             if (ndeep <= numDeepStates) {
                 nnorm = last;
@@ -248,11 +230,7 @@ c        -------------------------------------------------------------
 
 
                 for (int j = 0; j < last; j++) {
-#ifdef NEW_SOLVER
-                    atom.corden(j, is) += fac1 * (P[j] * P[j]);
-#else
                     atom.corden(j, is) += fac1 * f[j + 1];
-#endif
                 }
 
                 atom.ecorv[is] += fac1 * atom.ec(ic, is);
@@ -333,21 +311,13 @@ c        -------------------------------------------------------------
     atom.qcpsc_ws = qcorws + qsemws;
 
 
-    if (lsms.global.iprint >= 1) {
+    if (lsms.global.iprint >= 0) {
         printf("getCoreStates: Muffin-tin core charge        = %16.11f\n", qcormt);
         printf("               Muffin-tin semicore charge    = %16.11f\n", qsemmt);
         printf("               Muffin-tin core+semi moment   = %16.11f\n", atom.mcpsc_mt);
         printf("               Wigner-Seitz core+semi moment = %16.11f\n", atom.mcpsc_ws);
         printf("               Interstitial charge core      = %16.11f\n", qcorout);
     }
-
-
-    //matplot::hold(matplot::on);
-    //matplot::plot(atom.r_mesh, P, "c*");
-    //matplot::plot(atom.r_mesh, corden_new, "b+");
-    //matplot::xlim({0, 5});
-    //matplot::hold(matplot::off);
-    //matplot::show();
 
 
 }

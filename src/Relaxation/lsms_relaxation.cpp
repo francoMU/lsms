@@ -134,9 +134,12 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
       std::printf("\nStart DFT calculation:\n");
    }
 
+
+
    auto num_local = distributeTypes(crystal, comm);
    local.setNumLocal(num_local);
    local.setGlobalId(comm.rank, crystal);
+
 
    if (reload_potentials) {
       local.setMaxPts(lsms.global.iprpts);
@@ -284,6 +287,7 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
    }
 
+
    // Reset
    local.tmatStore = 0.0;
    for (int i = 0; i < local.num_local; i++) {
@@ -291,7 +295,9 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
    }
    //
 
+
    for (iteration = 0; iteration < lsms.nscf && !converged; iteration++) {
+
 
       // Calculate band energy
       energyContourIntegration(comm, lsms, local);
@@ -303,6 +309,7 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
       dTimeCCP = MPI_Wtime() - dTimeCCP;
       timeCalcChemPot += dTimeCCP;
 
+
       // Calculate magnetic moments for each site and check if spin has flipped
       calculateEvec(lsms, local);
       mixEvec(lsms, local, 0.0);
@@ -312,6 +319,7 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
       }
 
       double dTimePM = MPI_Wtime();
+
 
       // Calculate charge densities, potentials, and total energy
       calculateAllLocalChargeDensities(lsms, local);
@@ -329,6 +337,7 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
       dTimePM = MPI_Wtime() - dTimePM;
       timeCalcPotentialsAndMixing += dTimePM;
 
+
       // Recalculate core states
       // - swap core state energies for different spin channels first if spin has flipped
       //   (from LSMS 1: lsms_main.f:2101-2116)
@@ -340,6 +349,7 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
          }
       }
       calculateCoreStates(comm, lsms, local);
+
 
       dTimePM = MPI_Wtime();
       // If charge is mixed, recalculate potential and mix (need a flag for this from input)

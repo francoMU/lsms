@@ -89,7 +89,7 @@ void buildEnergyContour(int igrid, Real ebot, Real etop, Real eibot, Real eitop,
    Real pi = 2.0 * std::asin(1.0);
    Real dE;
    int ipepts;
-   if (iprint >= 0)
+   if (iprint > 0)
       printf(
             "Energy Contour Parameters: grid=%d  npts=%d\n                           ebot=%lf etop=%lf eibot=%lf eitop=%lf\n                           temperature = %lf K\n",
             igrid, npts, ebot, etop, eibot, eitop, temperature);
@@ -125,7 +125,7 @@ void buildEnergyContour(int igrid, Real ebot, Real etop, Real eibot, Real eitop,
 void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeInfo &local) {
    double timeEnergyContourIntegration_1 = MPI_Wtime();
 
-   if (lsms.global.iprint >= 0) printf("** Energy Contour Integration **\n");
+   if (lsms.global.iprint > 0) printf("** Energy Contour Integration **\n");
 
    // calculate coefficients and matrices for spherical relativistic calculations
    if (lsms.relativity == full) {
@@ -377,7 +377,7 @@ void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsm
 #ifdef USE_NVTX
       nvtxRangePop();
 #endif
-      if (lsms.global.iprint >= 0) printf("timeSingleScatteres = %lf sec\n", timeSingleScatterers);
+      if (lsms.global.iprint > 0) printf("timeSingleScatteres = %lf sec\n", timeSingleScatterers);
 
 #if defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
       extern DeviceStorage *deviceStorage;
@@ -397,7 +397,7 @@ void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsm
          int iie = ie - eGroupIdx[ig];
          Complex energy = egrd[ie];
          Complex pnrel = std::sqrt(energy);
-         if (lsms.global.iprint >= 0) printf("Energy #%d (%lf,%lf)\n", ie, real(energy), imag(energy));
+         if (lsms.global.iprint > 0) printf("Energy #%d (%lf,%lf)\n", ie, real(energy), imag(energy));
 
          double timeCATM = MPI_Wtime();
          calculateAllTauMatrices(comm, lsms, local, vr_con, energy, iie, tau00_l);
@@ -566,7 +566,7 @@ firstprivate(ie, iie, pnrel, energy, nume)
       }
    }
    timeEnergyContourIntegration_2 = MPI_Wtime() - timeEnergyContourIntegration_2;
-   if (lsms.global.iprint >= 0) {
+   if (lsms.global.iprint > 0) {
       printf("time in energyContourIntegration = %lf sec\n",
              timeEnergyContourIntegration_1 + timeEnergyContourIntegration_2);
       printf("  before energy loop             = %lf sec\n", timeEnergyContourIntegration_1);

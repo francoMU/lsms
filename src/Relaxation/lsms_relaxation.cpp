@@ -135,7 +135,6 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
    }
 
 
-
    auto num_local = distributeTypes(crystal, comm);
    local.setNumLocal(num_local);
    local.setGlobalId(comm.rank, crystal);
@@ -253,6 +252,7 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
    if (lsms.global.iprint >= 1) {
       std::cout << "Calculate core states...." << std::endl;
    }
+
    calculateCoreStates(comm, lsms, local);
 
    prepareSpinOnAtoms(lsms, local);

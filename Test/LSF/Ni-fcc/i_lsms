@@ -12,7 +12,10 @@ nspin=2
 
 mtasa=0
 
-xcFunctional={1,1,12} -- Perdew & Wang
+xcFunctional={0,1} -- von Barth Hedin (LSMS_1)
+
+
+-- xcFunctional={1,1,12} -- Perdew & Wang
 
 iprint=0
 default_iprint=-1
@@ -37,7 +40,7 @@ tolerance = 1e-6
 initial_sigma = 0.0001
 
 
-energyContour = {npts=31,grid=2,ebot=-0.3,etop=0.0,eitop=0.825,eibot=0.0025}
+energyContour = {npts=31,grid=2,ebot=-0.4,etop=0.0,eitop=0.825,eibot=0.0025}
 
 a = 3.499 / 0.529177
 
@@ -46,7 +49,7 @@ bravais[1]={ 1.0*a, 0.0, 0.0}
 bravais[2]={ 0.0, 1.0*a, 0.0}
 bravais[3]={ 0.0, 0.0, 1.0*a}
 
-site_default={ lmax=2,
+site_default={ lmax=3,
                rLIZ=9.5,
                rsteps={89.5,91.5,93.2,99.9},
                atom="Ni",
@@ -55,9 +58,9 @@ site_default={ lmax=2,
                Zs=8,
                Zv=10,
                rad=2,
-               lsf=3}
+               lsf=0}
 
-mixing = { {quantity = "potential", algorithm = "broyden", mixing_parameter = 0.05} }
+mixing = { {quantity = "potential", algorithm = "broyden", mixing_parameter = 0.01} }
 
 numberOfMixQuantities = 0
 for k,v in pairs(mixing) do

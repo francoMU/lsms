@@ -24,7 +24,7 @@ void lsms::LsmsRelaxationFunction::evaluate(const std::vector<Real> &coordinates
    }
 
    // Main DFT run
-   bool reload_potentials = number_of_evaluations == 0 ? true : false;
+   bool reload_potentials = number_of_evaluations == 0;
    lsms::run_dft_calculation(lsms, comm, crystal, local, mix, reload_potentials);
    number_of_evaluations++;
 

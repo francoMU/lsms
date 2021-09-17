@@ -51,6 +51,7 @@
 #include "Forces/forces.hpp"
 #include "Madelung/Multipole/higherOrderMadelung.hpp"
 #include "Madelung/Multipole/calcHigherOrderMadelung.hpp"
+#include "IO/io_utils.hpp"
 
 #include "Misc/readLastLine.hpp"
 
@@ -393,6 +394,12 @@ int main(int argc, char *argv[]) {
     }
 
     calculateCoreStates(comm, lsms, local);
+
+#ifdef LSMS_CORE_DEBUG
+    // Print the core output
+    lsms::printCoreOutput(lsms, crystal, local, comm);
+#endif // LSMS_CORE_DEBUG
+
     if (lsms.global.iprint >= 0)
         printf("Finished calculateCoreStates(...)\n");
 

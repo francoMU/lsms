@@ -344,7 +344,7 @@ int main(int argc, char *argv[]) {
    std::string executionTimeStr = std::string("Total execution time: ")
                                   + std::to_string(totalTimeRelaxation)
                                   + std::string("sec\n");
-   if (lsms.pot_out_type >= 0) {
+   if (comm.rank == 0) {
       std::cout << executionTimeStr;
    }
 

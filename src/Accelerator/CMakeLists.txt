@@ -1,3 +1,6 @@
+#
+# Created by Franco P. Moitzi
+#
 
 
 target_sources(
@@ -5,7 +8,7 @@ target_sources(
         PUBLIC
         accelerator_initialize.F
         accelerator_finalize.F
-        accelerator_interface.c
+        accelerator_interface.h
         Accelerator.hpp
         Accelerator.cpp
         zblock_lu_cuda_c.cu

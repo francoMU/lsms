@@ -73,3 +73,14 @@ if (NOT Libxc_FOUND)
             )
 
 endif()
+
+
+if (NOT TARGET libxc::libxc)
+    add_library(libxc::libxc INTERFACE IMPORTED GLOBAL)
+    target_include_directories(libxc::libxc INTERFACE ${Libxc_INCLUDE_DIR})
+    target_link_libraries(libxc::libxc INTERFACE ${Libxc_LIBRARIES})
+endif ()
+
+if (NOT libxc_FOUND)
+    add_dependencies(libxc::libxc libxc)
+endif ()

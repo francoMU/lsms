@@ -11,7 +11,7 @@
 #include "Communication/LSMSCommunication.hpp"
 #include "SingleSite/SingleSiteScattering.hpp"
 #include "MultipleScattering/MultipleScattering.hpp"
-#include "EnergyContourIntegration.hpp"
+#include "energyContourIntegration.hpp"
 #include "Misc/Coeficients.hpp"
 #include "calculateDensities.hpp"
 #include "MultipleScattering/linearSolvers.hpp"
@@ -409,7 +409,7 @@ void energyContourIntegration(LSMSCommunication &comm,LSMSSystemParameters &lsms
       int iie=ie-eGroupIdx[ig];
       Complex energy=egrd[ie];
       Complex pnrel=std::sqrt(energy);
-      if(lsms.global.iprint>=-1) printf("Energy #%d (%lf,%lf)\n",ie,real(energy),imag(energy));
+      if(lsms.global.iprint>=0) printf("Energy #%d (%lf,%lf)\n",ie,real(energy),imag(energy));
       
       double timeCATM=MPI_Wtime();
       calculateAllTauMatrices(comm, lsms, local, vr_con, energy, iie, tau00_l);

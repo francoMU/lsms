@@ -1,8 +1,11 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 #ifndef LSMS_SYSTEM_PARAM_H
 #define LSMS_SYSTEM_PARAM_H
+
 #include <stdio.h>
 #include <string.h>
+
+#include <vector>
 
 #include "Real.hpp"
 #include "Complex.hpp"
@@ -139,6 +142,7 @@ public:
   int pot_in_idx;
   Real conc;
   int alloy_class;
+  int lsf_functional{0};
 };
 
 class CrystalParameters {

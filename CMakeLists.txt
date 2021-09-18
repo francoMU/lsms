@@ -1,11 +1,10 @@
+#
+# Created by Franco P. Moitzi
+#
+
 cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 
-project(lsms
-        LANGUAGES
-        Fortran
-        C
-        CXX)
-
+project(lsms LANGUAGES Fortran C CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,14 +12,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-
 #
 # Add main source subdirectory
 #
 add_subdirectory(src)
 
 add_subdirectory(include)
-
 
 # Find MPI library
 find_package(MPI REQUIRED)
@@ -36,9 +33,9 @@ find_package(HDF5 REQUIRED)
 target_link_libraries(lsmscore PUBLIC HDF5::HDF5)
 
 # Lapack
-if (NOT DEFINED BLA_VENDOR)
-    set(BLA_VENDOR "Generic")
-endif ()
+if(NOT DEFINED BLA_VENDOR)
+  set(BLA_VENDOR "Generic")
+endif()
 find_package(LAPACK REQUIRED)
 target_link_libraries(lsmscore PUBLIC LAPACK::LAPACK)
 
@@ -47,12 +44,12 @@ find_package(BLAS REQUIRED)
 target_link_libraries(lsmscore PUBLIC BLAS::BLAS)
 
 # Lua
-if (NOT DEFINED LUA_INCLUDE_DIR)
-    message(FATAL_ERROR "LUA_INCLUDE_DIR is not defined")
-endif ()
-if (NOT DEFINED LUA_LIB_DIR)
-    message(FATAL_ERROR "LUA_LIB_DIR is not defined")
-endif ()
+if(NOT DEFINED LUA_INCLUDE_DIR)
+  message(FATAL_ERROR "LUA_INCLUDE_DIR is not defined")
+endif()
+if(NOT DEFINED LUA_LIB_DIR)
+  message(FATAL_ERROR "LUA_LIB_DIR is not defined")
+endif()
 target_include_directories(lsmscore PUBLIC ${LUA_INCLUDE_DIR})
 target_link_directories(lsmscore PUBLIC ${LUA_LIB_DIR})
 target_link_libraries(lsmscore PUBLIC lua)
@@ -63,14 +60,13 @@ add_subdirectory(mjson)
 target_link_libraries(lsmscore PUBLIC mjson)
 
 # LibXC
-if (NOT DEFINED Libxc_DIR)
-    message(FATAL_ERROR "Libxc_DIR is not defined")
-endif ()
-find_library(LIBXC xc
-        PATHS ${Libxc_DIR}/lib
-        NO_DEFAULT_PATH
-        REQUIRED
-        )
+if(NOT DEFINED Libxc_DIR)
+  message(FATAL_ERROR "Libxc_DIR is not defined")
+endif()
+find_library(
+  LIBXC xc
+  PATHS ${Libxc_DIR}/lib
+  NO_DEFAULT_PATH REQUIRED)
 
 message(STATUS "LibXC directory: " ${Libxc_DIR})
 message(STATUS "LibXC library:   " ${LIBXC})
@@ -81,12 +77,10 @@ target_include_directories(lsmscore PUBLIC ${Libxc_DIR}/include)
 target_link_directories(lsmscore PUBLIC ${Libxc_DIR}/lib)
 target_link_libraries(lsmscore PUBLIC ${LIBXC})
 
-
 # DL
 target_link_libraries(lsmscore PUBLIC ${CMAKE_DL_LIBS})
 
-target_compile_definitions(lsmscore PUBLIC
-        HAS_BACKTRACE)
+target_compile_definitions(lsmscore PUBLIC HAS_BACKTRACE)
 
 #
 # Enable Testing with CTest

@@ -4,11 +4,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <mpi.h>
+
 #include <vector>
 
-#include "Main/SystemParameters.hpp"
+#include <mpi.h>
 
+#include "Main/SystemParameters.hpp"
 #include "SingleSite/AtomData.hpp"
 #include "Potential/PotentialShifter.hpp"
 

@@ -30,19 +30,7 @@ message(STATUS "Build type: " ${CMAKE_BUILD_TYPE})
 message(STATUS "Build external libraries")
 
 # Build LUA in this project
-if (NOT BUILD_LUA)
-    set(BUILD_LUA ON CACHE STRING
-            "Build LUA is ON"
-            FORCE)
-endif (NOT BUILD_LUA)
-
-message(STATUS "Build LUA: " ${BUILD_LUA})
-
-if (BUILD_LUA)
-    include(buildLUA)
-else ()
-
-endif ()
+include(lua)
 
 
 #
@@ -53,7 +41,6 @@ include(CTest)
 enable_testing()
 message(STATUS "Testing is " ${BUILD_TESTING})
 add_subdirectory(unittests)
-
 
 
 if (BUILD_LSMS)

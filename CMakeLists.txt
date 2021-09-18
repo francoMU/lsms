@@ -32,6 +32,8 @@ message(STATUS "Build external libraries")
 # Build LUA in this project
 include(lua)
 
+# Build LibXC in this project
+include(libxc)
 
 #
 # Enable Testing with CTest

@@ -46,8 +46,6 @@ add_subdirectory(LuaInterface)
 
 add_subdirectory(Madelung)
 
-add_subdirectory(Main)
-
 add_subdirectory(Misc)
 
 add_subdirectory(MultipleScattering)
@@ -61,5 +59,7 @@ add_subdirectory(SingleSite)
 add_subdirectory(TotalEnergy)
 
 add_subdirectory(VORPOL)
+
+add_subdirectory(Main)
 
 target_link_libraries(lsms_main PUBLIC lsmscore)

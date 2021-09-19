@@ -1,5 +1,8 @@
-#include "Main/SystemParameters.hpp"
+
 #include "Madelung.hpp"
+
+#include <vector>
+
 
 void calculateMadelungMatrices(LSMSSystemParameters &lsms, CrystalParameters &crystal, LocalTypeInfo &local)
 {

@@ -1,28 +1,28 @@
 
 
-if (NOT DEFINED Libxc_LIBRARIES)
-    set(Libxc_LIBRARIES
-            ${PROJECT_BINARY_DIR}/external/Libxc/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Libxc${CMAKE_STATIC_LIBRARY_SUFFIX})
+if (NOT DEFINED libxc_LIBRARIES)
+    set(libxc_LIBRARIES
+            ${PROJECT_BINARY_DIR}/external/libxc/lib/${CMAKE_STATIC_LIBRARY_PREFIX}libxc${CMAKE_STATIC_LIBRARY_SUFFIX})
 
-    set(Libxc_INCLUDE_DIR
-            ${PROJECT_BINARY_DIR}/external/Libxc/include
+    set(libxc_INCLUDE_DIR
+            ${PROJECT_BINARY_DIR}/external/libxc/include
             )
 endif ()
 
-set(Libxc_LIBRARIES ${Libxc_LIBRARIES}
-        CACHE FILEPATH "Libxc library" FORCE)
-set(Libxc_INCLUDE_DIR ${Libxc_INCLUDE_DIR}
-        CACHE FILEPATH "Libxc include dirs" FORCE)
+set(libxc_LIBRARIES ${libxc_LIBRARIES}
+        CACHE FILEPATH "libxc library" FORCE)
+set(libxc_INCLUDE_DIR ${libxc_INCLUDE_DIR}
+        CACHE FILEPATH "libxc include dirs" FORCE)
 
 
-if (EXISTS ${Libxc_LIBRARIES} AND EXISTS ${Libxc_INCLUDE_DIR})
-    set(Libxc_FOUND true)
-    message(STATUS "Libxc was found")
-    message(STATUS "Libxc library: " ${Libxc_LIBRARIES})
-    message(STATUS "Libxc include: " ${Libxc_INCLUDE_DIR})
+if (EXISTS ${libxc_LIBRARIES} AND EXISTS ${libxc_INCLUDE_DIR})
+    set(libxc_FOUND true)
+    message(STATUS "libxc was found")
+    message(STATUS "libxc library: " ${libxc_LIBRARIES})
+    message(STATUS "libxc include: " ${libxc_INCLUDE_DIR})
 endif ()
 
-if (NOT Libxc_FOUND)
+if (NOT libxc_FOUND)
 
     find_program(AUTORECONF_EXECUTABLE
             NAMES autoreconf
@@ -76,8 +76,8 @@ endif()
 
 if (NOT TARGET libxc::libxc)
     add_library(libxc::libxc INTERFACE IMPORTED GLOBAL)
-    target_include_directories(libxc::libxc INTERFACE ${Libxc_INCLUDE_DIR})
-    target_link_libraries(libxc::libxc INTERFACE ${Libxc_LIBRARIES})
+    target_include_directories(libxc::libxc INTERFACE ${libxc_INCLUDE_DIR})
+    target_link_libraries(libxc::libxc INTERFACE ${libxc_LIBRARIES})
 endif ()
 
 if (NOT libxc_FOUND)

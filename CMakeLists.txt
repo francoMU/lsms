@@ -90,7 +90,9 @@ target_link_libraries(lsmscore PUBLIC libxc::libxc)
 
 # DL
 target_link_libraries(lsmscore PUBLIC ${CMAKE_DL_LIBS})
-
 target_compile_definitions(lsmscore PUBLIC HAS_BACKTRACE)
+
+# Include the common files
+target_include_directories(lsmscore PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 

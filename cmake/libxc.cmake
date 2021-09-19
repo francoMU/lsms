@@ -2,11 +2,13 @@
 
 if (NOT DEFINED libxc_LIBRARIES)
     set(libxc_LIBRARIES
-            ${PROJECT_BINARY_DIR}/external/libxc/lib/${CMAKE_STATIC_LIBRARY_PREFIX}libxc${CMAKE_STATIC_LIBRARY_SUFFIX})
+            ${CMAKE_BINARY_DIR}/external/libxc/lib/${CMAKE_STATIC_LIBRARY_PREFIX}xc${CMAKE_STATIC_LIBRARY_SUFFIX})
+    get_filename_component(libxc_LIBRARIES "${libxc_LIBRARIES}" REALPATH)
 
     set(libxc_INCLUDE_DIR
-            ${PROJECT_BINARY_DIR}/external/libxc/include
+            ${CMAKE_BINARY_DIR}/external/libxc/include
             )
+    get_filename_component(libxc_INCLUDE_DIR "${libxc_INCLUDE_DIR}" REALPATH)
 endif ()
 
 set(libxc_LIBRARIES ${libxc_LIBRARIES}
@@ -20,6 +22,8 @@ if (EXISTS ${libxc_LIBRARIES} AND EXISTS ${libxc_INCLUDE_DIR})
     message(STATUS "libxc was found")
     message(STATUS "libxc library: " ${libxc_LIBRARIES})
     message(STATUS "libxc include: " ${libxc_INCLUDE_DIR})
+else()
+    message(STATUS "Libxc library not found")
 endif ()
 
 if (NOT libxc_FOUND)
@@ -51,12 +55,12 @@ if (NOT libxc_FOUND)
 
 
     file(COPY ${PROJECT_SOURCE_DIR}/external/libxc-5.1.6
-            DESTINATION ${PROJECT_BINARY_DIR}/external)
+            DESTINATION ${CMAKE_BINARY_DIR}/external)
 
-    set(_src ${PROJECT_BINARY_DIR}/external/libxc-5.1.6)
+    set(_src ${CMAKE_BINARY_DIR}/external/libxc-5.1.6)
     get_filename_component(_src "${_src}" REALPATH)
 
-    set(_install ${PROJECT_BINARY_DIR}/external/libxc)
+    set(_install ${CMAKE_BINARY_DIR}/external/libxc)
     file(MAKE_DIRECTORY ${_install})
     get_filename_component(_install "${_install}" REALPATH)
     include(ExternalProject)
@@ -71,6 +75,9 @@ if (NOT libxc_FOUND)
             INSTALL_COMMAND ${MAKE_EXECUTABLE} install
             )
 
+else()
+    add_library(libxc STATIC IMPORTED)
+    set_target_properties(libxc PROPERTIES IMPORTED_LOCATION ${libxc_LIBRARIES})
 endif()
 
 

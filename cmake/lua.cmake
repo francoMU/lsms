@@ -2,10 +2,10 @@
 
 if (NOT DEFINED Lua_LIBRARIES)
     set(Lua_LIBRARIES
-            ${PROJECT_BINARY_DIR}/external/lua/lib/${CMAKE_STATIC_LIBRARY_PREFIX}lua${CMAKE_STATIC_LIBRARY_SUFFIX})
+            ${CMAKE_BINARY_DIR}/external/lua/lib/${CMAKE_STATIC_LIBRARY_PREFIX}lua${CMAKE_STATIC_LIBRARY_SUFFIX})
 
     set(Lua_INCLUDE_DIR
-            ${PROJECT_BINARY_DIR}/external/lua/include
+            ${CMAKE_BINARY_DIR}/external/lua/include
             )
 endif ()
 
@@ -27,16 +27,16 @@ if (NOT Lua_FOUND)
     find_program(MAKE_EXECUTABLE NAMES gmake make REQUIRED)
 
     file(COPY ${PROJECT_SOURCE_DIR}/external/lua-5.2.4
-            DESTINATION ${PROJECT_BINARY_DIR}/external)
+            DESTINATION ${CMAKE_BINARY_DIR}/external)
 
-    set(_src ${PROJECT_BINARY_DIR}/external/lua-5.2.4)
+    set(_src ${CMAKE_BINARY_DIR}/external/lua-5.2.4)
     get_filename_component(_src "${_src}" REALPATH)
 
-    set(_install ${PROJECT_BINARY_DIR}/external/lua)
+    set(_install ${CMAKE_BINARY_DIR}/external/lua)
     file(MAKE_DIRECTORY ${_install})
     get_filename_component(_install "${_install}" REALPATH)
 
-    set(_include ${PROJECT_BINARY_DIR}/external/lua/include)
+    set(_include ${CMAKE_BINARY_DIR}/external/lua/include)
     file(MAKE_DIRECTORY ${_include})
     get_filename_component(_include "${_include}" REALPATH)
 

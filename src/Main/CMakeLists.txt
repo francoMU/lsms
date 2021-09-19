@@ -13,7 +13,6 @@ target_sources(lsmscore
         calculateDensities.cpp
         calculateChemPot.cpp
         checkConsistency.cpp
-        lsmsClass.cpp
         calculateEvec.cpp
         initializeAtom.cpp
         mixing.cpp
@@ -38,7 +37,6 @@ target_sources(lsmscore
         Graph2d.hpp
         HDF5io.hpp
         initializeAtom.hpp
-        lsmsClass.hpp
         LSMSMode.hpp
         mixing.hpp
         PotentialIO.hpp

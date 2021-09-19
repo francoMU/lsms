@@ -2,7 +2,7 @@
 target_sources(lsmscore
         PUBLIC
         SystemParameters.cpp
-        read_input.h
+        read_input.hpp
         read_input.cpp
         PotentialIO.cpp
         buildLIZandCommLists.cpp

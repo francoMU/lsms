@@ -8,8 +8,6 @@ target_sources(lsmscore
         localTotalEnergy.hpp
         zeropt_c.f
         janake_c.f
-        energyStruct.cpp
-        energyStruct.hpp
         )
 
 target_include_directories(

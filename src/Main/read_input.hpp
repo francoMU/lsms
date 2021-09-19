@@ -7,7 +7,6 @@
 #include "LSMSMode.hpp"
 #include "LuaInterface/LuaSupport.hpp"
 #include "Potential/PotentialShifter.hpp"
-#include "Forces/forces.hpp"
 #include "mixing_params.hpp"
 
 int readInput(lua_State *L,

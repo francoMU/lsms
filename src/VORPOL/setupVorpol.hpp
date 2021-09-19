@@ -18,4 +18,4 @@ void calculateVolumes(LSMSCommunication &comm,
                       CrystalParameters &crystal,
                       LocalTypeInfo &local);
 
-#endif /* LSMS_SETUP_VORPOL_H
+#endif // LSMS_SETUP_VORPOL_H

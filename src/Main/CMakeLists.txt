@@ -23,15 +23,11 @@ target_sources(lsmscore
         rotateToGlobal.hpp
         write_restart.cpp
         mixing_params.hpp
-        )
-
-target_sources(lsmscore
-        PUBLIC
         calculateChemPot.hpp
         calculateDensities.hpp
         calculateEvec.hpp
         checkConsistency.hpp
-        EnergyContourIntegration.hpp
+        energyContourIntegration.hpp
         EvecGenerator.h
         ExhaustiveIsing.h
         global.hpp
@@ -63,9 +59,6 @@ target_include_directories(
 )
 
 
-#
-#
-#
 target_sources(lsms_main
         PUBLIC
         lsms.cpp)

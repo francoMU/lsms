@@ -16,3 +16,5 @@ target_sources(lsmscore
         richnk_c.f
         semcst_c.f
         )
+
+target_include_directories(lsmscore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

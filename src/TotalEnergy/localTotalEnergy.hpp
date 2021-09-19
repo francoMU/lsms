@@ -3,7 +3,6 @@
 #define MUST_LOCALTOTALENERGY_HPP
 
 #include "Main/SystemParameters.hpp"
-#include "energyStruct.hpp"
 
 extern "C"
 {

@@ -1,6 +1,6 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
-#include "calculateCoreState.hpp"
+#include "calculateCoreStates.hpp"
 
 #include "coreSolver.hpp"
 

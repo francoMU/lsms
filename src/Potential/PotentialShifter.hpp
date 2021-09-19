@@ -16,19 +16,13 @@ public:
     double minShift{0.0};
     double maxShift{0.0};
 
-    void resetPotentials(LocalTypeInfo &local) {
-        for (int i = 0; i < local.num_local; i++)
-            vr0[i] = local.atom[i].vr;
-    }
+    void resetPotentials(LocalTypeInfo &local);
 
-    void resize(int n) { vr0.resize(n); }
+    void resize(int n);
 
     void applyShifts(LocalTypeInfo &local);
 
-    void restorePotentials(LocalTypeInfo &local) {
-        for (int i = 0; i < local.num_local; i++)
-            local.atom[i].vr = vr0[i];
-    }
+    void restorePotentials(LocalTypeInfo &local);
 
     std::vector<Matrix<Real> > vr0{}; // the unshifted potential
 

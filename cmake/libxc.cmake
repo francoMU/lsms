@@ -78,6 +78,7 @@ if (NOT TARGET libxc::libxc)
     add_library(libxc::libxc INTERFACE IMPORTED GLOBAL)
     target_include_directories(libxc::libxc INTERFACE ${libxc_INCLUDE_DIR})
     target_link_libraries(libxc::libxc INTERFACE ${libxc_LIBRARIES})
+    target_compile_definitions(libxc::libxc INTERFACE USE_LIBXC)
 endif ()
 
 if (NOT libxc_FOUND)

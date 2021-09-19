@@ -35,6 +35,9 @@ include(lua)
 # Build LibXC in this project
 include(libxc)
 
+# Build mjson library
+include(mjson)
+
 #
 # Enable Testing with CTest
 #
@@ -80,8 +83,6 @@ target_link_libraries(lsmscore PUBLIC BLAS::BLAS)
 target_link_libraries(lsmscore PUBLIC Lua::Lua)
 
 # mjson
-target_include_directories(lsmscore PUBLIC ${CMAKE_SOURCE_DIR}/include)
-add_subdirectory(mjson)
 target_link_libraries(lsmscore PUBLIC mjson)
 
 # LibXC
@@ -92,12 +93,4 @@ target_link_libraries(lsmscore PUBLIC ${CMAKE_DL_LIBS})
 
 target_compile_definitions(lsmscore PUBLIC HAS_BACKTRACE)
 
-#
-# Enable Testing with CTest
-#
-option(BUILD_TESTING "Build the testing tree." ON)
-include(CTest)
-enable_testing()
-message(STATUS "Testing is " ${BUILD_TESTING})
-add_subdirectory(tests)
 

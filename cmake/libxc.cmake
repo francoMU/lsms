@@ -24,8 +24,6 @@ endif ()
 
 if (NOT Libxc_FOUND)
 
-    message(STATUS "LIBXC")
-
     find_program(AUTORECONF_EXECUTABLE
             NAMES autoreconf
             DOC "Autoreconf" REQUIRED)

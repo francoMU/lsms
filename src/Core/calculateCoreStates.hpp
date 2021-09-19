@@ -5,13 +5,8 @@
 #include "Main/SystemParameters.hpp"
 #include "Communication/LSMSCommunication.hpp"
 
-class CoreStates {
-public:
-  
-};
-
-void getCoreStates(LSMSSystemParameters &lsms, AtomData &atom);
 void calculateCoreStates(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeInfo &local);
+
 void calculateCoreStates(LSMSCommunication &comm, LSMSSystemParameters &lsms, AlloyAtomBank &alloyBank);
 
 /*
@@ -30,15 +25,15 @@ c     ================================================================
 
 extern "C"
 {
-  void getcor_(int *n_spin_pola,int *mtasa,
-               int *jmt,int *jws,double *r_mesh,double *h,double *xstart,double *vr,
-               int *numc,int *nc,int *lc,int *kc,double *ec,
-               double *ztotss,double *zsemss,double *zcorss,
-               double *ecorv,double *esemv,double *corden,double *semcor,
-               int *nrelc,
-               double *qcpsc_mt,double *qcpsc_ws,double *mcpsc_mt,double *mcpsc_ws,
-               int *iprpts,int *ipcore,
-               int *iprint,char *istop,int itop_length);
+void getcor_(int *n_spin_pola, int *mtasa,
+             int *jmt, int *jws, double *r_mesh, double *h, double *xstart, double *vr,
+             int *numc, int *nc, int *lc, int *kc, double *ec,
+             double *ztotss, double *zsemss, double *zcorss,
+             double *ecorv, double *esemv, double *corden, double *semcor,
+             int *nrelc,
+             double *qcpsc_mt, double *qcpsc_ws, double *mcpsc_mt, double *mcpsc_ws,
+             int *iprpts, int *ipcore,
+             int *iprint, char *istop, int itop_length);
 }
 
 #endif

@@ -17,21 +17,6 @@ target_link_libraries(lsms_main
 
 #
 #
-#
-add_executable(lsms_relaxation_main)
-set_target_properties(lsms_relaxation_main
-        PROPERTIES
-        OUTPUT_NAME "lsms_relaxation"
-        )
-
-set_target_properties(lsms_relaxation_main
-        PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-        )
-
-#
-#
-#
 set_target_properties(lsmscore PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
@@ -55,8 +40,6 @@ add_subdirectory(Accelerator)
 
 add_subdirectory(Communication)
 
-add_subdirectory(IO)
-
 add_subdirectory(Core)
 
 add_subdirectory(LuaInterface)
@@ -79,11 +62,4 @@ add_subdirectory(TotalEnergy)
 
 add_subdirectory(VORPOL)
 
-add_subdirectory(Forces)
-
-add_subdirectory(Relaxation)
-
-
 target_link_libraries(lsms_main PUBLIC lsmscore)
-
-target_link_libraries(lsms_relaxation_main PUBLIC lsmscore)

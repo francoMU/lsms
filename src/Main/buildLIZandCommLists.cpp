@@ -1,18 +1,12 @@
+#include "buildLIZandCommLists.hpp"
+
 #include <vector>
 #include <cmath>
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "Real.hpp"
-#include "SystemParameters.hpp"
-#include "Communication/LSMSCommunication.hpp"
 
-class LIZInfoType{
-public:
-  int idx;
-  Real p1,p2,p3;
-  Real dSqr;
-};
 
 // for buildLIZ see LSMS_1 neighbors_c.f
 int buildLIZ(CrystalParameters &crystal, int idx,std::vector<LIZInfoType> &LIZ)
@@ -105,10 +99,7 @@ bool nodeIsInList(int val, std::vector<LIZInfoType> &list, int len, CrystalParam
   return false;
 }
 
-class NodeIdxInfo {
-public:
-  int node, localIdx, globalIdx;
-};
+
  
 bool nodeLess_NodeIndexInfo(const NodeIdxInfo &x, const NodeIdxInfo &y) {return x.node<y.node;}
 bool globalLess_NodeIndexInfo(const NodeIdxInfo &x, const NodeIdxInfo &y) {return x.globalIdx<y.globalIdx;}

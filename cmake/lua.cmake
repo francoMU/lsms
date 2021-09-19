@@ -51,14 +51,15 @@ if (NOT Lua_FOUND)
             )
 
 
-endif ()
+else()
+    add_library(Lua STATIC IMPORTED)
+    set_target_properties(Lua PROPERTIES IMPORTED_LOCATION ${Lua_LIBRARIES})
+endif()
 
 if (NOT TARGET Lua::Lua)
+    # convert files outside of a CMake project into logical targets inside of the project.
+    # No build files are created. Global makes it visible every where
     add_library(Lua::Lua INTERFACE IMPORTED GLOBAL)
     target_include_directories(Lua::Lua INTERFACE ${Lua_INCLUDE_DIR})
     target_link_libraries(Lua::Lua INTERFACE ${Lua_LIBRARIES})
-endif ()
-
-if (NOT Lua_FOUND)
-    add_dependencies(Lua::Lua Lua)
 endif ()

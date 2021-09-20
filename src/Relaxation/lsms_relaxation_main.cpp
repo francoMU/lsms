@@ -313,10 +313,11 @@ int main(int argc, char *argv[]) {
    if (lsms.pot_out_type >= 0) {
       if (comm.rank == 0) std::cout << "Writing new potentials" << std::endl;
       writePotentials(comm, lsms, crystal, local);
-      if (comm.rank == 0) {
-         std::cout << "Writing restart file.\n";
-         writeRestart("i_lsms.restart", lsms, crystal, mix, potentialShifter, alloyDesc);
-      }
+
+      //if (comm.rank == 0) {
+      //   std::cout << "Writing restart file.\n";
+      //   writeRestart("i_lsms.restart.lua", lsms, crystal, mix, potentialShifter, alloyDesc);
+      //}
    }
 
 

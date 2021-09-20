@@ -14,6 +14,11 @@ namespace lsms {
                             bool reload_potentials,
                             EnergyDebugMode mode = EnergyDebugMode::Local);
 
+   void magneticMoments(LSMSSystemParameters &lsms,
+                        LSMSCommunication &comm,
+                        CrystalParameters &crystal,
+                        LocalTypeInfo &local,
+                        Real &sum_mag);
 
    Real extractTotalEnergy(LSMSSystemParameters &lsms);
 

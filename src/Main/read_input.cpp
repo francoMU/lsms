@@ -199,10 +199,10 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms, CrystalParameters &cryst
   if(lsms.nspin>2) lsms.n_spin_cant=2; else lsms.n_spin_cant=1;
 
 // read exchange correlation functional specification:
-  for(int i=0; i<numFunctionalIndices; i++) lsms.xcFunctional[i]=-1;
+  for(int i=0; i<NUM_FUNCTIONAL_INDICES; i++) lsms.xcFunctional[i]=-1;
   lsms.xcFunctional[0]=0;
   lsms.xcFunctional[1]=1; // default functional is von Barth-Hedin
-  for(int i=0; i<numFunctionalIndices; i++)
+  for(int i=0; i<NUM_FUNCTIONAL_INDICES; i++)
   {
     luaGetIntegerPositionInTable(L,"xcFunctional",i+1,&lsms.xcFunctional[i]);
   }

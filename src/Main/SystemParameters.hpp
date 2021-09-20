@@ -14,10 +14,6 @@
 #include "SingleSite/AtomData.hpp"
 #include "Misc/Indices.hpp"
 #include "Forces/forces_params.hpp"
-
-
-const int numFunctionalIndices = 3;
-
 #include "Potential/libxcInterface.hpp"
 
 
@@ -90,7 +86,7 @@ public:
   int nscf;
   int writeSteps;
   int mtasa;
-  int xcFunctional[numFunctionalIndices]; // specifies the energy functional to use in the calculations
+  int xcFunctional[NUM_FUNCTIONAL_INDICES]; // specifies the energy functional to use in the calculations
   // the first entry specifies the set of DFTs to use and the following numbers specify
   // the actual functional:
   // densityFunctional[0]=0: build in functionals

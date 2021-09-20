@@ -56,7 +56,7 @@ void printLSMSSystemParameters(FILE *f, LSMSSystemParameters &lsms) {
             fprintf(f, "!!!!UNKNOWN!!!!\n");
     }
     fprintf(f, "xcFunctional:");
-    for (int i = 0; i < numFunctionalIndices; i++) fprintf(f, " %d", lsms.xcFunctional[i]);
+    for (int i = 0; i < NUM_FUNCTIONAL_INDICES; i++) fprintf(f, " %d", lsms.xcFunctional[i]);
     std::string name;
     getXCName(lsms, name);
     fprintf(f, " [%s]", name.c_str());

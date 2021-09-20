@@ -1,0 +1,66 @@
+[Control]
+job_name = test-fcc  # Prefix for directories
+job_type = sc  # Type of calculation: 'sc' -- self-consistent DFT
+xc_type = lda  # Ceperly-Adler (4) or PBE (7)
+soft_core = yes  # yes, no, auto
+length_unit = au  # A or au
+energy_unit = Ry  # eV, Ry, Ha
+max_iter = 1
+max_lin_iter = 21
+ef_tol = 1e-9
+ef_mix = 0.7
+pot_mix = 0.7
+etot_tol = 1e-7
+restart = force
+
+[
+
+[Structure]
+name = fcc-l2
+path = ./struct
+#lattice_scale = 3.8 A # In Angstroms, overriding the global setting (au)
+ws_radius = 3.0 # Alternative to `lattice_scale`
+lattice =
+  0.5   0.5   0.0
+  0.0   0.5   0.5
+  0.5   0.0   0.5
+sites_frac =     # fractional coordinates
+#  x     y     z        loc. frame (theta, phi)
+  0.0   0.0   0.0  Al
+
+lmax = 2 # spd-basis
+#lmax_high = 2 # Highers, if equal to `lmax` then no highers
+cluster_rmax = 4.1 # in units of WS
+
+lmax_mad = 6  # l-cutoff for the Madelung matrix
+ewald_lambda = 1.0 # Ewlad parameter \lambda = \sqrt{\eta} / 2
+ewald_rmax = 4.5  # Size of real-space cluster in Ewald summation
+ewald_kmax = 4.5  # Size of reciprocal-space cluster in Ewald summation
+
+
+[Kpoints] ---
+mesh_size = 21  21  21
+bz_type = IBZ  # FBZ, IBZ
+time_reversal = yes  # Yes, No
+
+[Atomic]
+niter = 30  # Number of iterations when searching for the eigenenergy
+niter_dft = 100  # Number of atomic-DFT iterations
+watson_radius = 0.0  # Watson-sphere radius (no sphere if zero or negative)
+potential_mix = 0.3
+rmesh_r1 = 0.001  # Unscaled first point of the radial mesh
+rmesh_rmax = 20.0  # Final point of the radial mesh
+rmesh_step = 0.03  # Exponential step of the radial mesh
+eig_tol = 1e-12  # Tolerance for eigenenergies in the atomic solver
+en_tol = 1e-6  # Tolerance for the eigenenergies/energy in atomic DFT
+pot_tol = 1e-10  # Tolerance for the potential in atomic DFT
+
+[Contour]
+e_fermi = 0.0
+type = circular  # Circular, Elliptic, Fermi, etc.
+nz_sections = 16  # Number of points on contour sections (for certain types)
+n_aux = 10
+depth = 1.0
+#params = 0.03 1
+#temperature = 500 K # Fermi temperature in K
+

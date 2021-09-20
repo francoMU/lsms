@@ -69,7 +69,7 @@ int writeRestart(const char *restartName, LSMSSystemParameters &lsms, CrystalPar
 
   fprintf(of,"xcFunctional={%d",lsms.xcFunctional[0]);
   
-  for(int i=1; i<numFunctionalIndices; i++)
+  for(int i=1; i<NUM_FUNCTIONAL_INDICES; i++)
   {
     if(lsms.xcFunctional[i]>=0)
       fprintf(of,",%d",lsms.xcFunctional[i]);

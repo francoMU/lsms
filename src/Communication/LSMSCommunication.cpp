@@ -1,7 +1,10 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
-#include <mpi.h>
 #include "LSMSCommunication.hpp"
+
+#include <mpi.h>
+
 #include "mixing_params.hpp"
+#include "libxcInterface.hpp"
 
 #define USE_ISEND
 
@@ -58,7 +61,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
         MPI_Pack(&lsms.n_spin_cant, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.n_spin_pola, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.mtasa, 1, MPI_INT, buf, s, &pos, comm.comm);
-        MPI_Pack(&lsms.xcFunctional[0], numFunctionalIndices, MPI_INT, buf, s, &pos, comm.comm);
+        MPI_Pack(&lsms.xcFunctional[0], NUM_FUNCTIONAL_INDICES, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.fixRMT, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.nscf, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.writeSteps, 1, MPI_INT, buf, s, &pos, comm.comm);
@@ -140,7 +143,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
         MPI_Unpack(buf, s, &pos, &lsms.n_spin_cant, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.n_spin_pola, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.mtasa, 1, MPI_INT, comm.comm);
-        MPI_Unpack(buf, s, &pos, &lsms.xcFunctional[0], numFunctionalIndices, MPI_INT, comm.comm);
+        MPI_Unpack(buf, s, &pos, &lsms.xcFunctional[0], NUM_FUNCTIONAL_INDICES, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.fixRMT, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.nscf, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.writeSteps, 1, MPI_INT, comm.comm);
@@ -267,7 +270,7 @@ void communicateParameters(LSMSCommunication &comm,
         MPI_Pack(&lsms.n_spin_cant, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.n_spin_pola, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.mtasa, 1, MPI_INT, buf, s, &pos, comm.comm);
-        MPI_Pack(&lsms.xcFunctional[0], numFunctionalIndices, MPI_INT, buf, s, &pos, comm.comm);
+        MPI_Pack(&lsms.xcFunctional[0], NUM_FUNCTIONAL_INDICES, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.fixRMT, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.nscf, 1, MPI_INT, buf, s, &pos, comm.comm);
         MPI_Pack(&lsms.writeSteps, 1, MPI_INT, buf, s, &pos, comm.comm);
@@ -342,7 +345,7 @@ void communicateParameters(LSMSCommunication &comm,
         MPI_Unpack(buf, s, &pos, &lsms.n_spin_cant, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.n_spin_pola, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.mtasa, 1, MPI_INT, comm.comm);
-        MPI_Unpack(buf, s, &pos, &lsms.xcFunctional[0], numFunctionalIndices, MPI_INT, comm.comm);
+        MPI_Unpack(buf, s, &pos, &lsms.xcFunctional[0], NUM_FUNCTIONAL_INDICES, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.fixRMT, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.nscf, 1, MPI_INT, comm.comm);
         MPI_Unpack(buf, s, &pos, &lsms.writeSteps, 1, MPI_INT, comm.comm);

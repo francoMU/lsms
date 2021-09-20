@@ -11,43 +11,50 @@
 
 namespace lsms {
 
-   enum class LSFFunctionalType {
-      Heisenberg,
-      Order1,
-      Order2,
-      Order3,
-      Non
+  enum class LSFFunctionalType {
+    Heisenberg,
+    Order1,
+    Order2,
+    Order3,
+    Non
 
-   };
+  };
 
-   static std::map<int, LSFFunctionalType> LSFTypeMap = {
-         {-1, LSFFunctionalType::Heisenberg},
-         {1,  LSFFunctionalType::Order1},
-         {2,  LSFFunctionalType::Order2},
-         {3,  LSFFunctionalType::Order3},
-         {0,  LSFFunctionalType::Non},
-   };
-
-
-   class LSFFunctional {
+  static std::map<int, LSFFunctionalType> LSFTypeMap {
+      {-1, LSFFunctionalType::Heisenberg},
+      {1,  LSFFunctionalType::Order1},
+      {2,  LSFFunctionalType::Order2},
+      {3,  LSFFunctionalType::Order3},
+      {0,  LSFFunctionalType::Non},
+  };
 
 
-   private:
-
-      Real temperature;
-      LSFFunctionalType type;
-
-   public:
-
-      LSFFunctional(Real temperature = 0.0,
-                    LSFFunctionalType type = LSFFunctionalType::Non);
-
-      Real exchange_field(Real mag_mom);
-
-      Real entropy(Real mag_mom);
+  class LSFFunctional {
 
 
-   };
+  private:
+
+    Real temperature;
+    LSFFunctionalType type;
+
+  public:
+
+    explicit LSFFunctional(Real temperature = 0.0,
+                           LSFFunctionalType type = LSFFunctionalType::Non);
+
+    Real exchange_field(Real mag_mom);
+
+    Real entropy(Real mag_mom);
+
+
+  };
+
+  template<typename T>
+  int signum(T val) {
+    static_assert(std::is_signed<T>::value, "Signed values only!!!");
+    return (T(0) < val) - (val < T(0));
+  }
+
 }
 
 

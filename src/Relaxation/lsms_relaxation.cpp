@@ -30,6 +30,7 @@
 #include "energyDebugMode.hpp"
 #include "orderedPrint.hpp"
 
+
 static void prepareSpinOnAtoms(const LSMSSystemParameters &lsms,
                                LocalTypeInfo &local) {
   if (lsms.n_spin_cant > 1) {
@@ -45,6 +46,25 @@ static void prepareSpinOnAtoms(const LSMSSystemParameters &lsms,
   }
 }
 
+void lsms::magneticMoments(LSMSSystemParameters &lsms,
+                           LSMSCommunication &comm,
+                           CrystalParameters &crystal,
+                           LocalTypeInfo &local,
+                           Real &sum_mag) {
+
+  Real local_sum_mag = 0.0;
+
+  for (int i = 0; i < local.num_local; i++) {
+    local_sum_mag += local.atom[i].mvalws;
+  }
+
+  local_sum_mag /= local.num_local;
+
+  globalSum(comm, local_sum_mag);
+
+  sum_mag = local_sum_mag;
+
+}
 
 void lsms::ForcesToGradientVector(LSMSSystemParameters &lsms,
                                   LSMSCommunication &comm,
@@ -162,6 +182,20 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
   // Setup XC functional
   if (lsms.xcFunctional[0] == 1) {
     lsms.libxcFunctional.init(lsms.n_spin_pola, lsms.xcFunctional);
+  }
+
+  if (lsms.global.iprint >= 0) {
+    if (lsms.xcFunctional[0] == 1) {
+      std::printf("The functional [1]:'%s'\n", lsms.libxcFunctional.functional[0].info->name);
+      std::printf("The functional [2]:'%s'\n", lsms.libxcFunctional.functional[1].info->name);
+
+      if(lsms.libxcFunctional.needGradients) {
+        std::printf("XC: GGA\n");
+      } else {
+        std::printf("XC: LDA\n");
+      }
+
+    }
   }
 
 #if defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
@@ -308,13 +342,24 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
   //
   if (comm.rank == 0) {
-    std::printf("\n");
-    std::printf("%4s %20s %20s %20s %20s\n",
-                "#.",
-                "Band Energy",
-                "Fermi Energy",
-                "Total Energy",
-                "RMS");
+    if (lsms.n_spin_pola == 1) {
+      std::printf("\n");
+      std::printf("%4s %20s %20s %20s %20s\n",
+                  "#.",
+                  "Band Energy",
+                  "Fermi Energy",
+                  "Total Energy",
+                  "RMS");
+    } else if (lsms.n_spin_pola == 2) {
+      std::printf("\n");
+      std::printf("%4s %20s %20s %20s %20s %10s\n",
+                  "#.",
+                  "Band Energy",
+                  "Fermi Energy",
+                  "Total Energy",
+                  "RMS",
+                  "Mag.");
+    }
 
   }
 
@@ -400,18 +445,25 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
     }
     globalMax(comm, rms);
 
-
     if (iteration > 2) {
       converged = rms < lsms.rmsTolerance;
     }
 
+    auto sum_mag = 0.0;
+    if (lsms.n_spin_pola == 2) {
+      magneticMoments(lsms, comm, crystal, local, sum_mag);
+    }
+
     if (comm.rank == 0) {
-      std::printf("%4d %20.12f %20.12f %20.12f %20.12f\n",
-                  iteration,
-                  eband,
-                  lsms.chempot,
-                  lsms.totalEnergy,
-                  rms);
+      if (lsms.n_spin_pola == 1) {
+        std::printf("%4d %20.12f %20.12f %20.12f %20.12f\n",
+                    iteration, eband, lsms.chempot,
+                    lsms.totalEnergy, rms);
+      } else if (lsms.n_spin_pola == 2) {
+        std::printf("%4d %20.12f %20.12f %20.12f %20.12f %10.6f\n",
+                    iteration, eband, lsms.chempot,
+                    lsms.totalEnergy, rms, sum_mag);
+      }
     }
 
     // Recalculate core states for new potential if we are performing scf calculations
@@ -421,7 +473,18 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
   timeScfLoop = MPI_Wtime() - timeScfLoop;
 
-  if (lsms.global.iprint > 0) {
+  if (lsms.global.iprint >= 0) {
+
+    if (converged) {
+      std::cout << std::endl;
+      std::cout << "SCF is converged" << std::endl;
+      std::cout << std::endl;
+    } else {
+      std::cout << std::endl;
+      std::cout << "SCF is not converged" << std::endl;
+      std::cout << std::endl;
+    }
+
     std::printf("%s: %lf", "Time in SCF Loop", timeScfLoop);
   }
 
@@ -476,11 +539,6 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
 
   }
-
-
-  /*
-   *
-   */
 
 
   /*

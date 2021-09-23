@@ -8,11 +8,11 @@
 namespace lsms {
 
 
-   constexpr int MAX_ITERATIONS = 30;
    constexpr double TOLERANCE = 1e-8;
    constexpr double INITIAL_SIGMA = 0.0001;
    constexpr bool WRITE_TO_FILE = false;
    constexpr int NO_OPTIMIZATION = -1;
+  constexpr int MAX_ITERATIONS = NO_OPTIMIZATION;
 
    class RelaxParams {
 

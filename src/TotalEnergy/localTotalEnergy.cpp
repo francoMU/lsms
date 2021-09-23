@@ -5,6 +5,7 @@
 
 #include <cmath>
 
+#include "integrator.hpp"
 #include "PhysicalConstants.hpp"
 
 #include "Main/SystemParameters.hpp"
@@ -159,23 +160,36 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
   if (lsms.global.iprint > 0)
     printf("erho                        = %35.25lf Ry\n", erho);
 
-  /*
-   *
-   */
+  std::vector<Real> core_coloumb(atom.r_mesh.size() + 1, 0.0);
 
   if (lsms.n_spin_pola == 1) {
     for (int i = 0; i < atom.r_mesh.size(); i++) {
       integrand[i + 1] = 2.0 * (atom.rhoNew(i, 0)) * atom.ztotss / (atom.r_mesh[i]);
+      core_coloumb[i] = -2.0 * (atom.rhoNew(i, 0)) * atom.ztotss / (atom.r_mesh[i]);
     }
   } else { // spin polarized
     for (int i = 0; i < atom.r_mesh.size(); i++) {
       integrand[i + 1] = 2.0 * (atom.rhoNew(i, 0) + atom.rhoNew(i, 1)) * atom.ztotss / (atom.r_mesh[i]);
+      core_coloumb[i] = -2.0 * (atom.rhoNew(i, 0) + atom.rhoNew(i, 1)) * atom.ztotss / (atom.r_mesh[i]);
     }
   }
   fit.set(grid0, integrand, 2);
   integrand[0] = fit(0.0);
   Real ezrho = -integrateOneDim(grid0, integrand, integral, rSphere); // (5b)
   energyStruct.core_interaction = ezrho;
+
+
+  auto result = lsms::radialIntegral(core_coloumb, atom.r_mesh, rSphere);
+
+
+  /*
+   *
+   */
+
+  std::printf("%30.20f\n", ezrho);
+  std::printf("%30.20f\n", result);
+
+
   if (lsms.global.iprint > 0)
     printf("ezrho                       = %35.25lf Ry\n", ezrho);
 

@@ -8,5 +8,4 @@ target_sources(lsmscore
         forces.hpp
         forces_params.cpp
         forces_params.hpp
-        utils.hpp
         )

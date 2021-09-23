@@ -27,7 +27,7 @@ print_node=0
 istop="main"
 
 nscf=30
-rmsTolerance=1.0e-9
+rmsTolerance=1.0e-12
 
 xRepeat=1
 yRepeat=1
@@ -66,7 +66,7 @@ site[2].pos={0.5*a,0.5*a,0}
 site[2].evec={0,0,1}
 site[3].pos={0.5*a,0,0.5*a}
 site[3].evec={0,0,1}
-site[4].pos={0,0.5*a,0.5*a+0.05}
+site[4].pos={0,0.5*a,0.5*a}
 site[4].evec={0,0,1}
 
 for i =1,num_atoms do

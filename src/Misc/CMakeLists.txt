@@ -3,6 +3,8 @@
 
 target_sources(lsmscore
         PUBLIC
+        integrator.hpp
+        utils.hpp
         associatedLegendreFunction.cpp
         associatedLegendreFunction.hpp
         bulirsch_stoer.f

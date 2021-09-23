@@ -46,6 +46,95 @@ static void prepareSpinOnAtoms(const LSMSSystemParameters &lsms,
   }
 }
 
+
+void lsms::getTotalCoreEnergy(LSMSSystemParameters &lsms,
+                              LSMSCommunication &comm,
+                              CrystalParameters &crystal,
+                              LocalTypeInfo &local,
+                              Real &total_core_energy) {
+
+  Real local_sum = 0.0;
+
+  for (int i = 0; i < local.num_local; i++) {
+
+    auto &atom = local.atom[i];
+
+    if (lsms.n_spin_pola == 1) {
+      local_sum += atom.ecorv[0] + atom.esemv[0];
+    } else { //spin polarized
+      local_sum += atom.evalsum[0] + atom.evalsum[1] + atom.esemv[0] + atom.esemv[1];
+    }
+
+  }
+
+  globalSum(comm, local_sum);
+
+  total_core_energy = local_sum;
+
+}
+
+void lsms::getInterstitialEnergy(LSMSSystemParameters &lsms,
+                                 LSMSCommunication &comm,
+                                 CrystalParameters &crystal,
+                                 LocalTypeInfo &local,
+                                 Real &total_interstitial_energy) {
+
+  Real local_sum = 0.0;
+
+  for (int i = 0; i < local.num_local; i++) {
+
+    auto &atom = local.atom[i];
+
+    local_sum += atom.interstitialEnergy;
+
+  }
+
+  globalSum(comm, local_sum);
+
+  total_interstitial_energy = local_sum;
+
+}
+
+void lsms::getSiteLocalEnergy(LSMSSystemParameters &lsms, LSMSCommunication &comm, CrystalParameters &crystal,
+                              LocalTypeInfo &local, Real &total_site_energy) {
+
+  Real local_sum = 0.0;
+
+  for (int i = 0; i < local.num_local; i++) {
+
+    auto &atom = local.atom[i];
+
+    /*
+     * Site local energies oczillate
+     */
+
+    // 1) XC: [x]
+    //local_sum += atom.energyStruct.exchange_correlation;
+
+    // 2) One electron: [x]
+    //local_sum += atom.energyStruct.one_electron;
+
+    // 3) Kohn sham [x]
+    // local_sum += atom.energyStruct.kohn_sham;
+
+    // 4) Hartree [x]
+    // local_sum += atom.energyStruct.hartree;
+
+    // 5) Core interaction [x]
+    local_sum += atom.energyStruct.core_interaction;
+
+
+    //    local_sum += atom.siteLocalEnergy;
+
+  }
+
+  globalSum(comm, local_sum);
+
+  total_site_energy = local_sum;
+
+}
+
+
 void lsms::magneticMoments(LSMSSystemParameters &lsms,
                            LSMSCommunication &comm,
                            CrystalParameters &crystal,
@@ -189,7 +278,7 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
       std::printf("The functional [1]:'%s'\n", lsms.libxcFunctional.functional[0].info->name);
       std::printf("The functional [2]:'%s'\n", lsms.libxcFunctional.functional[1].info->name);
 
-      if(lsms.libxcFunctional.needGradients) {
+      if (lsms.libxcFunctional.needGradients) {
         std::printf("XC: GGA\n");
       } else {
         std::printf("XC: LDA\n");
@@ -344,10 +433,13 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
   if (comm.rank == 0) {
     if (lsms.n_spin_pola == 1) {
       std::printf("\n");
-      std::printf("%4s %20s %20s %20s %20s\n",
+      std::printf("%4s %16s %16s %16s %16s %16s %16s %16s\n",
                   "#.",
-                  "Band Energy",
-                  "Fermi Energy",
+                  "Band",
+                  "Fermi",
+                  "Core",
+                  "Interstitial",
+                  "Site local",
                   "Total Energy",
                   "RMS");
     } else if (lsms.n_spin_pola == 2) {
@@ -445,7 +537,7 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
     }
     globalMax(comm, rms);
 
-    if (iteration > 2) {
+    if (iteration > MIN_ITERATIONS) {
       converged = rms < lsms.rmsTolerance;
     }
 
@@ -453,12 +545,20 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
     if (lsms.n_spin_pola == 2) {
       magneticMoments(lsms, comm, crystal, local, sum_mag);
     }
+    auto e_core = 0.0;
+    getTotalCoreEnergy(lsms, comm, crystal, local, e_core);
+
+    auto e_inter = 0.0;
+    getInterstitialEnergy(lsms, comm, crystal, local, e_inter);
+
+    auto e_site = 0.0;
+    getSiteLocalEnergy(lsms, comm, crystal, local, e_site);
 
     if (comm.rank == 0) {
       if (lsms.n_spin_pola == 1) {
-        std::printf("%4d %20.12f %20.12f %20.12f %20.12f\n",
+        std::printf("%4d %16.8f %16.8f %16.8f %16.8f %16.8f % 16.8f %16.10e\n",
                     iteration, eband, lsms.chempot,
-                    lsms.totalEnergy, rms);
+                    e_core, e_inter, e_site, lsms.totalEnergy, rms);
       } else if (lsms.n_spin_pola == 2) {
         std::printf("%4d %20.12f %20.12f %20.12f %20.12f %10.6f\n",
                     iteration, eband, lsms.chempot,

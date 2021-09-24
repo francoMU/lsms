@@ -175,20 +175,9 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
   }
   fit.set(grid0, integrand, 2);
   integrand[0] = fit(0.0);
-  Real ezrho = -integrateOneDim(grid0, integrand, integral, rSphere); // (5b)
-  energyStruct.core_interaction = ezrho;
 
-
-  auto result = lsms::radialIntegral(core_coloumb, atom.r_mesh, rSphere);
-
-
-  /*
-   *
-   */
-
-  std::printf("%30.20f\n", ezrho);
-  std::printf("%30.20f\n", result);
-
+  auto ezrho = lsms::radialIntegral(core_coloumb, atom.r_mesh, rSphere);
+  energyStruct.core_interaction = erho;
 
   if (lsms.global.iprint > 0)
     printf("ezrho                       = %35.25lf Ry\n", ezrho);

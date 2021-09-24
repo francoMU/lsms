@@ -101,10 +101,6 @@ namespace lsms {
     extended_integrand[i_after_rs + 1] = lagrange;
     extended_r_mesh[i_after_rs + 1] = r_sphere;
 
-    std::cout << extended_r_mesh[i_after_rs + 1] << std::endl;
-    std::cout << radial_mesh[i_after_rs] << std::endl;
-    std::cout << r_sphere << std::endl;
-
     auto extended_length = i_after_rs + 2;
 
     auto result = simpson_nonuniform(extended_r_mesh, extended_integrand, extended_length);

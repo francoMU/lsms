@@ -6,7 +6,7 @@
 
 namespace lsms {
 
-  constexpr int MIN_ITERATIONS = 10;
+  constexpr int MIN_ITERATIONS = 3;
 
   void run_dft_calculation(LSMSSystemParameters &lsms,
                            LSMSCommunication &comm,
@@ -16,11 +16,7 @@ namespace lsms {
                            bool reload_potentials,
                            EnergyDebugMode mode = EnergyDebugMode::Local);
 
-  void magneticMoments(LSMSSystemParameters &lsms,
-                       LSMSCommunication &comm,
-                       CrystalParameters &crystal,
-                       LocalTypeInfo &local,
-                       Real &sum_mag);
+
 
   Real extractTotalEnergy(LSMSSystemParameters &lsms);
 
@@ -41,13 +37,8 @@ namespace lsms {
                               LocalTypeInfo &local,
                               std::vector<Real> &gradient);
 
-  void getTotalCoreEnergy(LSMSSystemParameters &lsms,
-                          LSMSCommunication &comm,
-                          CrystalParameters &crystal,
-                          LocalTypeInfo &local,
-                          Real &total_core_energy);
 
-  void getInterstitialEnergy(LSMSSystemParameters &lsms,
+  void getInterCoreEnergy(LSMSSystemParameters &lsms,
                           LSMSCommunication &comm,
                           CrystalParameters &crystal,
                           LocalTypeInfo &local,
@@ -59,6 +50,11 @@ namespace lsms {
                              LocalTypeInfo &local,
                              Real &total_site_energy);
 
+  void getMagneticMoments(LSMSSystemParameters &lsms,
+                          LSMSCommunication &comm,
+                          CrystalParameters &crystal,
+                          LocalTypeInfo &local,
+                          Real &sum_mag);
 
 }
 

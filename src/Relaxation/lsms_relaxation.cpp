@@ -596,9 +596,10 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
     if (lsms.global.iprint >= 0) {
 
-      std::printf("Interstitial: %30.18lf Ry\n", total_interstitial);
-      std::printf("Madelung    : %30.18lf Ry\n", lsms.u0);
-      std::printf("Total Energy: %30.18lf Ry\n", lsms.totalEnergy);
+      std::printf(" Interstitial     : %30.18lf Ry\n", total_interstitial);
+      std::printf(" Madelung         : %30.18lf Ry\n", lsms.u0);
+      std::printf(" Total Energy     : %30.18lf Ry\n", lsms.totalEnergy);
+      std::printf(" Total Energy/Atom: %30.18lf Ry\n", lsms.totalEnergy/lsms.num_atoms);
 
     }
 

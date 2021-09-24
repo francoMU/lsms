@@ -1,9 +1,7 @@
 
 --[[
 
-Starting setup for FCC Aluminium
-
-This is the starter for bigger simulations
+Test for non-spin polarized Aluminium
 
 ]]--
 
@@ -21,23 +19,18 @@ mtasa=0
 
 xcFunctional = { 1, 1, 7 }
 
-iprint=0
+iprint=-1
 default_iprint=-1
 print_node=0
 istop="main"
 
 nscf=30
-rmsTolerance=1.0e-12
+rmsTolerance=1.0e-16
 
 xRepeat=1
 yRepeat=1
 zRepeat=1
 makeTypesUnique=1
-
-max_iterations = -1
-tolerance = 1e-6
-initial_sigma = 0.0001
-write_to_file = false
 
 energyContour = {npts=31,grid=2,ebot=-0.3,etop=0.0,eitop=0.825,eibot=0.0025}
 

@@ -1,21 +1,21 @@
 
 
+if (DEFINED libxc_LIBRARIES AND DEFINED libxc_INCLUDE_DIR)
+    if (EXISTS ${libxc_LIBRARIES} AND EXISTS ${libxc_INCLUDE_DIR})
+        message(STATUS "libxc path was correctly defined")
+    else()
+        message(ERROR "Specified path for libxc libaries is wrong")
+    endif ()
+endif()
+
 if (NOT DEFINED libxc_LIBRARIES)
     set(libxc_LIBRARIES
             ${CMAKE_BINARY_DIR}/external/libxc/lib/${CMAKE_STATIC_LIBRARY_PREFIX}xc${CMAKE_STATIC_LIBRARY_SUFFIX})
-    get_filename_component(libxc_LIBRARIES "${libxc_LIBRARIES}" REALPATH)
 
     set(libxc_INCLUDE_DIR
             ${CMAKE_BINARY_DIR}/external/libxc/include
             )
-    get_filename_component(libxc_INCLUDE_DIR "${libxc_INCLUDE_DIR}" REALPATH)
 endif ()
-
-set(libxc_LIBRARIES ${libxc_LIBRARIES}
-        CACHE FILEPATH "libxc library" FORCE)
-set(libxc_INCLUDE_DIR ${libxc_INCLUDE_DIR}
-        CACHE FILEPATH "libxc include dirs" FORCE)
-
 
 if (EXISTS ${libxc_LIBRARIES} AND EXISTS ${libxc_INCLUDE_DIR})
     set(libxc_FOUND true)
@@ -23,10 +23,13 @@ if (EXISTS ${libxc_LIBRARIES} AND EXISTS ${libxc_INCLUDE_DIR})
     message(STATUS "libxc library: " ${libxc_LIBRARIES})
     message(STATUS "libxc include: " ${libxc_INCLUDE_DIR})
 else()
-    message(STATUS "Libxc library not found")
+    set(libxc_FOUND false)
+    message(STATUS "libxc was not found and will be installed")
 endif ()
 
 if (NOT libxc_FOUND)
+
+    cmake_policy(SET CMP0111 NEW)
 
     find_program(AUTORECONF_EXECUTABLE
             NAMES autoreconf
@@ -45,14 +48,9 @@ if (NOT libxc_FOUND)
             NAMES_PER_DIR
             DOC "GNU Make")
 
-    #
-    # dos2unix
-    #
-
     include(FindPackageHandleStandardArgs)
     find_package_handle_standard_args(Autotools
             REQUIRED_VARS AUTOCONF_EXECUTABLE AUTOMAKE_EXECUTABLE MAKE_EXECUTABLE)
-
 
     file(COPY ${PROJECT_SOURCE_DIR}/external/libxc-5.1.6
             DESTINATION ${CMAKE_BINARY_DIR}/external)
@@ -62,6 +60,7 @@ if (NOT libxc_FOUND)
 
     set(_install ${CMAKE_BINARY_DIR}/external/libxc)
     file(MAKE_DIRECTORY ${_install})
+    file(MAKE_DIRECTORY ${_install}/include)
     get_filename_component(_install "${_install}" REALPATH)
     include(ExternalProject)
 
@@ -75,16 +74,12 @@ if (NOT libxc_FOUND)
             INSTALL_COMMAND ${MAKE_EXECUTABLE} install
             )
 
-else()
-    add_library(libxc STATIC IMPORTED)
-    set_target_properties(libxc PROPERTIES IMPORTED_LOCATION ${libxc_LIBRARIES})
-endif()
 
-
-if (NOT TARGET libxc::libxc)
-    add_library(libxc::libxc INTERFACE IMPORTED GLOBAL)
-    target_include_directories(libxc::libxc INTERFACE ${libxc_INCLUDE_DIR})
-    target_link_libraries(libxc::libxc INTERFACE ${libxc_LIBRARIES})
-    target_compile_definitions(libxc::libxc INTERFACE USE_LIBXC)
-    add_dependencies(libxc::libxc libxc)
 endif ()
+
+
+add_library(libxc::libxc STATIC IMPORTED GLOBAL)
+set_target_properties(libxc::libxc PROPERTIES IMPORTED_LOCATION ${libxc_LIBRARIES})
+target_include_directories(libxc::libxc INTERFACE ${libxc_INCLUDE_DIR})
+target_compile_definitions(libxc::libxc INTERFACE USE_LIBXC)
+add_dependencies(libxc::libxc libxc)

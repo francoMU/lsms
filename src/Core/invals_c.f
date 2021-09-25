@@ -35,19 +35,19 @@ c
       integer    m
       integer    k
 c
-      real*8     slp
-      real*8     gam
-      real*8     v
-      real*8     z
-      real*8     tol
-      real*8     en
-      real*8     c
-      real*8     dk
-      real*8     rg(iprpts)
-      real*8     rf(iprpts)
-      real*8     r(iprpts)
-      real*8     drg(2*ipdeq)
-      real*8     drf(2*ipdeq)
+      real(8), intent(in) :: slp
+      real(8), intent(in) :: gam
+      real(8), intent(in) :: v
+      real(8), intent(in) :: z
+      real(8), intent(in) :: tol
+      real(8), intent(in) :: en
+      real(8), intent(in) :: c
+      real(8), intent(in) :: dk
+      real(8), intent(inout) :: rg(iprpts)
+      real(8), intent(inout) :: rf(iprpts)
+      real(8), intent(inout) :: r(iprpts)
+      real(8), intent(inout) :: drg(2*ipdeq)
+      real(8), intent(inout) :: drf(2*ipdeq)
       real*8     zalfa
       real*8     term1
       real*8     term2

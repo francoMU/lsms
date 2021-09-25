@@ -26,8 +26,8 @@ void calculateMadelungMatrices(LSMSSystemParameters &lsms, CrystalParameters &cr
   }
 
 // cal_madelung_matrix appears not to be thread save.
-#pragma omp parallel for default(none) shared(lsms, crystal, local, atom_position_1, atom_position_2, atom_position_3) \
-   firstprivate(num_atoms)
+// #pragma omp parallel for default(none) shared(lsms, crystal, local, atom_position_1, atom_position_2, atom_position_3) \
+//   firstprivate(num_atoms)
   for(int i=0; i<local.num_local; i++)
   {
     int mynod=local.global_id[i];

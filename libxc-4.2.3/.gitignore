@@ -1,5 +1,0 @@
-*.Plo
-*.Po
-config.h
-funcs_*
-build/*

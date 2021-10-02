@@ -5,6 +5,9 @@
 #ifndef LSMS_CHAIN_STREAM_HPP
 #define LSMS_CHAIN_STREAM_HPP
 
+#include <iostream>
+#include <string>
+
 #include <mpi.h>
 
 #include "mpi_chain.hpp"

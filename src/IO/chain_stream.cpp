@@ -2,7 +2,6 @@
 // Created by F.Moitzi on 20.09.2021.
 //
 
-
 #include "chain_stream.hpp"
 
 namespace lsms {

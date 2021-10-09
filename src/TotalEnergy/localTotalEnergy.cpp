@@ -176,11 +176,11 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
   Real ezrho = -integrateOneDim(grid0, integrand, integral, rSphere); // (5b)
   energyStruct.core_interaction = erho;
 
-  if (lsms.global.iprint >= 0)
+  if (lsms.global.iprint > 0)
     printf("ezrho                       = %35.25lf Ry\n", ezrho);
 
   coulombEnergy = erho + ezrho; // (5)
-  if (lsms.global.iprint >= 0)
+  if (lsms.global.iprint > 0)
     printf("Coulomb Energy              = %35.25lf Ry\n", coulombEnergy);
 // Exchange-Correlation energy                  -- (7)
 

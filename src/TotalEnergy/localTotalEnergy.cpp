@@ -165,27 +165,23 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
   if (lsms.n_spin_pola == 1) {
     for (int i = 0; i < atom.r_mesh.size(); i++) {
       integrand[i + 1] = 2.0 * (atom.rhoNew(i, 0)) * atom.ztotss / (atom.r_mesh[i]);
-      core_coloumb[i] = -2.0 * (atom.rhoNew(i, 0)) * atom.ztotss / (atom.r_mesh[i]);
     }
   } else { // spin polarized
     for (int i = 0; i < atom.r_mesh.size(); i++) {
       integrand[i + 1] = 2.0 * (atom.rhoNew(i, 0) + atom.rhoNew(i, 1)) * atom.ztotss / (atom.r_mesh[i]);
-      core_coloumb[i] = -2.0 * (atom.rhoNew(i, 0) + atom.rhoNew(i, 1)) * atom.ztotss / (atom.r_mesh[i]);
     }
   }
   fit.set(grid0, integrand, 2);
   integrand[0] = fit(0.0);
-
-  auto ezrho = lsms::radialIntegral(core_coloumb, atom.r_mesh, rSphere);
+  Real ezrho = -integrateOneDim(grid0, integrand, integral, rSphere); // (5b)
   energyStruct.core_interaction = erho;
 
-  if (lsms.global.iprint > 0)
+  if (lsms.global.iprint >= 0)
     printf("ezrho                       = %35.25lf Ry\n", ezrho);
 
   coulombEnergy = erho + ezrho; // (5)
-  if (lsms.global.iprint > 0)
+  if (lsms.global.iprint >= 0)
     printf("Coulomb Energy              = %35.25lf Ry\n", coulombEnergy);
-
 // Exchange-Correlation energy                  -- (7)
 
   if (lsms.xcFunctional[0] == 0)  // for the built in xc functionals:

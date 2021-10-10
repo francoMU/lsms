@@ -522,8 +522,8 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
         std::printf("%4d %12.8f %16.8f %16.8f %16.8f %16.8f %10.4e %12.6f\n",
                     iteration,
                     lsms.chempot,
-                    eband /lsms.num_atoms,
-                    e_core_inter /lsms.num_atoms,
+                    eband / lsms.num_atoms,
+                    e_core_inter / lsms.num_atoms,
                     e_site / lsms.num_atoms,
                     lsms.totalEnergy / lsms.num_atoms,
                     rms,
@@ -587,19 +587,27 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
      * Total Interstitial
      */
 
-    Real total_interstitial = 0.0;
+    auto total_interstitial = 0.0;
     for (int i = 0; i < local.num_local; i++) {
       total_interstitial += local.atom[i].interstitialEnergy;
     }
-
     globalSum(comm, total_interstitial);
+
+
+
+
+
+
+
 
     if (lsms.global.iprint >= 0) {
 
+      std::printf(" Band sum         : %30.18lf Ry\n", total_band_sum);
+      std::printf(" Core energies    : %30.18lf Ry\n", core_energies);
       std::printf(" Interstitial     : %30.18lf Ry\n", total_interstitial);
       std::printf(" Madelung         : %30.18lf Ry\n", lsms.u0);
       std::printf(" Total Energy     : %30.18lf Ry\n", lsms.totalEnergy);
-      std::printf(" Total Energy/Atom: %30.18lf Ry\n", lsms.totalEnergy/lsms.num_atoms);
+      std::printf(" Total Energy/Atom: %30.18lf Ry\n", lsms.totalEnergy / lsms.num_atoms);
 
     }
 

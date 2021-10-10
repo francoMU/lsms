@@ -8,7 +8,7 @@ relativity="none"
 core_relativity="none"
 
 num_atoms=4
-nspin=2
+nspin=1
 
 mtasa=0
 

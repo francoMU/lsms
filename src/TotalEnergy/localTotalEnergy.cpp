@@ -126,6 +126,8 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
     printf("kinetic Energy              = %35.25lf Ry\n", kineticEnergy);
   }
 
+
+
 // calculate Coulomb Energy E_C:
 // E_C = \int \rho(r) v_{Coulomb} d^3r          -- (5)
 //     + E_{Madelung}                           -- (6) // external to this routine
@@ -183,6 +185,12 @@ void localTotalEnergy(LSMSSystemParameters &lsms,
   if (lsms.global.iprint > 0)
     printf("Coulomb Energy              = %35.25lf Ry\n", coulombEnergy);
 // Exchange-Correlation energy                  -- (7)
+
+if (lsms.global.iprint >= 0) {
+  printf("erho                        = %35.25lf Ry\n", erho);
+  printf("ezrho                       = %35.25lf Ry\n", ezrho);
+  printf("Coulomb Energy              = %35.25lf Ry\n", coulombEnergy);
+}
 
   if (lsms.xcFunctional[0] == 0)  // for the built in xc functionals:
   {

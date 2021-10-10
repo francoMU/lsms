@@ -420,6 +420,23 @@ public:
         generateNewMesh = false;
     }
 
+    std::vector<Real> getRmeshDerivative() {
+      int N = std::max((int) r_mesh.size(), jws);
+      N = std::max(N, jmt);
+
+      std::vector<Real> mesh(N, 0.0);
+
+      Real xmt = std::log(rmt);
+      h = (xmt - xstart) / (jmt - 1);
+
+      for (int j = 0; j < N; j++) {
+        mesh[j] = r_mesh[j] * h;
+      }
+
+      return mesh;
+
+    };
+
 
     void setEvec(Real x, Real y, Real z) {
         evec[0] = x;

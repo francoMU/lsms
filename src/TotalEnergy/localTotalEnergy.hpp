@@ -14,5 +14,4 @@ void
 localTotalEnergy(LSMSSystemParameters &lsms, AtomData &atom, Real &energy, Real &pressure);
 
 
-
 #endif //MUST_LOCALTOTALENERGY_HPP

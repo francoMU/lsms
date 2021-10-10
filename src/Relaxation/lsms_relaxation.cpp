@@ -588,6 +588,8 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
     auto total_band_sum = 0.0;
     auto core_energies = 0.0;
     auto xc_energies = 0.0;
+    auto coloumb_energies = 0.0;
+    auto hartree_energies = 0.0;
 
     for (int i = 0; i < local.num_local; i++) {
 
@@ -595,6 +597,8 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
       total_interstitial += atom.interstitialEnergy;
       xc_energies += atom.energyStruct.exchange_correlation;
+      hartree_energies += atom.energyStruct.hartree;
+      coloumb_energies += atom.energyStruct.core_interaction;
 
       if (lsms.n_spin_pola == 1) {
         total_band_sum += atom.evalsum[0];
@@ -609,9 +613,13 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
     globalSum(comm, total_band_sum);
     globalSum(comm, core_energies);
     globalSum(comm, xc_energies);
+    globalSum(comm, coloumb_energies);
+    globalSum(comm, hartree_energies);
 
     if (lsms.global.iprint >= 0) {
 
+      std::printf(" Coloumb energies : %30.18lf Ry\n", coloumb_energies);
+      std::printf(" Hartree energies : %30.18lf Ry\n", hartree_energies);
       std::printf(" XC energies      : %30.18lf Ry\n", xc_energies);
       std::printf(" Band sum         : %30.18lf Ry\n", total_band_sum);
       std::printf(" Core energies    : %30.18lf Ry\n", core_energies);

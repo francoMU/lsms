@@ -583,25 +583,36 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
     }
 
-    /*
-     * Total Interstitial
-     */
 
     auto total_interstitial = 0.0;
+    auto total_band_sum = 0.0;
+    auto core_energies = 0.0;
+    auto xc_energies = 0.0;
+
     for (int i = 0; i < local.num_local; i++) {
-      total_interstitial += local.atom[i].interstitialEnergy;
+
+      auto &atom = local.atom[i];
+
+      total_interstitial += atom.interstitialEnergy;
+      xc_energies += atom.energyStruct.exchange_correlation;
+
+      if (lsms.n_spin_pola == 1) {
+        total_band_sum += atom.evalsum[0];
+        core_energies += atom.ecorv[0] + atom.esemv[0];
+      } else {
+        total_band_sum += atom.evalsum[0] + atom.evalsum[1];
+        core_energies += atom.ecorv[0] + atom.ecorv[1] + atom.esemv[0] + atom.esemv[1]; // (1)
+      }
     }
+
     globalSum(comm, total_interstitial);
-
-
-
-
-
-
-
+    globalSum(comm, total_band_sum);
+    globalSum(comm, core_energies);
+    globalSum(comm, xc_energies);
 
     if (lsms.global.iprint >= 0) {
 
+      std::printf(" XC energies      : %30.18lf Ry\n", xc_energies);
       std::printf(" Band sum         : %30.18lf Ry\n", total_band_sum);
       std::printf(" Core energies    : %30.18lf Ry\n", core_energies);
       std::printf(" Interstitial     : %30.18lf Ry\n", total_interstitial);
@@ -615,42 +626,49 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
   }
 
 
-  /*
-   * Forces
-   */
+/*
+ * Forces
+ */
 
   lsms::HigherOrderMadelung higherOrderMadelung(local.num_local, crystal.num_atoms);
 
   lsms::calculateHigherOrderMadelung(lsms,
                                      crystal,
                                      local,
-                                     higherOrderMadelung);
+                                     higherOrderMadelung
+  );
 
   lsms::calculateForces(comm,
                         lsms,
                         local,
                         crystal,
                         higherOrderMadelung,
-                        lsms.forceParams);
+                        lsms
+                            .forceParams);
 
   if (lsms.global.iprint > 0) {
-    lsms::displayForces(comm, lsms, local, crystal, 0);
+    lsms::displayForces(comm, lsms, local, crystal,
+                        0);
   }
 
 
   lsms::normalizeForces(comm,
                         lsms,
                         local,
-                        crystal);
+                        crystal
+  );
 
 
-  lsms::displayForces(comm, lsms, local, crystal, 0);
+  lsms::displayForces(comm, lsms, local, crystal,
+                      0);
 
   if (comm.rank == 0) {
     std::printf("\nEnd DFT calculation:\n\n");
   }
 
-  local.tmatStore.unpinMemory();
+  local.tmatStore.
+
+      unpinMemory();
 
 }
 

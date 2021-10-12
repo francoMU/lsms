@@ -442,7 +442,6 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
     double dTimePM = MPI_Wtime();
 
-
     // Calculate charge densities, potentials, and total energy
     calculateAllLocalChargeDensities(lsms, local);
     calculateChargesPotential(comm, lsms, local, crystal, 0);

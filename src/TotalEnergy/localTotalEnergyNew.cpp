@@ -105,6 +105,9 @@ void lsms::localTotalEnergyNew(LSMSSystemParameters &lsms, AtomData &atom, Real 
   auto ezrho = lsms::radialIntegral(integrand, atom.r_mesh, rSphere);
   energyStruct.core_interaction = ezrho;
 
+  if (lsms.global.iprint > 0) {
+    printf("ezrho                       = %35.25lf Ry\n", ezrho);
+  }
 
   if (lsms.n_spin_pola == 1) {
     for (int i = 0; i < atom.r_mesh.size(); i++) {
@@ -123,11 +126,14 @@ void lsms::localTotalEnergyNew(LSMSSystemParameters &lsms, AtomData &atom, Real 
   auto erho = radialIntegral(integrand, atom.r_mesh, rSphere);
   energyStruct.hartree = erho;
 
-  coulombEnergy = erho + ezrho;
 
   if (lsms.global.iprint > 0) {
     printf("erho                        = %35.25lf Ry\n", erho);
-    printf("ezrho                       = %35.25lf Ry\n", ezrho);
+  }
+
+  coulombEnergy = erho + ezrho;
+
+  if (lsms.global.iprint > 0) {
     printf("Coulomb Energy              = %35.25lf Ry\n", coulombEnergy);
   }
 
@@ -174,7 +180,6 @@ void lsms::localTotalEnergyNew(LSMSSystemParameters &lsms, AtomData &atom, Real 
   energyStruct.exchange_correlation = xcEnergy;
   energy += kineticEnergy + coulombEnergy + xcEnergy; // + ezpt;
 
-
   /*
    * Longitudinal spin fluctuations
    */
@@ -185,56 +190,8 @@ void lsms::localTotalEnergyNew(LSMSSystemParameters &lsms, AtomData &atom, Real 
 
 
   /*
-   * Exchange-Correlation pressure
+  * Pressure is not includequ
    */
-  Real pressureXC{0.0};
-  if (lsms.xcFunctional[0] == 0)  // for the built in xc functionals:
-  {
-    if (lsms.n_spin_pola == 1) {
-      for (int i = 0; i < atom.r_mesh.size(); i++) {
-        integrand[i] = 3.0 * atom.rhoNew(i, 0) * (
-            atom.exchangeCorrelationPotential(i, 0) -
-            atom.exchangeCorrelationEnergy(i, 0));
-      }
-    } else { // spin polarized
-      for (int i = 0; i < atom.r_mesh.size(); i++) {
-        integrand[i] = 3.0 * atom.rhoNew(i, 0) *
-                       (atom.exchangeCorrelationPotential(i, 0) -
-                        atom.exchangeCorrelationEnergy(i, 0)) +
-                       3.0 * atom.rhoNew(i, 1) *
-                       (atom.exchangeCorrelationPotential(i, 1) -
-                        atom.exchangeCorrelationEnergy(i, 1));
-      }
-    }
-
-    pressureXC = lsms::radialIntegral(integrand, atom.r_mesh, rSphere); // (7)
-
-  } else if (lsms.xcFunctional[0] == 1) { // for libxc functionals
-    if (lsms.n_spin_pola == 1) {
-      for (int i = 0; i < atom.r_mesh.size(); i++) {
-        integrand[i + 1] = 3.0 * atom.rhoNew(i, 0) * (
-            atom.exchangeCorrelationPotential(i, 0) -
-            atom.exchangeCorrelationEnergy(i, 0));
-      }
-    } else { // spin polarized
-      for (int i = 0; i < atom.r_mesh.size(); i++) {
-        integrand[i] = 3.0 * atom.rhoNew(i, 0) *
-                       (atom.exchangeCorrelationPotential(i, 0) -
-                        atom.exchangeCorrelationEnergy(i, 0)) +
-                       3.0 * atom.rhoNew(i, 1) *
-                       (atom.exchangeCorrelationPotential(i, 1) -
-                        atom.exchangeCorrelationEnergy(i, 0));
-      }
-    }
-
-    pressureXC = lsms::radialIntegral(integrand, atom.r_mesh, rSphere); // (7)
-
-  } else {  // unknown functional (we never should arrive here!
-    printf("Unknown xc function in localTotalEnergy!\n");
-    exit(1);
-  }
-
-  pressure = pressureXC + 2.0 * kineticEnergy + coulombEnergy; // + ezpt;
-
+  pressure = 0.0;
 
 }

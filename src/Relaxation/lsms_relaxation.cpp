@@ -46,6 +46,37 @@ static void prepareSpinOnAtoms(const LSMSSystemParameters &lsms,
   }
 }
 
+static void printVolumes(LSMSSystemParameters &lsms,
+                         LSMSCommunication &comm,
+                         CrystalParameters &crystal,
+                         LocalTypeInfo &local) {
+
+  std::vector<double> rmt;
+  std::vector<double> rws;
+  std::vector<double> rInscribed;
+  lsms::gatherInfo(comm,
+                   lsms,
+                   local,
+                   crystal,
+                   rmt,
+                   rws,
+                   rInscribed,
+                   0);
+
+  if (comm.rank == 0) {
+    for (int i = 0; i < crystal.num_atoms; i++) {
+      std::printf("%5d %s [%d.%d]: %20.16f %20.16f %20.16f\n",
+                  i + 1,
+                  crystal.types[i].name,
+                  crystal.types[i].node,
+                  crystal.types[i].local_id,
+                  rmt[i],
+                  rws[i],
+                  rInscribed[i]);
+    }
+  }
+
+}
 
 void lsms::getInterCoreEnergy(LSMSSystemParameters &lsms,
                               LSMSCommunication &comm,
@@ -367,6 +398,8 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
 
   // 10. Prepare mixing
   mixing->prepare(comm, lsms, local.atom);
+
+  printVolumes(lsms, comm, crystal, local);
 
   /*
    * SCF Cycle

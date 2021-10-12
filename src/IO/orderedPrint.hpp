@@ -12,12 +12,23 @@
 
 namespace lsms {
 
-   void gatherEnergies(const LSMSCommunication &comm,
-                       const LSMSSystemParameters &lsms,
-                       const LocalTypeInfo &local,
-                       const CrystalParameters &crystal,
-                       std::vector<double> &global_energies,
-                       int root);
+  void gatherEnergies(const LSMSCommunication &comm,
+                      const LSMSSystemParameters &lsms,
+                      const LocalTypeInfo &local,
+                      const CrystalParameters &crystal,
+                      std::vector<double> &global_energies,
+                      int root);
+
+  void gatherInfo(const LSMSCommunication &comm,
+                  const LSMSSystemParameters &lsms,
+                  const LocalTypeInfo &local,
+                  const CrystalParameters &crystal,
+                  std::vector<double> &rmt,
+                  std::vector<double> &rws,
+                  std::vector<double> &rInscribed,
+                  int root);
+
+
 }
 
 #endif //LSMS_ORDEREDPRINT_HPP

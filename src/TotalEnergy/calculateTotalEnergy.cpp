@@ -103,14 +103,11 @@ void calculateTotalEnergy(LSMSCommunication &comm, LSMSSystemParameters &lsms, L
     } else { // new energy calculation
 
 
-      if (false) {
-        //localTotalEnergy(lsms, local.atom[i],
-        //                 energyNew, pressureNew);
+      localTotalEnergy(lsms, local.atom[i],
+                       energyNew, pressureNew);
 
-      }
-
-      lsms::localTotalEnergyNew(lsms, local.atom[i],
-                                energyNew, pressureNew);
+//      lsms::localTotalEnergyNew(lsms, local.atom[i],
+//                                energyNew, pressureNew);
 
       local.atom[i].localEnergy = energyNew;
       totalEnergyNew += energyNew * local.n_per_type[i];

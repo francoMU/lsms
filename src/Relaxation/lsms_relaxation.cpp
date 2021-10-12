@@ -346,8 +346,11 @@ void lsms::run_dft_calculation(LSMSSystemParameters &lsms,
   if (lsms.global.iprint >= 1) {
     std::cout << "Setup voronoi polyhedras...." << std::endl;
   }
-  setupVorpol(lsms, crystal,
-              local, sphericalHarmonicsCoeficients);
+
+  if (reload_potentials) {
+    setupVorpol(lsms, crystal,
+                local, sphericalHarmonicsCoeficients);
+  }
 
   /*
    * 3. Interpolate the potentials

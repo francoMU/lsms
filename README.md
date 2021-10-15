@@ -70,7 +70,7 @@ cmake <path/to/lsms/root> \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_CXX_COMPILER=mpic++ \
       -DCMAKE_C_COMPILER=gcc \
-      -DCMAKE_CXX_COMPILER=gfortran \
+      -DCMAKE_Fortran_COMPILER=gfortran \
       -DCMAKE_CXX_FLAGS="-O3 -mtune=native" \
       -DCMAKE_Fortran_FLAGS="-O3 -mtune=native -fbacktrace -cpp -fallow-argument-mismatch" \
       -DBLA_VENDOR=Intel10_64lp
@@ -78,13 +78,46 @@ cmake <path/to/lsms/root> \
 
 This is just an example for creating the build-system. `CMAKE_BUILD_TYPE` can be either Release or Debug. This has only an
 effect if no compiler flags are specified. In this case cmake will preset some flags depending on the chosen 
-build type. It is necessary to specify a C++,C and a Fortran Compiler. Preferably, one specifies as a C++ the compiler 
-wrapper, because it contains all the necessary flags and path already and it will be easier for CMake to choose the right
-libraries. In case of the `gcc` toolchain, one should prefer the compiler wrapper mpic++ over g++. 
+build type. It is necessary to specify a C++,C and a Fortran Compiler. The C++ compiler should be preferably be specified
+as the compiler wrapper, because it contains all the necessary flags and path already and it will be easier for CMake to choose the right
+libraries. For the  `GNU` toolchain for example, one should prefer the compiler wrapper mpic++ over g++.
 `CMAKE_CXX_FLAGS` and `CMAKE_Fortran_FLAGS` are the compiler flags that will be used to build the object files. 
 OpenMP will be search automatically by CMake and corresponding flags are added automatically.
 `LSMS` also needs LAPACK and BLAS. One can specify the desired type of LAPACK with the `BLA_VENDOR` definition. 
 The corresponding documentation can be found here ([CMake](https://cmake.org/cmake/help/v3.18/module/FindLAPACK.html)).
+
+Sometimes it is necessary to explicitly define the path to math libaries. In this case the automatic search has
+to be turned of by setting `SEARCH_LAPACK` or `SEARCH_BLAS` to `OFF`. The libaries has to be specified explicitly, if 
+the search is turned off.
+
+```bash
+cmake <path/to/lsms/root> \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_CXX_COMPILER=mpic++ \
+      -DCMAKE_C_COMPILER=gcc \
+      -DCMAKE_Fortran_COMPILER=gfortran \
+      -DCMAKE_CXX_FLAGS="-O3 -mtune=native" \
+      -DCMAKE_Fortran_FLAGS="-O3 -mtune=native -fbacktrace -cpp -fallow-argument-mismatch" \
+      -DSEARCH_LAPACK=OFF \
+      -DSEARCH_BLAS=OFF \
+      -DLAPACK_LIBARIES=liblapack.so \
+      -DBLAS_LIBARIES=libblas.so
+```
+
+The path to the LibXC and Lua libraries can be specified explicitly. In this case the libraries will not be installed
+automatically.
+
+```bash
+cmake <path/to/lsms/root> \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_CXX_COMPILER=mpic++ \
+      -DCMAKE_C_COMPILER=gcc \
+      -DCMAKE_Fortran_COMPILER=gfortran \
+      -DCMAKE_CXX_FLAGS="-O3 -mtune=native" \
+      -DCMAKE_Fortran_FLAGS="-O3 -mtune=native -fbacktrace -cpp -fallow-argument-mismatch" \
+      -Dlibxc_LIBRARIES=<path/libxc>/lib/libxc.a
+      -Dlibxc_INCLUDE_DIR=<path/libxc>/include
+```
 
 Build all target.
 

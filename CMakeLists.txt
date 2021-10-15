@@ -56,16 +56,15 @@ add_subdirectory(src)
 add_subdirectory(include)
 
 # Find MPI library
-find_package(MPI REQUIRED)
+find_package(MPI REQUIRED COMPONENTS CXX OPTIONAL_COMPONENTS)
 target_link_libraries(lsmscore PUBLIC MPI::MPI_CXX)
 
 # Find OpenMP library
 option(BUILD_WITH_OPENMP "Build with OpenMP" ON)
-
-if(BUILD_WITH_OPENMP)
+if (BUILD_WITH_OPENMP)
     find_package(OpenMP REQUIRED)
     target_link_libraries(lsmscore PUBLIC OpenMP::OpenMP_CXX)
-endif()
+endif ()
 
 # Find HDF5
 set(HDF5_PREFER_PARALLEL false)
@@ -73,14 +72,41 @@ find_package(HDF5 REQUIRED)
 target_link_libraries(lsmscore PUBLIC HDF5::HDF5)
 
 # Lapack
-if (NOT DEFINED BLA_VENDOR)
-    set(BLA_VENDOR "Generic")
+option(SEARCH_LAPACK "Search for LAPACK" ON)
+if (NOT SEARCH_LAPACK)
+    add_library(LAPACK::LAPACK STATIC IMPORTED GLOBAL)
+    set_target_properties(LAPACK::LAPACK PROPERTIES IMPORTED_LOCATION ${LAPACK_LIBRARIES})
+    if (DEFINED LAPACK_LINKER_FLAGS)
+        target_compile_options(LAPACK::LAPACK INTERFACE ${LAPACK_LINKER_FLAGS})
+    endif ()
+    if (DEFINED LAPACK_INCLUDE_DIR)
+        target_include_directories(LAPACK::LAPACK INTERFACE ${LAPACK_INCLUDE_DIR})
+    endif ()
+else ()
+    if (NOT DEFINED BLA_VENDOR)
+        set(BLA_VENDOR "Generic")
+    endif ()
+    find_package(LAPACK REQUIRED)
 endif ()
-find_package(LAPACK REQUIRED)
 target_link_libraries(lsmscore PUBLIC LAPACK::LAPACK)
 
 # BLAS
-find_package(BLAS REQUIRED)
+option(SEARCH_BLAS "Search for BLAS" ON)
+if (NOT SEARCH_BLAS)
+    add_library(BLAS::BLAS STATIC IMPORTED GLOBAL)
+    set_target_properties(BLAS::BLAS PROPERTIES IMPORTED_LOCATION ${BLAS_LIBRARIES})
+    if (DEFINED BLAS_LINKER_FLAGS)
+        target_compile_options(BLAS::BLAS INTERFACE ${BLAS_LINKER_FLAGS})
+    endif ()
+    if (DEFINED BLAS_INCLUDE_DIR)
+        target_include_directories(BLAS::BLAS INTERFACE ${BLAS_INCLUDE_DIR})
+    endif ()
+else ()
+    if (NOT DEFINED BLA_VENDOR)
+        set(BLA_VENDOR "Generic")
+    endif ()
+    find_package(BLAS REQUIRED)
+endif ()
 target_link_libraries(lsmscore PUBLIC BLAS::BLAS)
 
 # Lua

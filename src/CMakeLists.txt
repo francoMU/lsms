@@ -48,6 +48,8 @@ add_subdirectory(Main)
 
 add_subdirectory(Madelung)
 
+add_subdirectory(MultipoleMoments)
+
 add_subdirectory(Misc)
 
 add_subdirectory(MultipleScattering)

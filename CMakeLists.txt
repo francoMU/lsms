@@ -17,6 +17,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include(CTest)
+endif()
+
 # Default build type is RELEASE
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RELEASE CACHE BOOL
@@ -90,3 +94,19 @@ target_compile_definitions(lsmscore PUBLIC HAS_BACKTRACE)
 
 # Include the common files
 target_include_directories(lsmscore PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+find_package(Armadillo REQUIRED)
+# Use the inline header only libary
+target_include_directories(lsmscore PUBLIC  ${OPTIM_INCLUDES})
+target_include_directories(lsmscore PUBLIC ${ARMADILLO_INCLUDE_DIRS})
+target_link_libraries(lsmscore PUBLIC ${ARMADILLO_LIBRARIES})
+
+
+# add tests
+if (NOT BUILD_TESTING)
+    set(BUILD_TESTING ON CACHE BOOL "Activate testing" FORCE)
+endif (NOT BUILD_TESTING)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

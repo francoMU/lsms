@@ -17,6 +17,8 @@ target_sources(lsms_relaxation_main
         lsms_relaxation.hpp
         lsms_relaxation_function.cpp
         lsms_relaxation_function.hpp
+        box_relaxation_function.cpp
+        box_relaxation_function.hpp
         nl_optimization.cpp
         nl_optimization.hpp
         base_function.hpp

@@ -1077,6 +1077,25 @@ int iexch = 0;
 
     }
 
+
+    /*
+     * Phenomenological longitudinal spin fluctuations
+     *
+     * https://doi.org/10.1103/PhysRevB.75.054402
+     * https://doi.org/10.1103/PhysRevB.102.014402
+     *
+     */
+     if (lsms.n_spin_pola == 2) {
+       auto mag_mom = local.atom[i].mvalws;
+       auto h_lsf = local.atom[i].lsf_functional.exchange_field(mag_mom);
+
+       for (int ir = 0; ir < local.atom[0].r_mesh.size(); ir++) {
+         local.atom[i].vrNew(ir, 0) -= h_lsf * local.atom[i].r_mesh[ir];
+         local.atom[i].vrNew(ir, 1) += h_lsf * local.atom[i].r_mesh[ir];
+       }
+
+     }
+
     calculateMTZeroPotDiff(lsms, local, chargeSwitch);
 
     delete[] rTemp;

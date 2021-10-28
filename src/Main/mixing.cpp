@@ -71,42 +71,46 @@ void setupMixing(MixingParameters &mix, Mixing *&mixing, int iprint) {
   // frozen potential by default
   if (!mix.quantity[MixingParameters::no_mixing] &&
       !mix.quantity[MixingParameters::charge] &&
-      !mix.quantity[MixingParameters::potential] &&
-      !mix.quantity[MixingParameters::moment_magnitude] &&
-      !mix.quantity[MixingParameters::moment_direction]) {
+      !mix.quantity[MixingParameters::potential])
+    // &&
+    //  !mix.quantity[MixingParameters::moment_magnitude] &&
+    //  !mix.quantity[MixingParameters::moment_direction])
+  {
     mixing = new FrozenPotential;
-    if (iprint >= 1)
+    if (iprint >= 0)
       printf("Mixing method     : frozen potential (default)\n");
   }
     // no mixing
   else if (mix.quantity[MixingParameters::no_mixing]) {
     mixing = new NoMixing;
-    if (iprint >= 1)
+    if (iprint >= 0)
       printf("Mixing method     : no mixing\n");
   }
     // charge mixing
   else if (!mix.quantity[MixingParameters::no_mixing] &&
            mix.quantity[MixingParameters::charge] &&
-           !mix.quantity[MixingParameters::potential] &&
-           !mix.quantity[MixingParameters::moment_magnitude] &&
-           !mix.quantity[MixingParameters::moment_direction]) {
+           !mix.quantity[MixingParameters::potential])
+    // &&
+    // !mix.quantity[MixingParameters::moment_magnitude] &&
+    // !mix.quantity[MixingParameters::moment_direction])
+  {
     switch (mix.algorithm[MixingParameters::charge]) {
       case 1 :
         mixing = new SimpleChargeDensityMixing(mix.mixingParameter[MixingParameters::charge]);
-        if (iprint >= 1)
+        if (iprint >= 0)
           printf("Mixing method     : simple\n");
         break;
       case 2 :
         mixing = new BroydenChargeDensityMixing(mix.mixingParameter[MixingParameters::charge]);
-        if (iprint >= 1)
+        if (iprint >= 0)
           printf("Mixing method     : broyden\n");
         break;
       default :
         mixing = new NoMixing;
-        if (iprint >= 1)
+        if (iprint >= 0)
           printf("Mixing method     : no mixing\n");
     }
-    if (iprint >= 1) {
+    if (iprint >= 0) {
       printf("Mixing quantity   : charge\n");
       printf("Mixing parameters : %4.2f\n", mix.mixingParameter[MixingParameters::charge]);
     }
@@ -114,37 +118,71 @@ void setupMixing(MixingParameters &mix, Mixing *&mixing, int iprint) {
     // potential mixing
   else if (!mix.quantity[MixingParameters::no_mixing] &&
            !mix.quantity[MixingParameters::charge] &&
-           mix.quantity[MixingParameters::potential] &&
-           !mix.quantity[MixingParameters::moment_magnitude] &&
-           !mix.quantity[MixingParameters::moment_direction]) {
+           mix.quantity[MixingParameters::potential])
+    // &&
+    // !mix.quantity[MixingParameters::moment_magnitude] &&
+    // !mix.quantity[MixingParameters::moment_direction])
+  {
     switch (mix.algorithm[MixingParameters::potential]) {
       case 1 :
         if (mix.mixingParameter[MixingParameters::potential] == 0.0) {
           mixing = new FrozenPotential;
-          if (iprint >= 1)
+          if (iprint >= 0)
             printf("Mixing method     : frozen potential\n");
         } else {
           mixing = new SimplePotentialMixing(mix.mixingParameter[MixingParameters::potential]);
-          if (iprint >= 1)
+          if (iprint >= 0)
             printf("Mixing method     : simple\n");
         }
         break;
       case 2 :
         mixing = new BroydenPotentialMixing(mix.mixingParameter[MixingParameters::potential]);
-        if (iprint >= 1)
+        if (iprint >= 0)
           printf("Mixing method     : broyden\n");
         break;
       default :
         mixing = new FrozenPotential;
-        if (iprint >= 1)
+        if (iprint >= 0)
           printf("Mixing method     : frozen potential\n");
     }
-    if (iprint >= 1) {
+    if (iprint >= 0) {
       printf("Mixing quantity   : potential\n");
       printf("Mixing parameters : %4.2f\n", mix.mixingParameter[MixingParameters::potential]);
     }
   } else {
-    if (iprint >= 1) {
+    if (iprint >= 0) {
+      printf("Type of mixing is not supported.\n");
+      for (int i = 0; i < mix.numQuantities; i++) {
+        printf("quantity = %5d, algorithm = %5d, mixing parameter = %6.3f\n",
+               mix.quantity[i], mix.algorithm[i], mix.mixingParameter[i]);
+      }
+      exit(1);
+    }
+  }
+
+  // Moment mixing
+  if (!mix.quantity[MixingParameters::moment_magnitude] &&
+      !mix.quantity[MixingParameters::moment_direction]) {
+    if (iprint >= 0)
+      printf("No moment mixing!\n");
+  } else if (!mix.quantity[MixingParameters::moment_magnitude] &&
+             mix.quantity[MixingParameters::moment_direction]) {
+    switch (mix.algorithm[MixingParameters::moment_direction]) {
+      case 1 :
+        if (mix.mixingParameter[MixingParameters::moment_direction] > 0.0) {
+          mixing->momentMixing = new SimpleMomentDirectionMixing(
+              mix.mixingParameter[MixingParameters::moment_direction]);
+          if (iprint >= 0) {
+            printf("Moment Direction Mixing : simple\n");
+            printf("Mixing parameters : %4.2f\n", mix.mixingParameter[MixingParameters::moment_direction]);
+          }
+        }
+        break;
+      default:
+        printf("Moment Direction Mixing : none\n");
+    }
+  } else {
+    if (iprint >= 0) {
       printf("Type of mixing is not supported.\n");
       for (int i = 0; i < mix.numQuantities; i++) {
         printf("quantity = %5d, algorithm = %5d, mixing parameter = %6.3f\n",
@@ -155,6 +193,7 @@ void setupMixing(MixingParameters &mix, Mixing *&mixing, int iprint) {
   }
 
 }
+
 
 void BroydenPotentialMixing::updateChargeDensity(LSMSCommunication &comm, LSMSSystemParameters &lsms,
                                                  std::vector<AtomData> &as) {
@@ -271,4 +310,62 @@ BroydenChargeDensityMixing::prepare(LSMSCommunication &comm, LSMSSystemParameter
   mixer.init(alpha, 2 * vSize + 2);
   fNew.resize(2 * vSize + 2);
   fOld.resize(2 * vSize + 2);
+}
+
+void Mixing::updateMoments(LSMSCommunication &comm, LSMSSystemParameters &lsms, std::vector<AtomData> &as) {
+  if (momentMixing != nullptr) momentMixing->update(comm, lsms, as);
+  else {
+    for (int i = 0; i < as.size(); i++) {
+      Real evecMagnitude = std::sqrt(as[i].evec[0] * as[i].evec[0] +
+                                     as[i].evec[1] * as[i].evec[1] +
+                                     as[i].evec[2] * as[i].evec[2]);
+      as[i].evecNew[0] = as[i].evec[0] / evecMagnitude;
+      as[i].evecNew[1] = as[i].evec[1] / evecMagnitude;
+      as[i].evecNew[2] = as[i].evec[2] / evecMagnitude;
+    }
+  }
+}
+
+void
+SimpleMomentDirectionMixing::update(LSMSCommunication &comm, LSMSSystemParameters &lsms, std::vector<AtomData> &as) {
+
+  const Real tolerance = 1.0e-8;
+
+  for (int i = 0; i < as.size(); i++) {
+
+    if (lsms.global.iprint > 0) {
+      printf("Moment direction before mixing = (%12.8f, %12.8f, %12.8f)\n",
+             as[i].evecNew[0], as[i].evecNew[1], as[i].evecNew[2]);
+    }
+
+    as[i].evecNew[0] = alpev * as[i].evecNew[0] + (1.0 - alpev) * as[i].evec[0];
+    as[i].evecNew[1] = alpev * as[i].evecNew[1] + (1.0 - alpev) * as[i].evec[1];
+    as[i].evecNew[2] = alpev * as[i].evecNew[2] + (1.0 - alpev) * as[i].evec[2];
+
+    Real evecMagnitude = std::sqrt(as[i].evecNew[0] * as[i].evecNew[0] +
+                                   as[i].evecNew[1] * as[i].evecNew[1] +
+                                   as[i].evecNew[2] * as[i].evecNew[2]);
+
+    if (evecMagnitude < tolerance) {
+      printf("GETEVEC: magnitude of evec too small. (= %35.25f)\n", evecMagnitude);
+    }
+
+    as[i].evecNew[0] = as[i].evecNew[0] / evecMagnitude;
+    as[i].evecNew[1] = as[i].evecNew[1] / evecMagnitude;
+    as[i].evecNew[2] = as[i].evecNew[2] / evecMagnitude;
+
+    // as[i].evecOut[0] = as[i].evecNew[0];
+    // as[i].evecOut[1] = as[i].evecNew[1];
+    // as[i].evecOut[2] = as[i].evecNew[2];
+
+    as[i].b_con[0] = 0.0;
+    as[i].b_con[1] = 0.0;
+    as[i].b_con[2] = 0.0;
+
+    if (lsms.global.iprint > 0) {
+      printf("Moment direction after mixing = (%12.8f, %12.8f, %12.8f)\n",
+             as[i].evecNew[0], as[i].evecNew[1], as[i].evecNew[2]);
+    }
+
+  }
 }

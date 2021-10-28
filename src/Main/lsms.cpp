@@ -488,10 +488,7 @@ int main(int argc, char *argv[])
     // Calculate magnetic moments for each site and check if spin has flipped
     calculateEvec(lsms, local);
     // mixEvec(lsms, local, 0.0);
-
-    // @TODO: include the update moments again
-    //mixing -> updateMoments(comm, lsms, local.atom);
-
+    mixing -> updateMoments(comm, lsms, local.atom);
     for (int i=0; i<local.num_local; i++)
     {
       if(!mix.quantity[MixingParameters::moment_direction])

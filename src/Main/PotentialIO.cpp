@@ -155,6 +155,12 @@ int loadPotentials(LSMSCommunication &comm,LSMSSystemParameters &lsms, CrystalPa
     local.atom[i].lmax=crystal.types[local.global_id[i]].lmax;
     local.atom[i].kkrsz=(local.atom[i].lmax+1)*
                         (local.atom[i].lmax+1);
+
+    // LSF
+    auto lsf_functional = crystal.types[local.global_id[i]].lsf_functional;
+    local.atom[i].lsf_functional = lsms::LSFFunctional(
+        lsms.temperature, lsms::LSFTypeMap[lsf_functional]);
+
     if(lsms.fixRMT==0)
     {
       local.atom[i].rmt=local.atom[i].rInscribed;

@@ -20,6 +20,8 @@ target_sources(lsmscore
         PotentialShifter.hpp
         PotentialShifter.cpp
         rs.f
+        lsf_functional.hpp
+        lsf_functional.cpp
         )
 
 target_include_directories(

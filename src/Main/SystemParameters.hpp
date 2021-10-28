@@ -140,6 +140,7 @@ public:
   int pot_in_idx;
   Real conc;
   int alloy_class;
+  int lsf_functional{0};
 };
 
 class CrystalParameters {

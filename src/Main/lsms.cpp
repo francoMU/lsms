@@ -280,13 +280,7 @@ int main(int argc, char *argv[])
   if (lsms.global.iprint >= 0) printLSMSSystemParameters(stdout, lsms);
   if (lsms.global.iprint >= 1) printCrystalParameters(stdout, crystal);
   if (lsms.global.iprint >= 0) printAlloyParameters(stdout, alloyDesc);
-  if (lsms.global.iprint >= 0)
-  {
-    fprintf(stdout,"LIZ for atom 0 on this node\n");
-    printLIZInfo(stdout, local.atom[0]);
-    if(local.atom[0].forceZeroMoment)
-      fprintf(stdout,"\nMagnetic moment of atom 0 forced to be zero!\n\n");
-  }
+
   if (lsms.global.iprint >= 1)
   {
     printCommunicationInfo(stdout, comm);
@@ -319,6 +313,15 @@ int main(int argc, char *argv[])
 #endif
 
   loadPotentials(comm, lsms, crystal, local);
+
+  if (lsms.global.iprint >= 0)
+  {
+    fprintf(stdout,"LIZ for atom 0 on this node\n");
+    printLIZInfo(stdout, local.atom[0]);
+    if(local.atom[0].forceZeroMoment) {
+      fprintf(stdout,"\nMagnetic moment of atom 0 forced to be zero!\n\n");
+    }
+  }
 
   if ( alloyDesc.size() > 0 )
   {

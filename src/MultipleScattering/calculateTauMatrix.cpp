@@ -3,6 +3,10 @@
 #include "Complex.hpp"
 #include <vector>
 #include <cmath>
+
+#include <fstream>
+#include <iostream>
+
 #include "PhysicalConstants.hpp"
 
 // #include "lapack.h"
@@ -17,12 +21,15 @@
 #include "linearSolvers.hpp"
 #include "buildKKRMatrix.hpp"
 #include "tau00Postprocess.cpp"
+
 #ifdef USE_NVTX
 #include <nvToolsExt.h>
 #endif
 
 #ifdef _OPENMP
+
 #include <omp.h>
+
 #else
 #ifndef LSMS_DUMMY_OPENMP
 #define LSMS_DUMMY_OPENMP
@@ -38,12 +45,13 @@ inline int omp_get_thread_num() {return 0;}
 // extern void * deviceStorage;
 extern DeviceStorage *deviceStorage;
 #endif
+
 #include <assert.h>
 
 
 extern "C"
 {
-  void write_kkrmat_(Complex *a,int *n,int *lda,Complex *e);
+void write_kkrmat_(Complex *a, int *n, int *lda, Complex *e);
 };
 
 // void buildKKRMatrix_gpu(LSMSSystemParameters &lsms, LocalTypeInfo &local,AtomData &atom, Complex energy, Complex prel, int iie, Matrix<Complex> &m);
@@ -53,56 +61,52 @@ void block_inverse(Matrix<Complex> &a, int *blk_sz, int nblk, Matrix<Complex> &d
 // #define WRITE_GIJ
 
 void buildKKRMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom,
-                    int ispin, Complex energy, Complex prel, int iie, Matrix<Complex> &m)
-{
+                    int ispin, Complex energy, Complex prel, int iie, Matrix<Complex> &m) {
   Real rij[3];
 
-  int lmax=lsms.maxlmax;
-  int kkrsz=(lmax+1)*(lmax+1);
-  int kkrsz_ns=kkrsz*lsms.n_spin_cant;
-  int nrmat_ns=lsms.n_spin_cant*atom.nrmat;
-  int nrst,ncst;
+  int lmax = lsms.maxlmax;
+  int kkrsz = (lmax + 1) * (lmax + 1);
+  int kkrsz_ns = kkrsz * lsms.n_spin_cant;
+  int nrmat_ns = lsms.n_spin_cant * atom.nrmat;
+  int nrst, ncst;
 
-  Complex *gij = new Complex[kkrsz*kkrsz];
-  Real *sinmp = new Real[2*lmax+1];
-  Real *cosmp = new Real[2*lmax+1];
+  Complex *gij = new Complex[kkrsz * kkrsz];
+  Real *sinmp = new Real[2 * lmax + 1];
+  Real *cosmp = new Real[2 * lmax + 1];
   Real *plm = new Real[lsms.angularMomentumIndices.ndlm];
-  Complex *hfn = new Complex[2*lmax+1];
+  Complex *hfn = new Complex[2 * lmax + 1];
   Complex *dlm = new Complex[lsms.angularMomentumIndices.ndlj];
-  Complex *bgij = new Complex[4*kkrsz*kkrsz];
-  Complex *tmat_n = new Complex[atom.kkrsz*atom.kkrsz*4];
+  Complex *bgij = new Complex[4 * kkrsz * kkrsz];
+  Complex *tmat_n = new Complex[atom.kkrsz * atom.kkrsz * 4];
 
-  const Complex cmone=-1.0;
-  const Complex czero=0.0;
+  const Complex cmone = -1.0;
+  const Complex czero = 0.0;
 
-  Real pi4=4.0*2.0*std::asin(1.0);
+  Real pi4 = 4.0 * 2.0 * std::asin(1.0);
 
-  for(int i=0; i<nrmat_ns*nrmat_ns; i++) m[i]=0.0;
-  for(int i=0; i<nrmat_ns; i++) m(i,i)=1.0;
+  for (int i = 0; i < nrmat_ns * nrmat_ns; i++) m[i] = 0.0;
+  for (int i = 0; i < nrmat_ns; i++) m(i, i) = 1.0;
 
   // print first t matrix
-  if(lsms.lsmsMode == LSMSMode::liz0 && lsms.rank==0)
-  {
+  if (lsms.lsmsMode == LSMSMode::liz0 && lsms.rank == 0) {
     printf("first t Matrix:\n");
-    for(int i=0; i<kkrsz_ns; i++)
-      for(int j=0; j<kkrsz_ns; j++)
-      {
-        printf("%d %d %.8le %.8le\n",i,j,std::real(local.tmatStore(i+j*kkrsz_ns,0)),std::imag(local.tmatStore(i+j*kkrsz_ns,0)));
+    for (int i = 0; i < kkrsz_ns; i++)
+      for (int j = 0; j < kkrsz_ns; j++) {
+        printf("%d %d %.8le %.8le\n", i, j, std::real(local.tmatStore(i + j * kkrsz_ns, 0)),
+               std::imag(local.tmatStore(i + j * kkrsz_ns, 0)));
       }
 // write the tmatStore
-    FILE *of=fopen("tmat.dat","w");
-    fprintf(of,"# tmatStore file for buildkkrmat test:\n");
-    fprintf(of,"# line 4: num_store kkrsz Re(energy) Im(energy)\n");
-    fprintf(of,"# following numstore*kkrsz*kkrsz lines: storeidx i j Re(t_ij) Im(t_ij)\n");
-    fprintf(of,"%4zu %4d %lg %lg\n", local.tmatStoreGlobalIdx.size(),kkrsz_ns,std::real(energy),std::imag(energy)); 
-    for(int idx=0; idx<local.tmatStoreGlobalIdx.size(); idx++)
-    {
-      for(int i=0; i<kkrsz_ns; i++)
-        for(int j=0; j<kkrsz_ns; j++)
-        {
-          fprintf(of,"%4d %4d %4d %.8le %.8le\n",
-                  idx,i,j,std::real(local.tmatStore(i+j*kkrsz_ns,idx)),
-                  std::imag(local.tmatStore(i+j*kkrsz_ns,idx)));
+    FILE *of = fopen("tmat.dat", "w");
+    fprintf(of, "# tmatStore file for buildkkrmat test:\n");
+    fprintf(of, "# line 4: num_store kkrsz Re(energy) Im(energy)\n");
+    fprintf(of, "# following numstore*kkrsz*kkrsz lines: storeidx i j Re(t_ij) Im(t_ij)\n");
+    fprintf(of, "%4zu %4d %lg %lg\n", local.tmatStoreGlobalIdx.size(), kkrsz_ns, std::real(energy), std::imag(energy));
+    for (int idx = 0; idx < local.tmatStoreGlobalIdx.size(); idx++) {
+      for (int i = 0; i < kkrsz_ns; i++)
+        for (int j = 0; j < kkrsz_ns; j++) {
+          fprintf(of, "%4d %4d %4d %.8le %.8le\n",
+                  idx, i, j, std::real(local.tmatStore(i + j * kkrsz_ns, idx)),
+                  std::imag(local.tmatStore(i + j * kkrsz_ns, idx)));
         }
     }
 
@@ -119,19 +123,18 @@ void buildKKRMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &
 //    }
 //    fclose(of);
 
-    of=fopen("LIZ_pos.dat","w");
-    fprintf(of,"# LIZ file for buildkkrmat test:\n");
-    fprintf(of,"# line 4: LIZsize\n");
-    fprintf(of,"# following LIZsize line: i x_i y_i z_i idx_i lmax_i\n");
-    fprintf(of,"%d\n",atom.numLIZ);
-    for(int i=0; i<atom.numLIZ; i++)
-    {
-      fprintf(of,"%6d ",i);
-      fprintf(of,"%lg ",atom.LIZPos(0,i));
-      fprintf(of,"%lg ",atom.LIZPos(1,i));
-      fprintf(of,"%lg ",atom.LIZPos(2,i));
-      fprintf(of,"%4d ",atom.LIZStoreIdx[i]);
-      fprintf(of,"%2d\n",atom.LIZlmax[i]);
+    of = fopen("LIZ_pos.dat", "w");
+    fprintf(of, "# LIZ file for buildkkrmat test:\n");
+    fprintf(of, "# line 4: LIZsize\n");
+    fprintf(of, "# following LIZsize line: i x_i y_i z_i idx_i lmax_i\n");
+    fprintf(of, "%d\n", atom.numLIZ);
+    for (int i = 0; i < atom.numLIZ; i++) {
+      fprintf(of, "%6d ", i);
+      fprintf(of, "%lg ", atom.LIZPos(0, i));
+      fprintf(of, "%lg ", atom.LIZPos(1, i));
+      fprintf(of, "%lg ", atom.LIZPos(2, i));
+      fprintf(of, "%4d ", atom.LIZStoreIdx[i]);
+      fprintf(of, "%2d\n", atom.LIZlmax[i]);
     }
     fclose(of);
 
@@ -143,41 +146,64 @@ void buildKKRMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &
   for(int i=0; i<nrmat_ns*nrmat_ns; i++) Gij_full[i]=0.0;
 #endif
 
-  nrst=0;
-  for(int ir1=0; ir1<atom.numLIZ; ir1++)
-  {
-    int kkr1=(atom.LIZlmax[ir1]+1)*(atom.LIZlmax[ir1]+1);
-    int kkr1_ns=kkr1*lsms.n_spin_cant;
+  nrst = 0;
+  for (int ir1 = 0; ir1 < atom.numLIZ; ir1++) {
+    int kkr1 = (atom.LIZlmax[ir1] + 1) * (atom.LIZlmax[ir1] + 1);
+    int kkr1_ns = kkr1 * lsms.n_spin_cant;
 
-    ncst=0;
+    ncst = 0;
 // build local t_mat:
-    int im=0;
-    if(lsms.n_spin_pola == lsms.n_spin_cant) // non polarized or spin canted
+    int im = 0;
+    if (lsms.n_spin_pola == lsms.n_spin_cant) // non polarized or spin canted
     {
-      for(int js=0; js<lsms.n_spin_cant; js++)
-      {
-        int jsm = kkrsz*kkrsz_ns*js;
-        for(int j=0; j<kkr1; j++)
-        {
-          for(int is=0; is<lsms.n_spin_cant; is++)
-          {
-            int jm=jsm+kkrsz_ns*j+kkrsz*is;
-            int one=1;
-            BLAS::zcopy_(&kkr1,&local.tmatStore(iie*local.blkSizeTmatStore+jm,atom.LIZStoreIdx[ir1]),&one,&tmat_n[im],&one);
-            im+=kkr1;
+      for (int js = 0; js < lsms.n_spin_cant; js++) {
+        int jsm = kkrsz * kkrsz_ns * js;
+        for (int j = 0; j < kkr1; j++) {
+          for (int is = 0; is < lsms.n_spin_cant; is++) {
+            int jm = jsm + kkrsz_ns * j + kkrsz * is;
+            int one = 1;
+            BLAS::zcopy_(&kkr1, &local.tmatStore(iie * local.blkSizeTmatStore + jm, atom.LIZStoreIdx[ir1]), &one,
+                         &tmat_n[im], &one);
+            im += kkr1;
           }
         }
       }
     } else { // spin polarized colinear version for ispin
-      int jsm = kkrsz*kkrsz*ispin; // copy spin up or down?
-      for(int j=0; j<kkr1; j++)
-      {
-	int jm=jsm+kkrsz_ns*j;
-	int one=1;
-	BLAS::zcopy_(&kkr1,&local.tmatStore(iie*local.blkSizeTmatStore+jm,atom.LIZStoreIdx[ir1]),&one,&tmat_n[im],&one);
-	im+=kkr1;
+      int jsm = kkrsz * kkrsz * ispin; // copy spin up or down?
+      for (int j = 0; j < kkr1; j++) {
+        int jm = jsm + kkrsz_ns * j;
+        int one = 1;
+        BLAS::zcopy_(&kkr1, &local.tmatStore(iie * local.blkSizeTmatStore + jm, atom.LIZStoreIdx[ir1]), &one,
+                     &tmat_n[im], &one);
+        im += kkr1;
       }
     }
+
+    /*
+     * Tmat _n
+     */
+
+    {
+      std::ofstream file;
+
+      auto energy_point = std::to_string(ispin) + std::string("tmatn.dat");
+      file.open(energy_point.c_str());
+
+      int ncol = atom.kkrsz * atom.kkrsz * 4;
+
+      for (int j_col = 0; j_col < ncol; j_col++) {
+        auto value = tmat_n[j_col];
+        auto cvalue = std::imag(value);
+        auto rvalue = std::real(value);
+
+        file << std::setprecision(10) << std::scientific << cvalue << " ";
+        file << std::setprecision(10) << std::scientific << rvalue << std::endl;
+
+
+      }
+    }
+
+
 /*
     if(ir1==1)
     {
@@ -194,30 +220,28 @@ void buildKKRMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &
     }
 */
 //
-    for(int ir2=0; ir2<atom.numLIZ; ir2++)
-    {
-      int kkr2=(atom.LIZlmax[ir2]+1)*(atom.LIZlmax[ir2]+1);
-      int kkr2_ns=kkr2*lsms.n_spin_cant;
-      if(ir1!=ir2)
-      {
-        rij[0]=atom.LIZPos(0,ir1)-atom.LIZPos(0,ir2);
-        rij[1]=atom.LIZPos(1,ir1)-atom.LIZPos(1,ir2);
-        rij[2]=atom.LIZPos(2,ir1)-atom.LIZPos(2,ir2);
+    for (int ir2 = 0; ir2 < atom.numLIZ; ir2++) {
+      int kkr2 = (atom.LIZlmax[ir2] + 1) * (atom.LIZlmax[ir2] + 1);
+      int kkr2_ns = kkr2 * lsms.n_spin_cant;
+      if (ir1 != ir2) {
+        rij[0] = atom.LIZPos(0, ir1) - atom.LIZPos(0, ir2);
+        rij[1] = atom.LIZPos(1, ir1) - atom.LIZPos(1, ir2);
+        rij[2] = atom.LIZPos(2, ir1) - atom.LIZPos(2, ir2);
 
-        makegij_(&atom.LIZlmax[ir1],&kkr1,&atom.LIZlmax[ir2],&kkr2,
-                 &lsms.maxlmax,&kkrsz,&lsms.angularMomentumIndices.ndlj,&lsms.angularMomentumIndices.ndlm,
-                 &prel,&rij[0],sinmp,cosmp,
-                 &sphericalHarmonicsCoeficients.clm[0],plm,
-                 &gauntCoeficients.cgnt(0,0,0),&gauntCoeficients.lmax,
-                 &lsms.angularMomentumIndices.lofk[0],&lsms.angularMomentumIndices.mofk[0],
-                 &iFactors.ilp1[0],&iFactors.illp(0,0),
-                 hfn,dlm,gij,
-                 &pi4,&lsms.global.iprint,lsms.global.istop,32);
-        Complex psq=prel*prel;
-        int nrel_rel=0;
-        if(lsms.relativity==full) nrel_rel=1;
-        setgij_(gij,bgij,&kkr1,&kkr1_ns,&kkr2,&kkr2_ns,
-                &lsms.n_spin_cant,&nrel_rel,&psq,&energy);
+        makegij_(&atom.LIZlmax[ir1], &kkr1, &atom.LIZlmax[ir2], &kkr2,
+                 &lsms.maxlmax, &kkrsz, &lsms.angularMomentumIndices.ndlj, &lsms.angularMomentumIndices.ndlm,
+                 &prel, &rij[0], sinmp, cosmp,
+                 &sphericalHarmonicsCoeficients.clm[0], plm,
+                 &gauntCoeficients.cgnt(0, 0, 0), &gauntCoeficients.lmax,
+                 &lsms.angularMomentumIndices.lofk[0], &lsms.angularMomentumIndices.mofk[0],
+                 &iFactors.ilp1[0], &iFactors.illp(0, 0),
+                 hfn, dlm, gij,
+                 &pi4, &lsms.global.iprint, lsms.global.istop, 32);
+        Complex psq = prel * prel;
+        int nrel_rel = 0;
+        if (lsms.relativity == full) nrel_rel = 1;
+        setgij_(gij, bgij, &kkr1, &kkr1_ns, &kkr2, &kkr2_ns,
+                &lsms.n_spin_cant, &nrel_rel, &psq, &energy);
 
 //        if((ir1==1 && ir2==0) || (ir1==10 && ir2==0))
 //        {
@@ -231,13 +255,13 @@ void buildKKRMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &
           for(int jj=ncst; jj<ncst+kkr2_ns; jj++)
             Gij_full(ii,jj)=bgij[ii-nrst+(jj-ncst)*kkr2_ns];
 #endif
-        BLAS::zgemm_("n","n",&kkr1_ns,&kkr2_ns,&kkr1_ns,&cmone,
-                    tmat_n,&kkr1_ns,bgij,&kkr1_ns,&czero,
-                    &m(nrst,ncst),&nrmat_ns);
+        BLAS::zgemm_("n", "n", &kkr1_ns, &kkr2_ns, &kkr1_ns, &cmone,
+                     tmat_n, &kkr1_ns, bgij, &kkr1_ns, &czero,
+                     &m(nrst, ncst), &nrmat_ns);
       }
-      ncst+=kkr2_ns;
+      ncst += kkr2_ns;
     }
-    nrst+=kkr1_ns;
+    nrst += kkr1_ns;
   }
 
 #ifdef SYNTHETIC_MATRIX
@@ -298,22 +322,21 @@ void buildKKRMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &
   }
 */
 
-  delete [] gij;
-  delete [] sinmp;
-  delete [] cosmp;
-  delete [] plm;
-  delete [] hfn;
-  delete [] dlm;
-  delete [] bgij;
-  delete [] tmat_n;
+  delete[] gij;
+  delete[] sinmp;
+  delete[] cosmp;
+  delete[] plm;
+  delete[] hfn;
+  delete[] dlm;
+  delete[] bgij;
+  delete[] tmat_n;
 }
 
 // calculateTauMatrix replaces gettaucl from LSMS_1. The communication is performed in calculateAllTauMatrices
 // and the t matrices are in tmatStore, replacing vbig in gettaucl.
 void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int localAtomIndex,
                         int ispin, Complex energy, Complex prel,
-                        Complex *tau00_l,Matrix<Complex> &m,int iie)
-{
+                        Complex *tau00_l, Matrix<Complex> &m, int iie) {
 #if MST_LINEAR_SOLVER_DEFAULT == 0x015 && !defined(USE_IRSXGESV)
   printf("Error: USE_IRSXGESV needs to be defined to use IRSXgesv\n");
   exit(1);
@@ -321,16 +344,16 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
 #if MST_LINEAR_SOLVER_DEFAULT == 0x014 && !defined(USE_XGETRF)
   printf("Error: USE_XGETRF needs to be defined to use IRSXgesv\n");
   exit(1);
-#endif    
+#endif
   const unsigned int defaultLinearSolver = MST_LINEAR_SOLVER_DEFAULT;
   unsigned int linearSolver = lsms.global.linearSolver & MST_LINEAR_SOLVER_MASK; // only use 12 least significant bits
-  if(linearSolver == 0) linearSolver = defaultLinearSolver;
+  if (linearSolver == 0) linearSolver = defaultLinearSolver;
 
   unsigned int buildKKRMatrixKernel = lsms.global.linearSolver & MST_BUILD_KKR_MATRIX_MASK;
-  if(buildKKRMatrixKernel == 0) buildKKRMatrixKernel = MST_BUILD_KKR_MATRIX_DEFAULT;
-  
-  int nrmat_ns=lsms.n_spin_cant*atom.nrmat;
-  int kkrsz_ns=lsms.n_spin_cant*atom.kkrsz;
+  if (buildKKRMatrixKernel == 0) buildKKRMatrixKernel = MST_BUILD_KKR_MATRIX_DEFAULT;
+
+  int nrmat_ns = lsms.n_spin_cant * atom.nrmat;
+  int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz;
 
   Matrix<Complex> tau00(kkrsz_ns, kkrsz_ns);
   Complex *devM, *devT0;
@@ -338,399 +361,461 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
   // =======================================
   // build the KKR matrix
   // =======================================
-  m.resize(nrmat_ns,nrmat_ns);
+  m.resize(nrmat_ns, nrmat_ns);
 
-  double timeBuildKKRMatrix=MPI_Wtime();
+  double timeBuildKKRMatrix = MPI_Wtime();
 
 #ifdef USE_NVTX
   nvtxRangePushA("buildKKRMatrix");
-#endif  
-  switch(buildKKRMatrixKernel)
-  {
+#endif
+  switch (buildKKRMatrixKernel) {
     case MST_BUILD_KKR_MATRIX_F77:
+      std::cout << "-------------" << std::endl;
       buildKKRMatrix(lsms, local, atom, ispin, energy, prel, iie, m);
       break;
-  case MST_BUILD_KKR_MATRIX_CPP:
-    buildKKRMatrixCPU(lsms, local, atom, iie, energy, prel, m);
-    break;
+    case MST_BUILD_KKR_MATRIX_CPP:
+      buildKKRMatrixCPU(lsms, local, atom, iie, energy, prel, m);
+      break;
 #if defined(ACCELERATOR_CUDA_C)
-  case MST_BUILD_KKR_MATRIX_ACCELERATOR:
-/*
-  {
-// test 
-//  Matrix<Real> testLIZPos(3,atom.numLIZ);
-//  Matrix<Complex> bgij(nrmat_ns, nrmat_ns);
-  Complex testIlp1[2*lsms.maxlmax + 1];
-//  cudaMemcpy(&bgij[0], devBgij, nrmat_ns*nrmat_ns*sizeof(Complex), cudaMemcpyDeviceToHost);
-//  cudaMemcpy(&testLIZPos[0], devAtom.LIZPos, 3*atom.numLIZ*sizeof(Real), cudaMemcpyDeviceToHost);
-  cudaMemcpy(&testIlp1[0], DeviceConstants::ilp1, (2*lsms.maxlmax + 1)*sizeof(Complex), cudaMemcpyDeviceToHost);  
-  printf("calculateTauMatrix:\n");
-  for(int l=0; l<2*lsms.maxlmax; l++)
-  {
-    printf("l=%d : ilp1 [%g + %gi] | DeviceConstats::ilp1 [%g + %gi]\n",l,IFactors::ilp1[l].real(),IFactors::ilp1[l].imag(), testIlp1[l].real(), testIlp1[l].imag());
-  }
-  }
-*/
-    devM = deviceStorage->getDevM();
-    // printf("entering buildKKRMatrixCuda:\n");
-    buildKKRMatrixCuda(lsms, local, atom, *deviceStorage, deviceAtoms[localAtomIndex], ispin, iie, energy, prel,
-                       devM);
-    break;
+      case MST_BUILD_KKR_MATRIX_ACCELERATOR:
+    /*
+      {
+    // test
+    //  Matrix<Real> testLIZPos(3,atom.numLIZ);
+    //  Matrix<Complex> bgij(nrmat_ns, nrmat_ns);
+      Complex testIlp1[2*lsms.maxlmax + 1];
+    //  cudaMemcpy(&bgij[0], devBgij, nrmat_ns*nrmat_ns*sizeof(Complex), cudaMemcpyDeviceToHost);
+    //  cudaMemcpy(&testLIZPos[0], devAtom.LIZPos, 3*atom.numLIZ*sizeof(Real), cudaMemcpyDeviceToHost);
+      cudaMemcpy(&testIlp1[0], DeviceConstants::ilp1, (2*lsms.maxlmax + 1)*sizeof(Complex), cudaMemcpyDeviceToHost);
+      printf("calculateTauMatrix:\n");
+      for(int l=0; l<2*lsms.maxlmax; l++)
+      {
+        printf("l=%d : ilp1 [%g + %gi] | DeviceConstats::ilp1 [%g + %gi]\n",l,IFactors::ilp1[l].real(),IFactors::ilp1[l].imag(), testIlp1[l].real(), testIlp1[l].imag());
+      }
+      }
+    */
+        devM = deviceStorage->getDevM();
+        // printf("entering buildKKRMatrixCuda:\n");
+        buildKKRMatrixCuda(lsms, local, atom, *deviceStorage, deviceAtoms[localAtomIndex], ispin, iie, energy, prel,
+                           devM);
+        break;
 #endif
 #if defined(ACCELERATOR_HIP)
-  case MST_BUILD_KKR_MATRIX_ACCELERATOR:
-/*
-  {
-// test 
-//  Matrix<Real> testLIZPos(3,atom.numLIZ);
-//  Matrix<Complex> bgij(nrmat_ns, nrmat_ns);
-  Complex testIlp1[2*lsms.maxlmax + 1];
-//  deviceMemcpy(&bgij[0], devBgij, nrmat_ns*nrmat_ns*sizeof(Complex), deviceMemcpyDeviceToHost);
-//  deviceMemcpy(&testLIZPos[0], devAtom.LIZPos, 3*atom.numLIZ*sizeof(Real), deviceMemcpyDeviceToHost);
-  deviceMemcpy(&testIlp1[0], DeviceConstants::ilp1, (2*lsms.maxlmax + 1)*sizeof(Complex), deviceMemcpyDeviceToHost);  
-  printf("calculateTauMatrix:\n");
-  for(int l=0; l<2*lsms.maxlmax; l++)
-  {
-    printf("l=%d : ilp1 [%g + %gi] | DeviceConstats::ilp1 [%g + %gi]\n",l,IFactors::ilp1[l].real(),IFactors::ilp1[l].imag(), testIlp1[l].real(), testIlp1[l].imag());
-  }
-  }
-*/
-    devM = deviceStorage->getDevM();
-    buildKKRMatrixHip(lsms, local, atom, *deviceStorage, deviceAtoms[localAtomIndex], ispin, iie, energy, prel,
-                       devM);
-    break;
+      case MST_BUILD_KKR_MATRIX_ACCELERATOR:
+    /*
+      {
+    // test
+    //  Matrix<Real> testLIZPos(3,atom.numLIZ);
+    //  Matrix<Complex> bgij(nrmat_ns, nrmat_ns);
+      Complex testIlp1[2*lsms.maxlmax + 1];
+    //  deviceMemcpy(&bgij[0], devBgij, nrmat_ns*nrmat_ns*sizeof(Complex), deviceMemcpyDeviceToHost);
+    //  deviceMemcpy(&testLIZPos[0], devAtom.LIZPos, 3*atom.numLIZ*sizeof(Real), deviceMemcpyDeviceToHost);
+      deviceMemcpy(&testIlp1[0], DeviceConstants::ilp1, (2*lsms.maxlmax + 1)*sizeof(Complex), deviceMemcpyDeviceToHost);
+      printf("calculateTauMatrix:\n");
+      for(int l=0; l<2*lsms.maxlmax; l++)
+      {
+        printf("l=%d : ilp1 [%g + %gi] | DeviceConstats::ilp1 [%g + %gi]\n",l,IFactors::ilp1[l].real(),IFactors::ilp1[l].imag(), testIlp1[l].real(), testIlp1[l].imag());
+      }
+      }
+    */
+        devM = deviceStorage->getDevM();
+        buildKKRMatrixHip(lsms, local, atom, *deviceStorage, deviceAtoms[localAtomIndex], ispin, iie, energy, prel,
+                           devM);
+        break;
 #endif
-  default:
-    printf("UNKNOWN KKR MARIX BUILD KERNEL (%x)!!!\n",buildKKRMatrixKernel);
-    exit(1);
+    default:
+      printf("UNKNOWN KKR MARIX BUILD KERNEL (%x)!!!\n", buildKKRMatrixKernel);
+      exit(1);
   }
 
   // -----------------------------------------------------------------------
   // make sure that the kkr matrix m is in the right place in memory
   // -----------------------------------------------------------------------
-  switch(buildKKRMatrixKernel)
-  {
-  case MST_BUILD_KKR_MATRIX_F77:
-  case MST_BUILD_KKR_MATRIX_CPP:
-  // built on CPU:
-    switch(linearSolver)
-    {
-    case MST_LINEAR_SOLVER_ZGESV:
-    case MST_LINEAR_SOLVER_ZGETRF:
-    case MST_LINEAR_SOLVER_ZCGESV:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
-      break;
+  switch (buildKKRMatrixKernel) {
+    case MST_BUILD_KKR_MATRIX_F77:
+    case MST_BUILD_KKR_MATRIX_CPP:
+      // built on CPU:
+      switch (linearSolver) {
+        case MST_LINEAR_SOLVER_ZGESV:
+        case MST_LINEAR_SOLVER_ZGETRF:
+        case MST_LINEAR_SOLVER_ZCGESV:
+        case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
+        case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
+          break;
 #if defined(ACCELERATOR_CUDA_C)
-    case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
-    case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
-    case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:            
-      devM = deviceStorage->getDevM();
-      transferMatrixToGPUCuda(devM, m);
-      devT0 = deviceStorage->getDevT0();
-      transferT0MatrixToGPUCuda(devT0, lsms, local, atom, iie);
-      break;
+          case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
+          case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
+          case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
+          case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
+          case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
+          case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
+            devM = deviceStorage->getDevM();
+            transferMatrixToGPUCuda(devM, m);
+            devT0 = deviceStorage->getDevT0();
+            transferT0MatrixToGPUCuda(devT0, lsms, local, atom, iie);
+            break;
 #endif
 #ifdef ACCELERATOR_HIP
-    case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
-      devM = deviceStorage->getDevM();
-      transferMatrixToGPUHip(devM, m);
-      devT0 = deviceStorage->getDevT0();
-      transferT0MatrixToGPUHip(devT0, lsms, local, atom, iie);
-      break;
+          case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
+            devM = deviceStorage->getDevM();
+            transferMatrixToGPUHip(devM, m);
+            devT0 = deviceStorage->getDevT0();
+            transferT0MatrixToGPUHip(devT0, lsms, local, atom, iie);
+            break;
 #endif
-    default: break; // do nothing. We are using the CPU matrix
-    } break;
+        default:
+          break; // do nothing. We are using the CPU matrix
+      }
+      break;
 #if defined(ACCELERATOR_CUDA_C)
-  case MST_BUILD_KKR_MATRIX_ACCELERATOR:
-    // built on GPU:
-    switch(linearSolver)
-    {
-    case MST_LINEAR_SOLVER_ZGESV:
-    case MST_LINEAR_SOLVER_ZGETRF:
-    case MST_LINEAR_SOLVER_ZCGESV:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
-      transferMatrixFromGPUCuda(m, (cuDoubleComplex *)devM);
-      break;
-    case MST_LINEAR_SOLVER_BLOCK_INVERSE_F77:
-      transferMatrixFromGPUCuda(m, (cuDoubleComplex *)devM);
-      break;            
-    case MST_LINEAR_SOLVER_BLOCK_INVERSE_CPP:
-      transferMatrixFromGPUCuda(m, (cuDoubleComplex *)devM);
-      break;      
-    case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
-    case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
-    case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:            
-      devT0 = deviceStorage->getDevT0();
-      transferT0MatrixToGPUCuda(devT0, lsms, local, atom, iie);
-      break;
+      case MST_BUILD_KKR_MATRIX_ACCELERATOR:
+        // built on GPU:
+        switch(linearSolver)
+        {
+        case MST_LINEAR_SOLVER_ZGESV:
+        case MST_LINEAR_SOLVER_ZGETRF:
+        case MST_LINEAR_SOLVER_ZCGESV:
+        case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
+        case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
+          transferMatrixFromGPUCuda(m, (cuDoubleComplex *)devM);
+          break;
+        case MST_LINEAR_SOLVER_BLOCK_INVERSE_F77:
+          transferMatrixFromGPUCuda(m, (cuDoubleComplex *)devM);
+          break;
+        case MST_LINEAR_SOLVER_BLOCK_INVERSE_CPP:
+          transferMatrixFromGPUCuda(m, (cuDoubleComplex *)devM);
+          break;
+        case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
+        case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
+        case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
+        case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
+        case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
+        case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
+          devT0 = deviceStorage->getDevT0();
+          transferT0MatrixToGPUCuda(devT0, lsms, local, atom, iie);
+          break;
 #ifdef ACCELERATOR_HIP
-    case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
-      printf("MIXING HIP AND CUDA KERNELS (%x)!!!\n",buildKKRMatrixKernel);
-    exit(1);
+        case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
+          printf("MIXING HIP AND CUDA KERNELS (%x)!!!\n",buildKKRMatrixKernel);
+        exit(1);
 #endif
-    default: break; // do nothing. We are using the GPU matrix
-    } break;
+        default: break; // do nothing. We are using the GPU matrix
+        } break;
 #endif
 #if defined(ACCELERATOR_HIP)
-  case MST_BUILD_KKR_MATRIX_ACCELERATOR:
-    // built on GPU:
-    switch(linearSolver)
-    {
-    case MST_LINEAR_SOLVER_ZGESV:
-    case MST_LINEAR_SOLVER_ZGETRF:
-    case MST_LINEAR_SOLVER_ZCGESV:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
-      transferMatrixFromGPUHip(m, (deviceDoubleComplex *)devM);
-      break;
-    case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
-      devT0 = deviceStorage->getDevT0();
-      transferT0MatrixToGPUHip(devT0, lsms, local, atom, iie);
-      break;
+      case MST_BUILD_KKR_MATRIX_ACCELERATOR:
+        // built on GPU:
+        switch(linearSolver)
+        {
+        case MST_LINEAR_SOLVER_ZGESV:
+        case MST_LINEAR_SOLVER_ZGETRF:
+        case MST_LINEAR_SOLVER_ZCGESV:
+        case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
+        case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
+          transferMatrixFromGPUHip(m, (deviceDoubleComplex *)devM);
+          break;
+        case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
+          devT0 = deviceStorage->getDevT0();
+          transferT0MatrixToGPUHip(devT0, lsms, local, atom, iie);
+          break;
 #ifdef ACCELERATOR_CUDA_C
-    case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
-    case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
-    case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
-    case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:            
-      printf("MIXING HIP AND CUDA KERNELS (%x)!!!\n",buildKKRMatrixKernel);
-      exit(1);
-      break; 
+        case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
+        case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
+        case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
+        case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
+        case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
+        case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
+          printf("MIXING HIP AND CUDA KERNELS (%x)!!!\n",buildKKRMatrixKernel);
+          exit(1);
+          break;
+#endif
+        default:
+          printf("UNKNOWN SOLVER FOR MST_BUILD_KKR_MATRIX_ACCELERATOR (%x)!!!\n", linearSolver);
+          exit(1);
+          break; // do nothing. We are using the GPU matrix
+        } break;
 #endif
     default:
-      printf("UNKNOWN SOLVER FOR MST_BUILD_KKR_MATRIX_ACCELERATOR (%x)!!!\n", linearSolver);
+      printf("UNKNOWN KKR MARIX BUILD KERNEL (%x)!!!\n", buildKKRMatrixKernel);
       exit(1);
-      break; // do nothing. We are using the GPU matrix
-    } break;
-#endif
-  default:
-    printf("UNKNOWN KKR MARIX BUILD KERNEL (%x)!!!\n",buildKKRMatrixKernel);
-    exit(1);
   }
 #ifdef USE_NVTX
   nvtxRangePop();
-#endif   
+#endif
 
-  timeBuildKKRMatrix=MPI_Wtime()-timeBuildKKRMatrix;
-  if(lsms.global.iprint>=0) printf("  timeBuildKKRMatrix=%lf\n",timeBuildKKRMatrix);
-#ifdef USE_NVTX  
+  timeBuildKKRMatrix = MPI_Wtime() - timeBuildKKRMatrix;
+  if (lsms.global.iprint >= 0) printf("  timeBuildKKRMatrix=%lf\n", timeBuildKKRMatrix);
+#ifdef USE_NVTX
   nvtxRangePushA("linearSolver");
-#endif  
+#endif
 // use the new or old solvers?
-  if(linearSolver < MST_LINEAR_SOLVER_BLOCK_INVERSE_F77) // new solvers. Old solvers have numbers > 0x8000. different postpocessing required. 0 is the default solver, for the time being use the old LSMS_1.9 one
+
+/*
+ * tmat store
+ */
+
   {
-    switch(linearSolver)
-    {
-    case MST_LINEAR_SOLVER_ZGESV:
-      solveTau00zgesv(lsms, local, atom, iie, m, tau00); break;
-    case MST_LINEAR_SOLVER_ZGETRF:
-      solveTau00zgetrf(lsms, local, atom, iie, m, tau00); break;
+    std::ofstream file;
+
+    auto energy_point = std::to_string(iie) + "-" + std::to_string(ispin) + std::string("kkr.dat");
+    file.open(energy_point.c_str());
+
+    int ncol = nrmat_ns;
+
+    for (int i_row = 0; i_row < ncol; i_row++) {
+      for (int j_col = 0; j_col < ncol; j_col++) {
+
+        auto value = m(i_row, j_col);
+        auto cvalue = std::imag(value);
+        auto rvalue = std::real(value);
+
+        file << std::setprecision(10) << std::scientific << cvalue << " ";
+        file << std::setprecision(10) << std::scientific << rvalue << std::endl;
+
+      }
+    }
+  }
+
+
+  if (linearSolver <
+      MST_LINEAR_SOLVER_BLOCK_INVERSE_F77) // new solvers. Old solvers have numbers > 0x8000. different postpocessing required. 0 is the default solver, for the time being use the old LSMS_1.9 one
+  {
+    std::cout << "AAAAAAAAAAAA" << std::endl;
+
+    switch (linearSolver) {
+      case MST_LINEAR_SOLVER_ZGESV:
+        solveTau00zgesv(lsms, local, atom, iie, m, tau00);
+        break;
+      case MST_LINEAR_SOLVER_ZGETRF:
+        solveTau00zgetrf(lsms, local, atom, iie, m, tau00);
+        break;
 #ifndef ARCH_IBM
-    case MST_LINEAR_SOLVER_ZCGESV:
-      solveTau00zcgesv(lsms, local, atom, iie, m, tau00); break;
+      case MST_LINEAR_SOLVER_ZCGESV:
+        solveTau00zcgesv(lsms, local, atom, iie, m, tau00);
+        break;
 #endif
-    case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
-      solveTau00zblocklu_f77(lsms, local, atom, iie, m, tau00); break;
-    case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
-      solveTau00zblocklu_cpp(lsms, local, atom, iie, m, tau00); break;
+      case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
+        solveTau00zblocklu_f77(lsms, local, atom, iie, m, tau00);
+        break;
+      case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
+        solveTau00zblocklu_cpp(lsms, local, atom, iie, m, tau00);
+        break;
 #ifdef ACCELERATOR_CUDA_C
-    case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
-      solveTau00zgetrf_cublas(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
-    case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
-      printf("MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS (%d) not implemented!!!\n",linearSolver);
-      exit(1); break;
+        case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
+          solveTau00zgetrf_cublas(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+        case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
+          printf("MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS (%d) not implemented!!!\n",linearSolver);
+          exit(1); break;
 #ifndef ARCH_IBM
-    case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
-      solveTau00zzgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+        case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
+          solveTau00zzgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
 #endif
-    case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
-      solveTau00zgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
-#ifdef USE_XGETRF      
-    case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
-      solveTau00Xgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
-#endif      
-#ifdef USE_IRSXGESV      
-    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
-      solveTau00IRSXgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
-#endif      
+        case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
+          solveTau00zgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+#ifdef USE_XGETRF
+        case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
+          solveTau00Xgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+#endif
+#ifdef USE_IRSXGESV
+        case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
+          solveTau00IRSXgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+#endif
 #endif
 #ifdef ACCELERATOR_HIP
-    case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
-      solveTau00zgetrf_rocsolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+        case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
+          solveTau00zgetrf_rocsolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
 #endif
-    default:
-      printf("UNKNOWN LINEAR SOLVER (%d)!!!\n",linearSolver);
-      exit(1);
+      default:
+        printf("UNKNOWN LINEAR SOLVER (%d)!!!\n", linearSolver);
+        exit(1);
     }
-    
-    double timePostproc=MPI_Wtime();
-    if(lsms.relativity!=full)
-    {
+
+
+    double timePostproc = MPI_Wtime();
+    if (lsms.relativity != full) {
       calculateTau00MinusT(lsms, local, atom, iie, tau00, tau00);
       rotateTau00ToLocalFrameNonRelativistic(lsms, atom, tau00, tau00_l);
     } else {
       rotateTau00ToLocalFrameRelativistic(lsms, atom, tau00, tau00_l);
     }
-    timePostproc=MPI_Wtime()-timePostproc;
-    if(lsms.global.iprint>=1) printf("  timePostproc=%lf\n",timePostproc);
-    
+    timePostproc = MPI_Wtime() - timePostproc;
+    if (lsms.global.iprint >= 1) printf("  timePostproc=%lf\n", timePostproc);
+
   } else { // old solvers
-  // if(!lsms.global.checkIstop("buildKKRMatrix"))
-  {
-    // invert matrix to get tau00
-    // set up the block sizes for the block inversion:
 
-    int nblk;
+    std::cout << "BBBBBBBBBBBBBBBB" << std::endl;
+
+
+    // if(!lsms.global.checkIstop("buildKKRMatrix"))
+    {
+      // invert matrix to get tau00
+      // set up the block sizes for the block inversion:
+
+      int nblk;
 #if defined(ACCELERATOR_LIBSCI)
-    nblk=2;
+      nblk=2;
 #elif defined(ACCELERATOR_CUBLAS)
-    // nblk=12;
-    nblk=4;
+      // nblk=12;
+      nblk=4;
 #elif defined(ACCELERATOR_CUDA_C)
-    int max_blk_sz=175;
-    //assign blocks in a load balanced way
-    if((nrmat_ns-kkrsz_ns)%max_blk_sz==0)
-      nblk=(nrmat_ns-kkrsz_ns)/max_blk_sz+1;
-    else
-    {
-      nblk=(nrmat_ns-kkrsz_ns)/(max_blk_sz-1)+1;
-      if((nrmat_ns-kkrsz_ns)%(max_blk_sz-1) > max_blk_sz/2)
-        nblk++;
-    }
-#else
-    nblk=4;
-#endif
-    if(kkrsz_ns==nrmat_ns)
-        nblk=1;
-    else
-    {
-#if !defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_CUBLAS)
-      if(lsms.zblockLUSize>0)
-      {
+      int max_blk_sz=175;
       //assign blocks in a load balanced way
-        if((nrmat_ns-kkrsz_ns)%lsms.zblockLUSize==0)
-          nblk=(nrmat_ns-kkrsz_ns)/lsms.zblockLUSize+1;
-        else
-        {
-          nblk=(nrmat_ns-kkrsz_ns)/(lsms.zblockLUSize-1)+1;
-          if((nrmat_ns-kkrsz_ns)%(lsms.zblockLUSize-1) > lsms.zblockLUSize/2)
-            nblk++;
-        }
+      if((nrmat_ns-kkrsz_ns)%max_blk_sz==0)
+        nblk=(nrmat_ns-kkrsz_ns)/max_blk_sz+1;
+      else
+      {
+        nblk=(nrmat_ns-kkrsz_ns)/(max_blk_sz-1)+1;
+        if((nrmat_ns-kkrsz_ns)%(max_blk_sz-1) > max_blk_sz/2)
+          nblk++;
       }
+#else
+      nblk = 4;
 #endif
-    }
-    int blk_sz[1000];
-    assert(nblk<=1000);
+      if (kkrsz_ns == nrmat_ns)
+        nblk = 1;
+      else {
+#if !defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_CUBLAS)
+        if (lsms.zblockLUSize > 0) {
+          //assign blocks in a load balanced way
+          if ((nrmat_ns - kkrsz_ns) % lsms.zblockLUSize == 0)
+            nblk = (nrmat_ns - kkrsz_ns) / lsms.zblockLUSize + 1;
+          else {
+            nblk = (nrmat_ns - kkrsz_ns) / (lsms.zblockLUSize - 1) + 1;
+            if ((nrmat_ns - kkrsz_ns) % (lsms.zblockLUSize - 1) > lsms.zblockLUSize / 2)
+              nblk++;
+          }
+        }
+#endif
+      }
+      int blk_sz[1000];
+      assert(nblk <= 1000);
 
-    blk_sz[0]=kkrsz_ns;
-    if(nblk==1)
-      blk_sz[0]=nrmat_ns;
-    else if(nblk==2)
-      blk_sz[1]=nrmat_ns-blk_sz[0];
-    else if(nblk>2)
+      blk_sz[0] = kkrsz_ns;
+      if (nblk == 1)
+        blk_sz[0] = nrmat_ns;
+      else if (nblk == 2)
+        blk_sz[1] = nrmat_ns - blk_sz[0];
+      else if (nblk > 2)
 //  {
 //    int min_sz=(nrmat_ns-blk_sz[0])/(nblk-1);
 //    for(int i=1; i<nblk; i++) blk_sz[i]=min_sz;
 //    blk_sz[nblk-1]=nrmat_ns-blk_sz[0]-(nblk-2)*min_sz;
 //  }
-    {
-      int min_sz=(nrmat_ns-blk_sz[0])/(nblk-1);
-      int rem=(nrmat_ns-blk_sz[0])%(nblk-1);
-      int i=1;
-      for(;i<=rem;i++)
-        blk_sz[i]=min_sz+1;
-      for(;i<nblk;i++)
-        blk_sz[i]=min_sz;
-    }
-    if(lsms.global.iprint>=1)
-    {
-      printf("nrmat_ns=%d\nnblk=%d\n",nrmat_ns,nblk);
-      for(int i=0; i<nblk; i++) printf("  blk_sz[%d]=%d\n",i,blk_sz[i]);
-    }
-    // block inversion:
-    // vecs only needed for alg>2!
-    // Complex vecs[nrmat_ns*(kkrsz_ns*6+6)];
-    Complex *vecs;
-    Complex tmp_vecs; vecs=&tmp_vecs;
-    int *ipvt = new int[nrmat_ns];
-    Matrix<Complex> delta(kkrsz_ns, kkrsz_ns);
-    // Complex *delta = new Complex[kkrsz_ns*kkrsz_ns];
-    int *iwork = new int[kkrsz_ns*atom.numLIZ];
-    Real *rwork = new Real[kkrsz_ns*atom.numLIZ];
-    Complex *work1 = new Complex[kkrsz_ns*atom.numLIZ];
-    int alg=2;
-    if(alg>2) vecs=(Complex *)malloc((nrmat_ns*(kkrsz_ns*6+6))*sizeof(Complex));
-    int *idcol = new int[blk_sz[0]]; idcol[0]=0;
-    {
-      if(linearSolver == MST_LINEAR_SOLVER_BLOCK_INVERSE_F77)
-        block_inv_(&m(0,0),vecs,&nrmat_ns,&nrmat_ns,&nrmat_ns,ipvt,
-          blk_sz,&nblk,&delta(0,0),
-          iwork,rwork,work1,&alg,idcol,&lsms.global.iprint);
-      else if(linearSolver == MST_LINEAR_SOLVER_BLOCK_INVERSE_CPP)
-        block_inverse(m, blk_sz, nblk, delta, ipvt, idcol);
-      else {
-        printf("Unknown linear solver (%d)!!\n", linearSolver);
-        exit(2);
+      {
+        int min_sz = (nrmat_ns - blk_sz[0]) / (nblk - 1);
+        int rem = (nrmat_ns - blk_sz[0]) % (nblk - 1);
+        int i = 1;
+        for (; i <= rem; i++)
+          blk_sz[i] = min_sz + 1;
+        for (; i < nblk; i++)
+          blk_sz[i] = min_sz;
       }
+      if (lsms.global.iprint >= 1) {
+        printf("nrmat_ns=%d\nnblk=%d\n", nrmat_ns, nblk);
+        for (int i = 0; i < nblk; i++) printf("  blk_sz[%d]=%d\n", i, blk_sz[i]);
+      }
+      // block inversion:
+      // vecs only needed for alg>2!
+      // Complex vecs[nrmat_ns*(kkrsz_ns*6+6)];
+      Complex *vecs;
+      Complex tmp_vecs;
+      vecs = &tmp_vecs;
+      int *ipvt = new int[nrmat_ns];
+      Matrix<Complex> delta(kkrsz_ns, kkrsz_ns);
+      // Complex *delta = new Complex[kkrsz_ns*kkrsz_ns];
+      int *iwork = new int[kkrsz_ns * atom.numLIZ];
+      Real *rwork = new Real[kkrsz_ns * atom.numLIZ];
+      Complex *work1 = new Complex[kkrsz_ns * atom.numLIZ];
+      int alg = 2;
+      if (alg > 2) vecs = (Complex *) malloc((nrmat_ns * (kkrsz_ns * 6 + 6)) * sizeof(Complex));
+      int *idcol = new int[blk_sz[0]];
+      idcol[0] = 0;
+      {
+        if (linearSolver == MST_LINEAR_SOLVER_BLOCK_INVERSE_F77)
+          block_inv_(&m(0, 0), vecs, &nrmat_ns, &nrmat_ns, &nrmat_ns, ipvt,
+                     blk_sz, &nblk, &delta(0, 0),
+                     iwork, rwork, work1, &alg, idcol, &lsms.global.iprint);
+        else if (linearSolver == MST_LINEAR_SOLVER_BLOCK_INVERSE_CPP)
+          block_inverse(m, blk_sz, nblk, delta, ipvt, idcol);
+        else {
+          printf("Unknown linear solver (%d)!!\n", linearSolver);
+          exit(2);
+        }
+      }
+
+      if (alg > 2) free(vecs);
+
+      double timePostproc = MPI_Wtime();
+      Matrix<Complex> tau00(kkrsz_ns, kkrsz_ns);
+      if (lsms.relativity != full)
+        tau_inv_postproc_nrel_(&kkrsz_ns, &lsms.n_spin_cant,
+                               &m(0, 0), &delta(0, 0),
+                               &local.tmatStore(iie * local.blkSizeTmatStore, atom.LIZStoreIdx[0]), ipvt, &tau00(0, 0),
+                               atom.ubr, atom.ubrd,
+                               tau00_l);
+      else
+        tau_inv_postproc_rel_(&kkrsz_ns, &m(0, 0), &delta(0, 0),
+                              &local.tmatStore(iie * local.blkSizeTmatStore, atom.LIZStoreIdx[0]), ipvt, &tau00(0, 0),
+                              &atom.dmat(0, 0), &atom.dmatp(0, 0), tau00_l);
+
+
+      {
+        std::ofstream file;
+
+        auto energy_point = std::to_string(iie) + "-" + std::to_string(ispin) + std::string("tau00.dat");
+        file.open(energy_point.c_str());
+
+        int ncol = kkrsz_ns;
+
+        std::cout << "....." << std::endl;
+
+        for (int i_row = 0; i_row < ncol; i_row++) {
+          for (int j_col = 0; j_col < ncol; j_col++) {
+
+            auto value = tau00(i_row, j_col);
+            auto cvalue = std::imag(value);
+            auto rvalue = std::real(value);
+
+            file << std::setprecision(10) << std::scientific << cvalue << " ";
+            file << std::setprecision(10) << std::scientific << rvalue << std::endl;
+
+          }
+        }
+      }
+
+      timePostproc = MPI_Wtime() - timePostproc;
+      if (lsms.global.iprint >= 1) printf("  timePostproc=%lf\n", timePostproc);
+
+      delete[] ipvt;
+      // delete [] delta;
+      delete[] iwork;
+      delete[] rwork;
+      delete[] work1;
+      delete[] idcol;
     }
-
-    if(alg>2) free(vecs);
-
-    double timePostproc=MPI_Wtime();
-    Matrix<Complex> tau00(kkrsz_ns,kkrsz_ns);
-    if(lsms.relativity!=full)
-      tau_inv_postproc_nrel_(&kkrsz_ns,&lsms.n_spin_cant,
-                             &m(0,0),&delta(0,0),&local.tmatStore(iie*local.blkSizeTmatStore,atom.LIZStoreIdx[0]),ipvt,&tau00(0,0),
-                             atom.ubr,atom.ubrd,
-                             tau00_l);
-    else
-      tau_inv_postproc_rel_(&kkrsz_ns,&m(0,0),&delta(0,0),&local.tmatStore(iie*local.blkSizeTmatStore,atom.LIZStoreIdx[0]),ipvt,&tau00(0,0),
-                            &atom.dmat(0,0), &atom.dmatp(0,0), tau00_l);
-    
-    timePostproc=MPI_Wtime()-timePostproc;
-    if(lsms.global.iprint>=1) printf("  timePostproc=%lf\n",timePostproc);
-
-    delete [] ipvt;
-    // delete [] delta;
-    delete [] iwork;
-    delete [] rwork;
-    delete [] work1;
-    delete [] idcol;
-  }
   } // end of old solvers
 #ifdef USE_NVTX
   nvtxRangePop();
-#endif  
+#endif
 }
 
 
 // calculateAllTauMatrices replaces gettau and the communication part of gettaucl in LSMS_1
-void calculateAllTauMatrices(LSMSCommunication &comm,LSMSSystemParameters &lsms, LocalTypeInfo &local,
+void calculateAllTauMatrices(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeInfo &local,
                              std::vector<Matrix<Real> > &vr, Complex energy,
                              int iie,
-                             // std::vector<NonRelativisticSingleScattererSolution> &solution,
-                             Matrix<Complex> &tau00_l)
-{
-  Complex prel=std::sqrt(energy*(1.0+energy*c2inv));
-  Complex pnrel=std::sqrt(energy);
+    // std::vector<NonRelativisticSingleScattererSolution> &solution,
+                             Matrix<Complex> &tau00_l) {
+  Complex prel = std::sqrt(energy * (1.0 + energy * c2inv));
+  Complex pnrel = std::sqrt(energy);
 
-  int max_nrmat_ns=0;
-  int max_kkrsz=0;
-  for(int i=0; i<local.num_local; i++)
-  {
-    if(max_nrmat_ns<lsms.n_spin_cant*local.atom[i].nrmat)
-      max_nrmat_ns=lsms.n_spin_cant*local.atom[i].nrmat;
-    if(max_kkrsz<local.atom[i].kkrsz)
-      max_kkrsz=local.atom[i].kkrsz;
+  int max_nrmat_ns = 0;
+  int max_kkrsz = 0;
+  for (int i = 0; i < local.num_local; i++) {
+    if (max_nrmat_ns < lsms.n_spin_cant * local.atom[i].nrmat)
+      max_nrmat_ns = lsms.n_spin_cant * local.atom[i].nrmat;
+    if (max_kkrsz < local.atom[i].kkrsz)
+      max_kkrsz = local.atom[i].kkrsz;
   }
 
 /*
@@ -760,40 +845,39 @@ void calculateAllTauMatrices(LSMSCommunication &comm,LSMSSystemParameters &lsms,
 #endif
 */
 
-  Complex *m_dat=NULL;
+  Complex *m_dat = NULL;
 #if defined(ACCELERATOR_LIBSCI) || defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
   m_dat=get_host_m_(max_nrmat_ns);
 //  printf("m_dat = %p\n",m_dat);
 #else
-  m_dat=NULL;
+  m_dat = NULL;
 #endif
-  double timeCalcTauMatTotal=MPI_Wtime();
+  double timeCalcTauMatTotal = MPI_Wtime();
 #if defined(ACCELERATOR_LIBSCI) || defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
 #pragma omp parallel for default(none) \
             shared(lsms,local,energy,prel,tau00_l,max_nrmat_ns,m_dat,deviceStorage) \
             firstprivate(iie) num_threads(lsms.global.GPUThreads)
 #else
-#pragma omp parallel for default(none) shared(lsms,local,energy,prel,tau00_l,max_nrmat_ns,m_dat) \
+#pragma omp parallel for default(none) shared(lsms, local, energy, prel, tau00_l, max_nrmat_ns, m_dat) \
             firstprivate(iie)
 #endif
-  for(int i=0; i<local.num_local; i++)
-  {
+  for (int i = 0; i < local.num_local; i++) {
     // printf("Num threads: %d\n",omp_get_num_threads());
     // printf("i: %d, threadId :%d\n",i,omp_get_thread_num());
 #if defined(ACCELERATOR_LIBSCI) || defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
     Matrix<Complex> m(max_nrmat_ns,max_nrmat_ns,m_dat+max_nrmat_ns*max_nrmat_ns*omp_get_thread_num());
 #else
-    Matrix<Complex> m(max_nrmat_ns,max_nrmat_ns);
+    Matrix<Complex> m(max_nrmat_ns, max_nrmat_ns);
 #endif
-    double timeCalcTauMat=MPI_Wtime();
-    calculateTauMatrix(lsms,local,local.atom[i], i, 0, energy,prel,&tau00_l(0,i),m,iie);
-    if(lsms.n_spin_pola != lsms.n_spin_cant) // spin polarized second spin
-      calculateTauMatrix(lsms,local,local.atom[i], i, 1, energy,prel,&tau00_l(0,i+local.num_local),m,iie);
-    timeCalcTauMat=MPI_Wtime()-timeCalcTauMat;
-    if(lsms.global.iprint>=1) printf("calculateTauMatrix: %lf sec\n",timeCalcTauMat);
+    double timeCalcTauMat = MPI_Wtime();
+    calculateTauMatrix(lsms, local, local.atom[i], i, 0, energy, prel, &tau00_l(0, i), m, iie);
+    if (lsms.n_spin_pola != lsms.n_spin_cant) // spin polarized second spin
+      calculateTauMatrix(lsms, local, local.atom[i], i, 1, energy, prel, &tau00_l(0, i + local.num_local), m, iie);
+    timeCalcTauMat = MPI_Wtime() - timeCalcTauMat;
+    if (lsms.global.iprint >= 1) printf("calculateTauMatrix: %lf sec\n", timeCalcTauMat);
   }
-  timeCalcTauMatTotal=MPI_Wtime()-timeCalcTauMatTotal;
-  if(lsms.global.iprint>=1) printf("calculateTauMatrix total time: %lf sec\n",timeCalcTauMatTotal);
+  timeCalcTauMatTotal = MPI_Wtime() - timeCalcTauMatTotal;
+  if (lsms.global.iprint >= 1) printf("calculateTauMatrix total time: %lf sec\n", timeCalcTauMatTotal);
 
 /*
   ... various post processing
@@ -812,6 +896,6 @@ void calculateAllTauMatrices(LSMSCommunication &comm,LSMSSystemParameters &lsms,
 #if defined(ACCELERATOR_LIBSCI) || defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
 
 #else
-  m_dat=NULL;
+  m_dat = NULL;
 #endif
 }

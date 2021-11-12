@@ -162,18 +162,26 @@ void buildKKRMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &
           for (int is = 0; is < lsms.n_spin_cant; is++) {
             int jm = jsm + kkrsz_ns * j + kkrsz * is;
             int one = 1;
-            BLAS::zcopy_(&kkr1, &local.tmatStore(iie * local.blkSizeTmatStore + jm, atom.LIZStoreIdx[ir1]), &one,
+            BLAS::zcopy_(&kkr1, &local.tmatStore(iie * local.blkSizeTmatStore + jm,
+                                                 atom.LIZStoreIdx[ir1]), &one,
                          &tmat_n[im], &one);
             im += kkr1;
           }
         }
       }
     } else { // spin polarized colinear version for ispin
+
+      std::cout << ispin << std::endl;
+      std::cout << " +++ " << kkrsz << std::endl;
+      std::cout << " +++ " << kkrsz_ns << std::endl;
+
       int jsm = kkrsz * kkrsz * ispin; // copy spin up or down?
       for (int j = 0; j < kkr1; j++) {
         int jm = jsm + kkrsz_ns * j;
         int one = 1;
-        BLAS::zcopy_(&kkr1, &local.tmatStore(iie * local.blkSizeTmatStore + jm, atom.LIZStoreIdx[ir1]), &one,
+        BLAS::zcopy_(&kkr1,
+                     &local.tmatStore(iie * local.blkSizeTmatStore + jm,
+                                             atom.LIZStoreIdx[ir1]), &one,
                      &tmat_n[im], &one);
         im += kkr1;
       }
@@ -354,6 +362,11 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
 
   int nrmat_ns = lsms.n_spin_cant * atom.nrmat;
   int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz;
+
+  std::cout << "--: " << atom.nrmat << std::endl;
+  std::cout << "--: " << atom.kkrsz << std::endl;
+  std::cout << "--: " << lsms.n_spin_cant << std::endl;
+  std::cout << "--: " << atom.numLIZ << std::endl;
 
   Matrix<Complex> tau00(kkrsz_ns, kkrsz_ns);
   Complex *devM, *devT0;
@@ -630,11 +643,66 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
         exit(1);
     }
 
+    /*
+     * Out
+     */
+
+    {
+      std::ofstream file;
+
+      auto energy_point = std::to_string(iie) + "-" + std::to_string(ispin) + std::string("tau00.dat");
+      file.open(energy_point.c_str());
+
+      int ncol = kkrsz_ns;
+
+      for (int i_row = 0; i_row < ncol; i_row++) {
+        for (int j_col = 0; j_col < ncol; j_col++) {
+
+          auto value = tau00(i_row, j_col);
+          auto cvalue = std::imag(value);
+          auto rvalue = std::real(value);
+
+          file << std::setprecision(10) << std::scientific << cvalue << " ";
+          file << std::setprecision(10) << std::scientific << rvalue << std::endl;
+
+        }
+      }
+    }
+
+    /*
+     *
+     */
 
     double timePostproc = MPI_Wtime();
     if (lsms.relativity != full) {
       calculateTau00MinusT(lsms, local, atom, iie, tau00, tau00);
+
+      {
+        std::ofstream file;
+
+        auto energy_point = std::to_string(iie) + "-" + std::to_string(ispin) + std::string("tau00m.dat");
+        file.open(energy_point.c_str());
+
+        int ncol = kkrsz_ns;
+
+        for (int i_row = 0; i_row < ncol; i_row++) {
+          for (int j_col = 0; j_col < ncol; j_col++) {
+
+            auto value = tau00(i_row, j_col);
+            auto cvalue = std::imag(value);
+            auto rvalue = std::real(value);
+
+            file << std::setprecision(10) << std::scientific << cvalue << " ";
+            file << std::setprecision(10) << std::scientific << rvalue << std::endl;
+
+          }
+        }
+      }
+
+
       rotateTau00ToLocalFrameNonRelativistic(lsms, atom, tau00, tau00_l);
+
+
     } else {
       rotateTau00ToLocalFrameRelativistic(lsms, atom, tau00, tau00_l);
     }
@@ -802,7 +870,7 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
 
 // calculateAllTauMatrices replaces gettau and the communication part of gettaucl in LSMS_1
 void calculateAllTauMatrices(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeInfo &local,
-                             std::vector<Matrix<Real> > &vr, Complex energy,
+                             std::vector<Matrix<Real>> &vr, Complex energy,
                              int iie,
     // std::vector<NonRelativisticSingleScattererSolution> &solution,
                              Matrix<Complex> &tau00_l) {

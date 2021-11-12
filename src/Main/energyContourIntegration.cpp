@@ -377,8 +377,6 @@ void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsm
     }
 
 
-
-
     if (lsms.global.iprint >= 2) printf("About to send t matrices\n");
     sendTmats(comm, local);
     if (lsms.global.iprint >= 2) printf("About to finalize t matrices communication\n");
@@ -447,8 +445,8 @@ void energyContourIntegration(LSMSCommunication &comm, LSMSSystemParameters &lsm
 
       int ncol = local.num_local * lsms.n_spin_pola / lsms.n_spin_cant;
 
-      for (int i_row = 0; i_row < maxkkrsz_ns * maxkkrsz_ns; i_row++) {
-        for (int j_col = 0; j_col < ncol; j_col++) {
+      for (int j_col = 0; j_col < ncol; j_col++) {
+        for (int i_row = 0; i_row < maxkkrsz_ns * maxkkrsz_ns; i_row++) {
           auto value = tau00_l(i_row, j_col);
           auto cvalue = std::imag(value);
           auto rvalue = std::real(value);

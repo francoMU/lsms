@@ -294,6 +294,12 @@ void buildLIZandCommLists(LSMSCommunication &comm, LSMSSystemParameters &lsms,
   local.lDimTmatStore=local.blkSizeTmatStore*lsms.energyContour.groupSize();
   local.tmatStore.resize(local.lDimTmatStore,num_store);
 
+  std::cout << " ABCD " << std::endl;
+  std::cout << local.lDimTmatStore << std::endl;
+  std::cout << num_store << std::endl;
+  std::cout << local.blkSizeTmatStore << std::endl;
+  std::cout << lsms.energyContour.groupSize() << std::endl;
+
 // set the StorIdx for the local atom LIZs
   for(int i=0; i<local.num_local; i++)
     for(int j=0; j<local.atom[i].numLIZ; j++)

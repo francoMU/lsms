@@ -18,64 +18,56 @@
 // #define COMPARE_ORIGINAL 1
 
 
-inline void calculateHankel(Complex prel, Real r, int lend, Complex *hfn)
-{
+inline void calculateHankel(Complex prel, Real r, int lend, Complex *hfn) {
   const Complex sqrtm1(0.0, 1.0);
-  Complex z=prel*r;
-  hfn[0]=-sqrtm1;
-  hfn[1]=-1.0-sqrtm1/z;
-  for(int l=1; l<lend; l++)
-  {
-    hfn[l+1]=(2.0*l + 1.0) * hfn[l]/z - hfn[l-1];
+  Complex z = prel * r;
+  hfn[0] = -sqrtm1;
+  hfn[1] = -1.0 - sqrtm1 / z;
+  for (int l = 1; l < lend; l++) {
+    hfn[l + 1] = (2.0 * l + 1.0) * hfn[l] / z - hfn[l - 1];
   }
   /*
 c             l+1
 c     hfn = -i   *h (k*R  )*sqrt(E)
 c                  l    ij
 */
-  z=std::exp(sqrtm1*z)/r;
-  for(int l=0; l<=lend; l++)
-  {
-    hfn[l] = -hfn[l] * z * IFactors::ilp1[l];     
+  z = std::exp(sqrtm1 * z) / r;
+  for (int l = 0; l <= lend; l++) {
+    hfn[l] = -hfn[l] * z * IFactors::ilp1[l];
   }
 }
 
-inline void calculateSinCosPowers(Real *rij, int lend, Real *sinmp, Real *cosmp)
-{
+inline void calculateSinCosPowers(Real *rij, int lend, Real *sinmp, Real *cosmp) {
   const Real ptol = 1.0e-6;
-  Real pmag = std::sqrt(rij[0]*rij[0]+rij[1]*rij[1]);
+  Real pmag = std::sqrt(rij[0] * rij[0] + rij[1] * rij[1]);
   cosmp[0] = 1.0;
   sinmp[0] = 0.0;
-  if(pmag>ptol)
-  {
-    cosmp[1] = rij[0]/pmag;
-    sinmp[1] = rij[1]/pmag;
+  if (pmag > ptol) {
+    cosmp[1] = rij[0] / pmag;
+    sinmp[1] = rij[1] / pmag;
   } else {
     cosmp[1] = 0.0;
     sinmp[1] = 0.0;
   }
-  for(int m=2; m<=lend; m++)
-  {
-    cosmp[m] = cosmp[m-1]*cosmp[1] - sinmp[m-1]*sinmp[1];
-    sinmp[m] = sinmp[m-1]*cosmp[1] + cosmp[m-1]*sinmp[1];
+  for (int m = 2; m <= lend; m++) {
+    cosmp[m] = cosmp[m - 1] * cosmp[1] - sinmp[m - 1] * sinmp[1];
+    sinmp[m] = sinmp[m - 1] * cosmp[1] + cosmp[m - 1] * sinmp[1];
   }
 }
 
-void setBGijCPU(LSMSSystemParameters &lsms, AtomData &atom, int ir1, int ir2, int iOffset, int jOffset, Matrix<Complex> &bgij)
-{
-  if(lsms.n_spin_cant == 1) return;
+void setBGijCPU(LSMSSystemParameters &lsms, AtomData &atom, int ir1, int ir2, int iOffset, int jOffset,
+                Matrix<Complex> &bgij) {
+  if (lsms.n_spin_cant == 1) return;
 
-  int kkri=(atom.LIZlmax[ir1]+1)*(atom.LIZlmax[ir1]+1);
-  int kkrj=(atom.LIZlmax[ir2]+1)*(atom.LIZlmax[ir2]+1);
+  int kkri = (atom.LIZlmax[ir1] + 1) * (atom.LIZlmax[ir1] + 1);
+  int kkrj = (atom.LIZlmax[ir2] + 1) * (atom.LIZlmax[ir2] + 1);
   int kkrsz = atom.kkrsz;
 
-  if(lsms.relativity != full)
-  {
-    for(int i=0; i<kkri; i++)
-      for(int j=0; j<kkrj; j++)
-      {
-        bgij(iOffset + kkri + i, jOffset        + j) = 0.0; // bgij(iOffset + i, jOffset + j);
-        bgij(iOffset        + i, jOffset + kkrj + j) = 0.0; // bgij(iOffset + i, jOffset + j);
+  if (lsms.relativity != full) {
+    for (int i = 0; i < kkri; i++)
+      for (int j = 0; j < kkrj; j++) {
+        bgij(iOffset + kkri + i, jOffset + j) = 0.0; // bgij(iOffset + i, jOffset + j);
+        bgij(iOffset + i, jOffset + kkrj + j) = 0.0; // bgij(iOffset + i, jOffset + j);
         bgij(iOffset + kkri + i, jOffset + kkrj + j) = bgij(iOffset + i, jOffset + j);
       }
   } else {
@@ -88,76 +80,72 @@ void setBGijCPU(LSMSSystemParameters &lsms, AtomData &atom, int ir1, int ir2, in
               end do
             end do
     */
-    printf("Fully relativistic calculation not yet implemented in 'MultipleScattering/buildKKRMatrix.cpp : setBGijCPU'\n");
+    printf(
+        "Fully relativistic calculation not yet implemented in 'MultipleScattering/buildKKRMatrix.cpp : setBGijCPU'\n");
     exit(1);
   }
 }
 
 void buildBGijCPU(LSMSSystemParameters &lsms, AtomData &atom, int ir1, int ir2, Real *rij,
-                  Complex energy, Complex prel, int iOffset, int jOffset, Matrix<Complex> &bgij)
-{
-  Complex hfn[2*lsms.maxlmax + 1];
-  Real sinmp[2*lsms.maxlmax + 1];
-  Real cosmp[2*lsms.maxlmax + 1];
+                  Complex energy, Complex prel, int iOffset, int jOffset, Matrix<Complex> &bgij) {
+  Complex hfn[2 * lsms.maxlmax + 1];
+  Real sinmp[2 * lsms.maxlmax + 1];
+  Real cosmp[2 * lsms.maxlmax + 1];
   // Real plm[((lsms.maxlmax+1) * (lsms.maxlmax+2)) / 2];
   Real plm[lsms.angularMomentumIndices.ndlm];
   Complex dlm[lsms.angularMomentumIndices.ndlj];
-  Real r = std::sqrt(rij[0]*rij[0] + rij[1]*rij[1] + rij[2]*rij[2]);
+  Real r = std::sqrt(rij[0] * rij[0] + rij[1] * rij[1] + rij[2] * rij[2]);
   int lmax1 = atom.LIZlmax[ir1];
   int lmax2 = atom.LIZlmax[ir2];
-  int kkri=(lmax1+1)*(lmax1+1);
-  int kkrj=(lmax2+1)*(lmax2+1);
+  int kkri = (lmax1 + 1) * (lmax1 + 1);
+  int kkrj = (lmax2 + 1) * (lmax2 + 1);
   int lend = lmax1 + lmax2;
 
-  Real pi4=4.0*2.0*std::asin(1.0);
+  Real pi4 = 4.0 * 2.0 * std::asin(1.0);
 
   calculateHankel(prel, r, lend, hfn);
 
-  Real cosTheta = rij[2]/r;
+  Real cosTheta = rij[2] / r;
   associatedLegendreFunctionNormalized<Real>(cosTheta, lend, plm);
   // for associatedLegendreFunctionNormalized all clm[i] == 1.0
   // for(int j=0;j<ndlm_local;j++)
   //   plm[j]=clm[j]*plm[j];
-  
+
   //     calculate cos(phi) and sin(phi) .................................
   // needs to be serial
   calculateSinCosPowers(rij, lend, sinmp, cosmp);
 
   // can be parallel
-  int j=0;
-  for(int l=0; l<=lend; l++)
-  {
-    int ll = l*(l+1);
+  int j = 0;
+  for (int l = 0; l <= lend; l++) {
+    int ll = l * (l + 1);
     j = ll;
-    ll = ll/2;
+    ll = ll / 2;
     Real m1m = 1.0;
-    dlm[j] = hfn[l]*plm[ll];
-    for(int m=1; m<=l; m++)
-    {
+    dlm[j] = hfn[l] * plm[ll];
+    for (int m = 1; m <= l; m++) {
       m1m = -m1m;
-      Complex fac = plm[ll+m] * std::complex<Real>(cosmp[m],sinmp[m]);
-      dlm[j-m] = hfn[l]*m1m*fac;
-      dlm[j+m] = hfn[l]*std::conj(fac);
+      Complex fac = plm[ll + m] * std::complex<Real>(cosmp[m], sinmp[m]);
+      dlm[j - m] = hfn[l] * m1m * fac;
+      dlm[j + m] = hfn[l] * std::conj(fac);
     }
   }
 //     ================================================================
 //     calculate g(R_ij)...............................................
   // for(int i=0; i<kkri*kkrj; i++) gij[i]=0.0;
-  for(int i=0; i<kkri; i++)
-    for(int j=0; j<kkrj; j++)
+  for (int i = 0; i < kkri; i++)
+    for (int j = 0; j < kkrj; j++)
       bgij(iOffset + i, jOffset + j) = 0.0;
-  
+
 //     loop over l1,m1............................................
-  for(int lm1=0; lm1<kkrj; lm1++)
-  {
-    int l1=AngularMomentumIndices::lofk[lm1];
-    int m1=AngularMomentumIndices::mofk[lm1];
-    
+  for (int lm1 = 0; lm1 < kkrj; lm1++) {
+    int l1 = AngularMomentumIndices::lofk[lm1];
+    int m1 = AngularMomentumIndices::mofk[lm1];
+
 //        loop over l2,m2..............................................
-    for(int lm2=0; lm2<kkri; lm2++)
-    {
-      int l2=AngularMomentumIndices::lofk[lm2];
-      int m2=AngularMomentumIndices::mofk[lm2];
+    for (int lm2 = 0; lm2 < kkri; lm2++) {
+      int l2 = AngularMomentumIndices::lofk[lm2];
+      int m2 = AngularMomentumIndices::mofk[lm2];
       /*
         ==========================================================
                             l2-l1
@@ -166,17 +154,16 @@ void buildBGijCPU(LSMSSystemParameters &lsms, AtomData &atom, int ir1, int ir2, 
            perform sum over l3 with gaunt # ......................
         ==========================================================
       */
-      int m3=m2-m1;
-      int llow=std::max(std::abs(m3),std::abs(l1-l2));
-      if(std::abs(prel)==0.0) llow=l1+l2;
-      for(int l3=l1+l2; l3>=llow; l3-=2)
-      {
-        int j=l3*(l3+1)+m3;
+      int m3 = m2 - m1;
+      int llow = std::max(std::abs(m3), std::abs(l1 - l2));
+      if (std::abs(prel) == 0.0) llow = l1 + l2;
+      for (int l3 = l1 + l2; l3 >= llow; l3 -= 2) {
+        int j = l3 * (l3 + 1) + m3;
         // gij[lm2+lm1*kkri] = gij[lm2+lm1*kkri]+cgnt(l3/2,lm1,lm2)*dlm[j];
-        bgij(iOffset + lm2, jOffset + lm1) += GauntCoeficients::cgnt(l3/2,lm1,lm2)*dlm[j];
+        bgij(iOffset + lm2, jOffset + lm1) += GauntCoeficients::cgnt(l3 / 2, lm1, lm2) * dlm[j];
       }
       // gij[lm2+lm1*kkri]=pi4*illp(lm2,lm1)*gij[lm2+lm1*kkri];
-      bgij(iOffset + lm2, jOffset + lm1) *= pi4 * IFactors::illp(lm2,lm1);
+      bgij(iOffset + lm2, jOffset + lm1) *= pi4 * IFactors::illp(lm2, lm1);
     }
   }
 
@@ -213,9 +200,9 @@ void buildBGijCPU(LSMSSystemParameters &lsms, AtomData &atom, int ir1, int ir2, 
     }
   if(exitCompare) exit(1);
 #endif
-        
+
   setBGijCPU(lsms, atom, ir1, ir2, iOffset, jOffset, bgij);
-  
+
 #ifdef COMPARE_ORIGINAL
   Complex psq=prel*prel;
   int kkr1_ns = 2*kkr1;
@@ -252,41 +239,39 @@ void buildBGijCPU(LSMSSystemParameters &lsms, AtomData &atom, int ir1, int ir2, 
 }
 
 
-void buildKKRMatrixLMaxIdenticalCPU(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Complex energy, Complex prel,
-                                    Matrix<Complex> &m)
-{
-  int nrmat_ns = lsms.n_spin_cant*atom.nrmat; // total size of the kkr matrix
-  int kkrsz_ns = lsms.n_spin_cant*atom.kkrsz; // size of t00 block
+void buildKKRMatrixLMaxIdenticalCPU(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie,
+                                    Complex energy, Complex prel,
+                                    Matrix<Complex> &m) {
+  int nrmat_ns = lsms.n_spin_cant * atom.nrmat; // total size of the kkr matrix
+  int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz; // size of t00 block
 
-  Complex cmone = Complex(-1.0,0.0);
-  Complex czero=0.0;
+  Complex cmone = Complex(-1.0, 0.0);
+  Complex czero = 0.0;
 
   Matrix<Complex> bgij(nrmat_ns, nrmat_ns);
   Matrix<Complex> bgijSmall(kkrsz_ns, kkrsz_ns);
-  
-  m = 0.0; bgij = 0.0;
-  for(int i=0; i<nrmat_ns; i++) m(i,i)=1.0;
+
+  m = 0.0;
+  bgij = 0.0;
+  for (int i = 0; i < nrmat_ns; i++) m(i, i) = 1.0;
 
   // loop over the LIZ blocks
-  for(int ir1 = 0; ir1 < atom.numLIZ; ir1++)
-  {
+  for (int ir1 = 0; ir1 < atom.numLIZ; ir1++) {
     int iOffset = ir1 * kkrsz_ns; // this assumes that there are NO lStep reductions of lmax!!!
-    for(int ir2 = 0; ir2 < atom.numLIZ; ir2++)
-    {
-      if(ir1 != ir2)
-      {
+    for (int ir2 = 0; ir2 < atom.numLIZ; ir2++) {
+      if (ir1 != ir2) {
         int jOffset = ir2 * kkrsz_ns; // this assumes that there are NO lStep reductions of lmax!!!
         Real rij[3];
         int lmax1 = atom.LIZlmax[ir1];
         int lmax2 = atom.LIZlmax[ir2];
-        int kkr1=(lmax1+1)*(lmax1+1);
-        int kkr2=(lmax2+1)*(lmax2+1);
+        int kkr1 = (lmax1 + 1) * (lmax1 + 1);
+        int kkr2 = (lmax2 + 1) * (lmax2 + 1);
         int kkr1_ns = kkr1 * lsms.n_spin_cant;
         int kkr2_ns = kkr2 * lsms.n_spin_cant;
-        rij[0]=atom.LIZPos(0,ir1)-atom.LIZPos(0,ir2);
-        rij[1]=atom.LIZPos(1,ir1)-atom.LIZPos(1,ir2);
-        rij[2]=atom.LIZPos(2,ir1)-atom.LIZPos(2,ir2);
-        
+        rij[0] = atom.LIZPos(0, ir1) - atom.LIZPos(0, ir2);
+        rij[1] = atom.LIZPos(1, ir1) - atom.LIZPos(1, ir2);
+        rij[2] = atom.LIZPos(2, ir1) - atom.LIZPos(2, ir2);
+
         buildBGijCPU(lsms, atom, ir1, ir2, rij, energy, prel, iOffset, jOffset, bgij);
         // buildBGijCPU(lsms, atom, ir1, ir2, rij, energy, prel, 0, 0, bgijSmall);
 
@@ -365,14 +350,22 @@ void buildKKRMatrixLMaxIdenticalCPU(LSMSSystemParameters &lsms, LocalTypeInfo &l
                  ir1, ir2, bgijSmall(0,0).real(), bgijSmall(0,0).imag(), tmat_n(0,0).real(), tmat_n(0,0).imag(), p.real(), p.imag());
         }
 #endif
-             
-        BLAS::zgemm_("n", "n", &kkr1_ns, &kkr2_ns, &kkr1_ns, &cmone,
-                     &local.tmatStore(iie*local.blkSizeTmatStore, atom.LIZStoreIdx[ir1]), &kkr1_ns,
-                     // &tmat_n(0, 0), &kkr1_ns,
-                     &bgij(iOffset, jOffset), &nrmat_ns, &czero,
-                     // &bgijSmall(0, 0), &kkrsz_ns, &czero,
-                     &m(iOffset, jOffset), &nrmat_ns);
-        
+
+        BLAS::zgemm_("n", // Transb
+                     "n", // Transa
+                     &kkr1_ns, // M
+                     &kkr2_ns, // N
+                     &kkr1_ns, // K
+                     &cmone, // alpha
+                     &local.tmatStore(iie * local.blkSizeTmatStore,
+                                      atom.LIZStoreIdx[ir1]), // A
+                     &kkr1_ns, // LDA
+                     &bgij(iOffset, jOffset), // B
+                     &nrmat_ns, // LDB
+                     &czero, // BETA
+                     &m(iOffset, jOffset), // C
+                     &nrmat_ns); // LDC
+
         /*
         for(int i=0; i<kkr1_ns; i++)
           for(int j=0; j<kkr2_ns; j++)
@@ -384,7 +377,7 @@ void buildKKRMatrixLMaxIdenticalCPU(LSMSSystemParameters &lsms, LocalTypeInfo &l
                 bgijSmall(k, j);
           }
         */
-        
+
       }
     }
   }
@@ -414,44 +407,42 @@ void buildKKRMatrixLMaxIdenticalCPU(LSMSSystemParameters &lsms, LocalTypeInfo &l
 #endif
 }
 
-void buildKKRMatrixLMaxDifferentCPU(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Complex energy, Complex prel,
-                                    Matrix<Complex> &m)
-{
-  int nrmat_ns = lsms.n_spin_cant*atom.nrmat; // total size of the kkr matrix
-  int kkrsz_ns = lsms.n_spin_cant*atom.kkrsz; // size of t00 block
+void buildKKRMatrixLMaxDifferentCPU(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie,
+                                    Complex energy, Complex prel,
+                                    Matrix<Complex> &m) {
+  int nrmat_ns = lsms.n_spin_cant * atom.nrmat; // total size of the kkr matrix
+  int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz; // size of t00 block
 
-  const Complex cmone=-1.0;
-  const Complex czero=0.0;
+  const Complex cmone = -1.0;
+  const Complex czero = 0.0;
 
   Matrix<Complex> bgij(nrmat_ns, nrmat_ns);
-  
-  m = 0.0; bgij = 0.0;
-  for(int i=0; i<nrmat_ns; i++) m(i,i)=1.0;
+
+  m = 0.0;
+  bgij = 0.0;
+  for (int i = 0; i < nrmat_ns; i++) m(i, i) = 1.0;
 
   std::vector<int> offsets(atom.numLIZ);
   offsets[0] = 0;
-  for(int ir = 1; ir < atom.numLIZ; ir++)
-    offsets[ir] = offsets[ir-1] + lsms.n_spin_cant * (atom.LIZlmax[ir-1]+1)*(atom.LIZlmax[ir-1]+1);
-  
+  for (int ir = 1; ir < atom.numLIZ; ir++)
+    offsets[ir] = offsets[ir - 1] + lsms.n_spin_cant * (atom.LIZlmax[ir - 1] + 1) * (atom.LIZlmax[ir - 1] + 1);
+
   // loop over the LIZ blocks
-  for(int ir1 = 0; ir1 < atom.numLIZ; ir1++)
-  {
+  for (int ir1 = 0; ir1 < atom.numLIZ; ir1++) {
     int iOffset = offsets[ir1];
-    for(int ir2 = 0; ir2 < atom.numLIZ; ir2++)
-    {
-      if(ir1 != ir2)
-      {
+    for (int ir2 = 0; ir2 < atom.numLIZ; ir2++) {
+      if (ir1 != ir2) {
         int jOffset = offsets[ir2];
         int lmax1 = atom.LIZlmax[ir1];
         int lmax2 = atom.LIZlmax[ir2];
-        int kkr1=(lmax1+1)*(lmax1+1);
-        int kkr2=(lmax2+1)*(lmax2+1);
+        int kkr1 = (lmax1 + 1) * (lmax1 + 1);
+        int kkr2 = (lmax2 + 1) * (lmax2 + 1);
         int kkr1_ns = kkr1 * lsms.n_spin_cant;
         int kkr2_ns = kkr2 * lsms.n_spin_cant;
         Real rij[3];
-        rij[0]=atom.LIZPos(0,ir1)-atom.LIZPos(0,ir2);
-        rij[1]=atom.LIZPos(1,ir1)-atom.LIZPos(1,ir2);
-        rij[2]=atom.LIZPos(2,ir1)-atom.LIZPos(2,ir2);
+        rij[0] = atom.LIZPos(0, ir1) - atom.LIZPos(0, ir2);
+        rij[1] = atom.LIZPos(1, ir1) - atom.LIZPos(1, ir2);
+        rij[2] = atom.LIZPos(2, ir1) - atom.LIZPos(2, ir2);
         buildBGijCPU(lsms, atom, ir1, ir2, rij, energy, prel, iOffset, jOffset, bgij);
 
 #ifdef COMPARE_ORIGINAL
@@ -521,12 +512,12 @@ void buildKKRMatrixLMaxDifferentCPU(LSMSSystemParameters &lsms, LocalTypeInfo &l
                      &m(iOffset, jOffset), &nrmat_ns);
         */
 #endif
-        
+
         BLAS::zgemm_("n", "n", &kkr1_ns, &kkr2_ns, &kkr1_ns, &cmone,
-                     &local.tmatStore(iie*local.blkSizeTmatStore, atom.LIZStoreIdx[ir1]), &kkrsz_ns,
+                     &local.tmatStore(iie * local.blkSizeTmatStore, atom.LIZStoreIdx[ir1]), &kkrsz_ns,
                      &bgij(iOffset, jOffset), &nrmat_ns, &czero,
                      &m(iOffset, jOffset), &nrmat_ns);
-       
+
       }
     }
   }
@@ -551,30 +542,27 @@ void buildKKRMatrixLMaxDifferentCPU(LSMSSystemParameters &lsms, LocalTypeInfo &l
 #endif
 }
 
-void buildKKRMatrixCPU(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Complex energy, Complex prel,
-                                    Matrix<Complex> &m)
-{
+void buildKKRMatrixCPU(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Complex energy,
+                       Complex prel,
+                       Matrix<Complex> &m) {
   // decide between identical lmax and different lmax:
-  
+
   bool lmaxIdentical = true;
 
-  if(atom.LIZlmax[0] != lsms.maxlmax)
-  {
+  if (atom.LIZlmax[0] != lsms.maxlmax) {
     lmaxIdentical = false;
-    printf("atom.LIZlmax[0] (=%d) != lsms.maxlmax (=%d)\n",atom.LIZlmax[0], lsms.maxlmax);
+    printf("atom.LIZlmax[0] (=%d) != lsms.maxlmax (=%d)\n", atom.LIZlmax[0], lsms.maxlmax);
   }
-  for(int ir = 0; ir < atom.numLIZ; ir++)
-  {
-    if(atom.LIZlmax[ir] != atom.LIZlmax[0])
+  for (int ir = 0; ir < atom.numLIZ; ir++) {
+    if (atom.LIZlmax[ir] != atom.LIZlmax[0])
       lmaxIdentical = false;
   }
-  
-  if(lmaxIdentical)
-  {
+
+  if (lmaxIdentical) {
     // printf("lmax identical in buildKKRMatrix\n");
     buildKKRMatrixLMaxIdenticalCPU(lsms, local, atom, iie, energy, prel, m);
   } else {
     // printf("lmax not identical in buildKKRMatrix\n");
-     buildKKRMatrixLMaxDifferentCPU(lsms, local, atom, iie, energy, prel, m);
+    buildKKRMatrixLMaxDifferentCPU(lsms, local, atom, iie, energy, prel, m);
   }
 }

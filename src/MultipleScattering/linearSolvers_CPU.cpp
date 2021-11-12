@@ -13,18 +13,52 @@ void buildKKRSizeTMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomD
                          Matrix<Complex> &tMatrix) {
   // assume Matrix<Complex> tMatrix(nrmat_ns, kkrsz_ns);
   int nrmat_ns = lsms.n_spin_cant * atom.nrmat; // total size of the kkr matrix
+
+  //int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz; // size of t00 block
+
   int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz; // size of t00 block
+
   int i0 = 0; // start index of the current atom's block
 
   tMatrix = 0.0;
+  //if (lsms.n_spin_pola == lsms.n_spin_cant) // non polarized or spin canted
+  //{
 
   for (int i = 0; i < kkrsz_ns; i++)
     for (int j = 0; j < kkrsz_ns; j++)
       tMatrix(i, j) = local.tmatStore(i + j * kkrsz_ns + iie * local.blkSizeTmatStore, atom.LIZStoreIdx[0]);
 
 
+}
+
+
+void buildKKRSizeTMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie,
+                         Matrix<Complex> &tMatrix, int spin) {
+  // assume Matrix<Complex> tMatrix(nrmat_ns, kkrsz_ns);
+  int nrmat_ns = lsms.n_spin_cant * atom.nrmat; // total size of the kkr matrix
+  int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz; // size of t00 block
+  int i0 = 0; // start index of the current atom's block
+
+  tMatrix = 0.0;
+  if (lsms.n_spin_pola == lsms.n_spin_cant) // non polarized or spin canted
+  {
+    // In the case of non-colinear this copies the whole matrix
+    for (int i = 0; i < kkrsz_ns; i++)
+      for (int j = 0; j < kkrsz_ns; j++)
+        tMatrix(i, j) = local.tmatStore(i + j * kkrsz_ns + iie * local.blkSizeTmatStore, atom.LIZStoreIdx[0]);
+  } else {
+
+
+    for (int i = 0; i < kkrsz_ns; i++)
+      for (int j = 0; j < kkrsz_ns; j++)
+        tMatrix(i, j) = local.tmatStore(i + j * kkrsz_ns + iie * local.blkSizeTmatStore, atom.LIZStoreIdx[0]);
+
+    // tmatrx (nrmat_ns, kkrsz_ns)
+
+  }
 
 }
+
 
 // given the  m-Matrix [(blockSize*numBlocks) x (blockSize*numBlocks)] and tMatrix[0] [blockSize x blockSize]
 // calculate the t00-Matrix as the blockSize x blockSize diagonal block of  (1 - tG)^-1 t
@@ -34,7 +68,9 @@ void solveTau00zgesv(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData 
   int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz; // size of t00 block
 
   // reference algorithm. Use LU factorization and linear solve for dense matrices in LAPACK
+
   Matrix<Complex> tau(nrmat_ns, kkrsz_ns);
+
   // copy t[0] into the top part of tau
   buildKKRSizeTMatrix(lsms, local, atom, iie, tau);
 

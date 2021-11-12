@@ -94,7 +94,7 @@ void buildKKRMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &
     fprintf(of,"# tmatStore file for buildkkrmat test:\n");
     fprintf(of,"# line 4: num_store kkrsz Re(energy) Im(energy)\n");
     fprintf(of,"# following numstore*kkrsz*kkrsz lines: storeidx i j Re(t_ij) Im(t_ij)\n");
-    fprintf(of,"%4zu %4d %lg %lg\n", local.tmatStoreGlobalIdx.size(),kkrsz_ns,std::real(energy),std::imag(energy)); 
+    fprintf(of,"%4zu %4d %lg %lg\n", local.tmatStoreGlobalIdx.size(),kkrsz_ns,std::real(energy),std::imag(energy));
     for(int idx=0; idx<local.tmatStoreGlobalIdx.size(); idx++)
     {
       for(int i=0; i<kkrsz_ns; i++)
@@ -321,14 +321,14 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
 #if MST_LINEAR_SOLVER_DEFAULT == 0x014 && !defined(USE_XGETRF)
   printf("Error: USE_XGETRF needs to be defined to use IRSXgesv\n");
   exit(1);
-#endif    
+#endif
   const unsigned int defaultLinearSolver = MST_LINEAR_SOLVER_DEFAULT;
   unsigned int linearSolver = lsms.global.linearSolver & MST_LINEAR_SOLVER_MASK; // only use 12 least significant bits
   if(linearSolver == 0) linearSolver = defaultLinearSolver;
 
   unsigned int buildKKRMatrixKernel = lsms.global.linearSolver & MST_BUILD_KKR_MATRIX_MASK;
   if(buildKKRMatrixKernel == 0) buildKKRMatrixKernel = MST_BUILD_KKR_MATRIX_DEFAULT;
-  
+
   int nrmat_ns=lsms.n_spin_cant*atom.nrmat;
   int kkrsz_ns=lsms.n_spin_cant*atom.kkrsz;
 
@@ -344,7 +344,7 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
 
 #ifdef USE_NVTX
   nvtxRangePushA("buildKKRMatrix");
-#endif  
+#endif
   switch(buildKKRMatrixKernel)
   {
     case MST_BUILD_KKR_MATRIX_F77:
@@ -357,13 +357,13 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
   case MST_BUILD_KKR_MATRIX_ACCELERATOR:
 /*
   {
-// test 
+// test
 //  Matrix<Real> testLIZPos(3,atom.numLIZ);
 //  Matrix<Complex> bgij(nrmat_ns, nrmat_ns);
   Complex testIlp1[2*lsms.maxlmax + 1];
 //  cudaMemcpy(&bgij[0], devBgij, nrmat_ns*nrmat_ns*sizeof(Complex), cudaMemcpyDeviceToHost);
 //  cudaMemcpy(&testLIZPos[0], devAtom.LIZPos, 3*atom.numLIZ*sizeof(Real), cudaMemcpyDeviceToHost);
-  cudaMemcpy(&testIlp1[0], DeviceConstants::ilp1, (2*lsms.maxlmax + 1)*sizeof(Complex), cudaMemcpyDeviceToHost);  
+  cudaMemcpy(&testIlp1[0], DeviceConstants::ilp1, (2*lsms.maxlmax + 1)*sizeof(Complex), cudaMemcpyDeviceToHost);
   printf("calculateTauMatrix:\n");
   for(int l=0; l<2*lsms.maxlmax; l++)
   {
@@ -381,13 +381,13 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
   case MST_BUILD_KKR_MATRIX_ACCELERATOR:
 /*
   {
-// test 
+// test
 //  Matrix<Real> testLIZPos(3,atom.numLIZ);
 //  Matrix<Complex> bgij(nrmat_ns, nrmat_ns);
   Complex testIlp1[2*lsms.maxlmax + 1];
 //  deviceMemcpy(&bgij[0], devBgij, nrmat_ns*nrmat_ns*sizeof(Complex), deviceMemcpyDeviceToHost);
 //  deviceMemcpy(&testLIZPos[0], devAtom.LIZPos, 3*atom.numLIZ*sizeof(Real), deviceMemcpyDeviceToHost);
-  deviceMemcpy(&testIlp1[0], DeviceConstants::ilp1, (2*lsms.maxlmax + 1)*sizeof(Complex), deviceMemcpyDeviceToHost);  
+  deviceMemcpy(&testIlp1[0], DeviceConstants::ilp1, (2*lsms.maxlmax + 1)*sizeof(Complex), deviceMemcpyDeviceToHost);
   printf("calculateTauMatrix:\n");
   for(int l=0; l<2*lsms.maxlmax; l++)
   {
@@ -427,7 +427,7 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
     case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
     case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
     case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:            
+    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
       devM = deviceStorage->getDevM();
       transferMatrixToGPUCuda(devM, m);
       devT0 = deviceStorage->getDevT0();
@@ -458,16 +458,16 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
       break;
     case MST_LINEAR_SOLVER_BLOCK_INVERSE_F77:
       transferMatrixFromGPUCuda(m, (cuDoubleComplex *)devM);
-      break;            
+      break;
     case MST_LINEAR_SOLVER_BLOCK_INVERSE_CPP:
       transferMatrixFromGPUCuda(m, (cuDoubleComplex *)devM);
-      break;      
+      break;
     case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
     case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
     case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
     case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
     case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:            
+    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
       devT0 = deviceStorage->getDevT0();
       transferT0MatrixToGPUCuda(devT0, lsms, local, atom, iie);
       break;
@@ -501,10 +501,10 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
     case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
     case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
     case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
-    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:            
+    case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
       printf("MIXING HIP AND CUDA KERNELS (%x)!!!\n",buildKKRMatrixKernel);
       exit(1);
-      break; 
+      break;
 #endif
     default:
       printf("UNKNOWN SOLVER FOR MST_BUILD_KKR_MATRIX_ACCELERATOR (%x)!!!\n", linearSolver);
@@ -518,13 +518,13 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
   }
 #ifdef USE_NVTX
   nvtxRangePop();
-#endif   
+#endif
 
   timeBuildKKRMatrix=MPI_Wtime()-timeBuildKKRMatrix;
   if(lsms.global.iprint>=0) printf("  timeBuildKKRMatrix=%lf\n",timeBuildKKRMatrix);
-#ifdef USE_NVTX  
+#ifdef USE_NVTX
   nvtxRangePushA("linearSolver");
-#endif  
+#endif
 // use the new or old solvers?
   if(linearSolver < MST_LINEAR_SOLVER_BLOCK_INVERSE_F77) // new solvers. Old solvers have numbers > 0x8000. different postpocessing required. 0 is the default solver, for the time being use the old LSMS_1.9 one
   {
@@ -554,14 +554,14 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
 #endif
     case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
       solveTau00zgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
-#ifdef USE_XGETRF      
+#ifdef USE_XGETRF
     case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
       solveTau00Xgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
-#endif      
-#ifdef USE_IRSXGESV      
+#endif
+#ifdef USE_IRSXGESV
     case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
       solveTau00IRSXgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
-#endif      
+#endif
 #endif
 #ifdef ACCELERATOR_HIP
     case MST_LINEAR_SOLVER_ZGETRF_ROCSOLVER:
@@ -571,7 +571,7 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
       printf("UNKNOWN LINEAR SOLVER (%d)!!!\n",linearSolver);
       exit(1);
     }
-    
+
     double timePostproc=MPI_Wtime();
     if(lsms.relativity!=full)
     {
@@ -582,7 +582,7 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
     }
     timePostproc=MPI_Wtime()-timePostproc;
     if(lsms.global.iprint>=1) printf("  timePostproc=%lf\n",timePostproc);
-    
+
   } else { // old solvers
   // if(!lsms.global.checkIstop("buildKKRMatrix"))
   {
@@ -687,15 +687,37 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
 
     double timePostproc=MPI_Wtime();
     Matrix<Complex> tau00(kkrsz_ns,kkrsz_ns);
-    if(lsms.relativity!=full)
-      tau_inv_postproc_nrel_(&kkrsz_ns,&lsms.n_spin_cant,
-                             &m(0,0),&delta(0,0),&local.tmatStore(iie*local.blkSizeTmatStore,atom.LIZStoreIdx[0]),ipvt,&tau00(0,0),
-                             atom.ubr,atom.ubrd,
-                             tau00_l);
+    if(lsms.relativity!=full) {
+
+      if(lsms.n_spin_pola == lsms.n_spin_cant) { // non polarized or spin canted
+
+        tau_inv_postproc_nrel_(&kkrsz_ns,&lsms.n_spin_cant,
+                               &m(0,0),&delta(0,0),
+                               &local.tmatStore(iie*local.blkSizeTmatStore,
+                                                atom.LIZStoreIdx[0]),ipvt,&tau00(0,0),
+                               atom.ubr,atom.ubrd,
+                               tau00_l);
+      } else {
+
+        int jsm = kkrsz_ns * kkrsz_ns * ispin;
+        tau_inv_postproc_nrel_(&kkrsz_ns,
+                               &lsms.n_spin_cant,
+                               &m(0,0),
+                               &delta(0,0),
+                               &local.tmatStore(iie*local.blkSizeTmatStore + jsm,
+                                                atom.LIZStoreIdx[0]),ipvt,&tau00(0,0),
+                                                atom.ubr,
+                                                atom.ubrd,
+                                                tau00_l);
+
+      }
+
+
+    }
     else
       tau_inv_postproc_rel_(&kkrsz_ns,&m(0,0),&delta(0,0),&local.tmatStore(iie*local.blkSizeTmatStore,atom.LIZStoreIdx[0]),ipvt,&tau00(0,0),
                             &atom.dmat(0,0), &atom.dmatp(0,0), tau00_l);
-    
+
     timePostproc=MPI_Wtime()-timePostproc;
     if(lsms.global.iprint>=1) printf("  timePostproc=%lf\n",timePostproc);
 
@@ -709,7 +731,7 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
   } // end of old solvers
 #ifdef USE_NVTX
   nvtxRangePop();
-#endif  
+#endif
 }
 
 

@@ -32,8 +32,12 @@ void buildKKRSizeTMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomD
 }
 
 
-void buildKKRSizeTMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie,
-                         Matrix<Complex> &tMatrix, int spin) {
+void buildKKRSizeTMatrix(LSMSSystemParameters &lsms,
+                         LocalTypeInfo &local,
+                         AtomData &atom,
+                         int iie,
+                         Matrix<Complex> &tMatrix,
+                         int spin) {
   // assume Matrix<Complex> tMatrix(nrmat_ns, kkrsz_ns);
   int nrmat_ns = lsms.n_spin_cant * atom.nrmat; // total size of the kkr matrix
   int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz; // size of t00 block
@@ -83,6 +87,34 @@ void solveTau00zgesv(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData 
     for (int j = 0; j < kkrsz_ns; j++)
       tau00(i, j) = tau(i, j);
 }
+
+/** given the  m-Matrix [(blockSize*numBlocks) x (blockSize*numBlocks)] and tMatrix[0] [blockSize x blockSize]
+/* calculate the t00-Matrix as the blockSize x blockSize diagonal block of  (1 - tG)^-1 t
+/*
+ */
+void solveTau00zgesv(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Matrix<Complex> &m,
+                     Matrix<Complex> &tau00, int ispin) {
+
+  int nrmat_ns = lsms.n_spin_cant * atom.nrmat; // total size of the kkr matrix
+  int kkrsz_ns = lsms.n_spin_cant * atom.kkrsz; // size of t00 block
+
+  // reference algorithm. Use LU factorization and linear solve for dense matrices in LAPACK
+
+  Matrix<Complex> tau(nrmat_ns, kkrsz_ns);
+
+  // copy t[0] into the top part of tau
+  buildKKRSizeTMatrix(lsms, local, atom, iie, tau, ispin);
+
+  int ipiv[nrmat_ns];
+  int info;
+  LAPACK::zgesv_(&nrmat_ns, &kkrsz_ns, &m(0, 0), &nrmat_ns, ipiv, &tau(0, 0), &nrmat_ns, &info);
+
+  // copy result into tau00
+  for (int i = 0; i < kkrsz_ns; i++)
+    for (int j = 0; j < kkrsz_ns; j++)
+      tau00(i, j) = tau(i, j);
+}
+
 
 void solveTau00zgetrf(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Matrix<Complex> &m,
                       Matrix<Complex> &tau00) {

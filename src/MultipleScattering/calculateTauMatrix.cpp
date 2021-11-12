@@ -597,7 +597,8 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
 
     switch (linearSolver) {
       case MST_LINEAR_SOLVER_ZGESV:
-        solveTau00zgesv(lsms, local, atom, iie, m, tau00);
+        //solveTau00zgesv(lsms, local, atom, iie, m, tau00);
+        solveTau00zgesv(lsms, local, atom, iie, m, tau00, ispin);
         break;
       case MST_LINEAR_SOLVER_ZGETRF:
         solveTau00zgetrf(lsms, local, atom, iie, m, tau00);

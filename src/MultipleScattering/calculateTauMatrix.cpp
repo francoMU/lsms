@@ -531,17 +531,17 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
     switch(linearSolver)
     {
     case MST_LINEAR_SOLVER_ZGESV:
-      solveTau00zgesv(lsms, local, atom, iie, m, tau00); break;
+      solveTau00zgesv(lsms, local, atom, iie, m, tau00, ispin); break;
     case MST_LINEAR_SOLVER_ZGETRF:
-      solveTau00zgetrf(lsms, local, atom, iie, m, tau00); break;
+      solveTau00zgetrf(lsms, local, atom, iie, m, tau00, ispin); break;
 #ifndef ARCH_IBM
     case MST_LINEAR_SOLVER_ZCGESV:
-      solveTau00zcgesv(lsms, local, atom, iie, m, tau00); break;
+      solveTau00zcgesv(lsms, local, atom, iie, m, tau00, ispin); break;
 #endif
     case MST_LINEAR_SOLVER_ZBLOCKLU_F77:
-      solveTau00zblocklu_f77(lsms, local, atom, iie, m, tau00); break;
+      solveTau00zblocklu_f77(lsms, local, atom, iie, m, tau00, ispin); break;
     case MST_LINEAR_SOLVER_ZBLOCKLU_CPP:
-      solveTau00zblocklu_cpp(lsms, local, atom, iie, m, tau00); break;
+      solveTau00zblocklu_cpp(lsms, local, atom, iie, m, tau00, ispin); break;
 #ifdef ACCELERATOR_CUDA_C
     case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
       solveTau00zgetrf_cublas(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
@@ -575,7 +575,7 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
     double timePostproc=MPI_Wtime();
     if(lsms.relativity!=full)
     {
-      calculateTau00MinusT(lsms, local, atom, iie, tau00, tau00);
+      calculateTau00MinusT(lsms, local, atom, iie, tau00, tau00, ispin);
       rotateTau00ToLocalFrameNonRelativistic(lsms, atom, tau00, tau00_l);
     } else {
       rotateTau00ToLocalFrameRelativistic(lsms, atom, tau00, tau00_l);

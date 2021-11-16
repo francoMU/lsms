@@ -23,7 +23,7 @@
 #endif
 
 #ifndef MST_LINEAR_SOLVER_DEFAULT
-#define MST_LINEAR_SOLVER_DEFAULT 0xf00
+#define MST_LINEAR_SOLVER_DEFAULT 5
 #endif
 
 #define MST_BUILD_KKR_MATRIX_F77         0x1000
@@ -31,15 +31,20 @@
 #define MST_BUILD_KKR_MATRIX_ACCELERATOR 0x3000
 
 #define MST_LINEAR_SOLVER_ZGESV 1
-void solveTau00zgesv(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00);
+void solveTau00zgesv(LSMSSystemParameters &lsms, LocalTypeInfo &local,
+                     AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00, int ispin);
 #define MST_LINEAR_SOLVER_ZGETRF 2
-void solveTau00zgetrf(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00);
+void solveTau00zgetrf(LSMSSystemParameters &lsms, LocalTypeInfo &local,
+                      AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00, int ispin);
 #define MST_LINEAR_SOLVER_ZCGESV 3
-void solveTau00zcgesv(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00);
+void solveTau00zcgesv(LSMSSystemParameters &lsms, LocalTypeInfo &local,
+                      AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00, int ispin);
 #define MST_LINEAR_SOLVER_ZBLOCKLU_F77 4
-void solveTau00zblocklu_f77(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00);
+void solveTau00zblocklu_f77(LSMSSystemParameters &lsms, LocalTypeInfo &local,
+                            AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00, int ispin);
 #define MST_LINEAR_SOLVER_ZBLOCKLU_CPP 5
-void solveTau00zblocklu_cpp(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00);
+void solveTau00zblocklu_cpp(LSMSSystemParameters &lsms, LocalTypeInfo &local,
+                            AtomData &atom, int iie, Matrix<Complex> &m, Matrix<Complex> &tau00, int ispin);
 
 // #ifdef ACCELERATOR_CUBLAS
 #define MST_LINEAR_SOLVER_ZGETRF_CUBLAS 0x10

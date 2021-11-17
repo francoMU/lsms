@@ -62,6 +62,9 @@ add_subdirectory(include)
 option(USE_ACCELERATOR_CUDA_C "Use the cuda accelerator" OFF)
 
 if (USE_ACCELERATOR_CUDA_C)
+
+    message(STATUS "ACCELERATOR_CUDA_C was activated")
+
     target_compile_definitions(lsmscore PUBLIC USE_ACCELERATOR_CUDA_C)
     target_compile_definitions(lsms_main PUBLIC USE_ACCELERATOR_CUDA_C)
 
@@ -75,7 +78,8 @@ if (USE_ACCELERATOR_CUDA_C)
         set(CMAKE_CUDA_STANDARD_REQUIRED ON)
     endif()
 
-    set_target_properties(particles PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+    set_target_properties(lsmscore PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+    set_target_properties(lsms_main PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 endif()
 

@@ -78,8 +78,9 @@ if (USE_ACCELERATOR_CUDA_C)
         set(CMAKE_CUDA_STANDARD_REQUIRED ON)
     endif()
 
-    set_target_properties(lsmscore PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
-    set_target_properties(lsms_main PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+    if(NOT DEFINED CMAKE_CUDA_SEPARABLE_COMPILATION)
+        set(CMAKE_CUDA_SEPARABLE_COMPILATION ON)
+    endif()
 
 endif()
 

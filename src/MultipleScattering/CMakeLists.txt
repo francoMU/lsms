@@ -38,6 +38,16 @@ target_sources(lsmscore
         zblock_lu_cublas.cpp
         )
 
+if (USE_ACCELERATOR_CUDA_C)
+    target_sources(
+            lsmscore
+            PUBLIC
+            buildKKRMatrix_CUDA.cu
+            linearSolvers_CUDA.cu
+            linearSolvers_CPU.cpp
+    )
+endif ()
+
 target_include_directories(
         lsmscore
         PUBLIC

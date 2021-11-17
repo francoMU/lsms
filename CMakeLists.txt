@@ -38,6 +38,10 @@ include(libxc)
 # Build mjson library
 include(mjson)
 
+
+
+
+
 #
 # Enable Testing with CTest
 #
@@ -47,13 +51,35 @@ enable_testing()
 message(STATUS "Testing is " ${BUILD_TESTING})
 add_subdirectory(unittests)
 
-
 #
 # Add main source subdirectory
 #
 add_subdirectory(src)
 
 add_subdirectory(include)
+
+# Enable the CUDA compilation
+option(USE_ACCELERATOR_CUDA_C "Use the cuda accelerator" OFF)
+
+if (USE_ACCELERATOR_CUDA_C)
+    target_compile_definitions(lsmscore PUBLIC USE_ACCELERATOR_CUDA_C)
+    target_compile_definitions(lsms_main PUBLIC USE_ACCELERATOR_CUDA_C)
+
+    include(CheckLanguage)
+    check_language(CUDA)
+
+    enable_language(CUDA)
+
+    if(NOT DEFINED CMAKE_CUDA_STANDARD)
+        set(CMAKE_CUDA_STANDARD 14)
+        set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+    endif()
+
+    set_target_properties(particles PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+
+endif()
+
+
 
 # Find MPI library
 find_package(MPI REQUIRED COMPONENTS CXX OPTIONAL_COMPONENTS)

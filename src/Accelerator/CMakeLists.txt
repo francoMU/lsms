@@ -2,21 +2,29 @@
 # Created by Franco P. Moitzi
 #
 
+target_sources(lsmscore
+        PUBLIC
+
+        inverse.cu
+        inverse.h
+
+        operations.h
+
+        DeviceStorage.cu
+        zblock_lu_cuda_c.cu
+
+
+        )
 
 target_sources(
         lsmscore
         PUBLIC
         accelerator_initialize.F
         accelerator_finalize.F
-        accelerator_interface.h
-        Accelerator.hpp
         Accelerator.cpp
-        zblock_lu_cuda_c.cu
+        Accelerator.hpp
         fortran.c
         fortran.h
-        inverse.cu
-        DeviceStorage.cu
-        DeviceStorage.hpp
 )
 
 

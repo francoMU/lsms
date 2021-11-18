@@ -21,7 +21,7 @@ option(USE_ACCELERATOR_CUDA_C "Use the cuda accelerator" OFF)
 if (USE_ACCELERATOR_CUDA_C)
     message(STATUS "ACCELERATOR_CUDA_C was activated")
     enable_language(CUDA)
-endif()
+endif ()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
@@ -47,9 +47,6 @@ include(libxc)
 include(mjson)
 
 
-
-
-
 #
 # Enable Testing with CTest
 #
@@ -71,17 +68,25 @@ if (USE_ACCELERATOR_CUDA_C)
     target_compile_definitions(lsmscore PUBLIC USE_ACCELERATOR_CUDA_C)
     target_compile_definitions(lsms_main PUBLIC USE_ACCELERATOR_CUDA_C)
 
-    if(NOT DEFINED CMAKE_CUDA_STANDARD)
+    if (NOT DEFINED CMAKE_CUDA_STANDARD)
         set(CMAKE_CUDA_STANDARD 14)
         set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-    endif()
+    endif ()
 
-    if(NOT DEFINED CMAKE_CUDA_SEPARABLE_COMPILATION)
+    if (NOT DEFINED CMAKE_CUDA_SEPARABLE_COMPILATION)
         set(CMAKE_CUDA_SEPARABLE_COMPILATION ON)
-    endif()
+    endif ()
 
-endif()
+    find_package(CUDAToolkit REQUIRED)
 
+    message(STATUS "CUDA Version: " ${CUDAToolkit_VERSION})
+    message(STATUS "CUDA Include dirs: " ${CUDAToolkit_INCLUDE_DIRS})
+    message(STATUS "CUDA Library" ${CUDAToolkit_LIBRARY_DIR})
+
+    target_link_libraries(lsmscore PUBLIC CUDA::cudart)
+    target_link_libraries(lsmscore PUBLIC CUDA::cublas)
+
+endif ()
 
 
 # Find MPI library

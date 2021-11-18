@@ -11,6 +11,8 @@ target_sources(lsmscore
         operations.h
 
         DeviceStorage.cu
+        DeviceStorage.hpp
+
         zblock_lu_cuda_c.cu
 
 

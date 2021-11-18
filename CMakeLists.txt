@@ -65,8 +65,7 @@ add_subdirectory(include)
 
 if (USE_ACCELERATOR_CUDA_C)
 
-    target_compile_definitions(lsmscore PUBLIC USE_ACCELERATOR_CUDA_C)
-    target_compile_definitions(lsms_main PUBLIC USE_ACCELERATOR_CUDA_C)
+    target_compile_definitions(lsmscore PUBLIC ACCELERATOR_CUDA_C)
 
     if (NOT DEFINED CMAKE_CUDA_STANDARD)
         set(CMAKE_CUDA_STANDARD 14)
@@ -81,10 +80,9 @@ if (USE_ACCELERATOR_CUDA_C)
 
     message(STATUS "CUDA Version: " ${CUDAToolkit_VERSION})
     message(STATUS "CUDA Include dirs: " ${CUDAToolkit_INCLUDE_DIRS})
-    message(STATUS "CUDA Library" ${CUDAToolkit_LIBRARY_DIR})
+    message(STATUS "CUDA Library: " ${CUDAToolkit_LIBRARY_DIR})
 
-    target_link_libraries(lsmscore PUBLIC CUDA::cudart)
-    target_link_libraries(lsmscore PUBLIC CUDA::cublas)
+    target_link_libraries(lsmscore PUBLIC CUDA::toolkit)
 
 endif ()
 

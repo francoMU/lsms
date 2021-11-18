@@ -544,23 +544,23 @@ void calculateTauMatrix(LSMSSystemParameters &lsms, LocalTypeInfo &local, AtomDa
       solveTau00zblocklu_cpp(lsms, local, atom, iie, m, tau00, ispin); break;
 #ifdef ACCELERATOR_CUDA_C
     case MST_LINEAR_SOLVER_ZGETRF_CUBLAS:
-      solveTau00zgetrf_cublas(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+      solveTau00zgetrf_cublas(lsms, local, *deviceStorage, atom, devT0, devM, tau00, ispin); break;
     case MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS:
       printf("MST_LINEAR_SOLVER_ZBLOCKLU_CUBLAS (%d) not implemented!!!\n",linearSolver);
       exit(1); break;
 #ifndef ARCH_IBM
     case MST_LINEAR_SOLVER_ZZGESV_CUSOLVER:
-      solveTau00zzgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+      solveTau00zzgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00, ispin); break;
 #endif
     case MST_LINEAR_SOLVER_ZGETRF_CUSOLVER:
-      solveTau00zgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+      solveTau00zgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00, ispin); break;
 #ifdef USE_XGETRF
     case MST_LINEAR_SOLVER_XGETRF_CUSOLVER:
-      solveTau00Xgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+      solveTau00Xgetrf_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00, ispin); break;
 #endif
 #ifdef USE_IRSXGESV
     case MST_LINEAR_SOLVER_IRSXGESV_CUSOLVER:
-      solveTau00IRSXgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00); break;
+      solveTau00IRSXgesv_cusolver(lsms, local, *deviceStorage, atom, devT0, devM, tau00, ispin); break;
 #endif
 #endif
 #ifdef ACCELERATOR_HIP

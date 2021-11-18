@@ -15,6 +15,14 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Enable the CUDA compilation
+option(USE_ACCELERATOR_CUDA_C "Use the cuda accelerator" OFF)
+
+if (USE_ACCELERATOR_CUDA_C)
+    message(STATUS "ACCELERATOR_CUDA_C was activated")
+    enable_language(CUDA)
+endif()
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Default build type is RELEASE
@@ -58,20 +66,10 @@ add_subdirectory(src)
 
 add_subdirectory(include)
 
-# Enable the CUDA compilation
-option(USE_ACCELERATOR_CUDA_C "Use the cuda accelerator" OFF)
-
 if (USE_ACCELERATOR_CUDA_C)
-
-    message(STATUS "ACCELERATOR_CUDA_C was activated")
 
     target_compile_definitions(lsmscore PUBLIC USE_ACCELERATOR_CUDA_C)
     target_compile_definitions(lsms_main PUBLIC USE_ACCELERATOR_CUDA_C)
-
-    include(CheckLanguage)
-    check_language(CUDA)
-
-    enable_language(CUDA)
 
     if(NOT DEFINED CMAKE_CUDA_STANDARD)
         set(CMAKE_CUDA_STANDARD 14)

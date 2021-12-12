@@ -22,6 +22,9 @@ target_sources(lsmscore
         rs.f
         lsf_functional.hpp
         lsf_functional.cpp
+        newFunctionalInterface.cpp
+        newFunctionalInterface.hpp
+        common.hpp
         )
 
 target_include_directories(

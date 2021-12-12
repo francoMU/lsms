@@ -16,8 +16,7 @@
 
 #include "Misc/Indices.hpp"
 
-
-const int numFunctionalIndices=3;
+#include "Potential/common.hpp"
 #include "Potential/libxcInterface.hpp"
 #include "Potential/newFunctionalInterface.hpp"
 

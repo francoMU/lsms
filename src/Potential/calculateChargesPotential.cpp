@@ -1,5 +1,7 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 #include "calculateChargesPotential.hpp"
+
+#include "newFunctionalInterface.hpp"
 #ifdef USE_LIBXC
 #include "libxcInterface.hpp"
 #endif

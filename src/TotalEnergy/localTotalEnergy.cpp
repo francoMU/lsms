@@ -16,6 +16,9 @@ void localTotalEnergy(LSMSSystemParameters &lsms, AtomData &atom,
 Real &energy, Real &pressure)
 {
   Real eigenvalueSum=0.0;
+  Real coreSum=0.0;
+  Real semicoreSum=0.0;
+  Real contourSum=0.0;
   Real kineticEnergy=0.0;
   Real coulombEnergy=0.0;
   Real xcEnergy=0.0;
@@ -58,6 +61,11 @@ Real &energy, Real &pressure)
   {
     eigenvalueSum=atom.evalsum[0]+atom.esemv[0];
 
+    coreSum=atom.ecorv[0];
+    semicoreSum=atom.esemv[0];
+    contourSum=atom.evalsum[0];
+
+
     kineticEnergy = atom.ecorv[0]+atom.esemv[0]; // (1)
     kineticEnergy += atom.evalsum[0]; // (2)
 
@@ -76,6 +84,10 @@ Real &energy, Real &pressure)
 
     kineticEnergy = atom.ecorv[0]+atom.ecorv[1]+atom.esemv[0]+atom.esemv[1]; // (1)
     kineticEnergy += atom.evalsum[0]+atom.evalsum[1]; // (2)
+
+    coreSum=atom.ecorv[0]+atom.ecorv[1];
+    semicoreSum=atom.esemv[0]+atom.esemv[1];
+    contourSum=atom.evalsum[0]+atom.evalsum[1];
 
     // set up integrand for (3)
     for(int i=0; i<atom.r_mesh.size(); i++)
@@ -97,6 +109,9 @@ Real &energy, Real &pressure)
   // kineticEnergy -= integrateOneDim<11>(gridCbrt, integrand, integral, std::cbrt(rSphere)); // (3)
   if (lsms.global.iprint >= 0)
   {
+    printf("coreSum                     = %35.25lf Ry\n",coreSum);
+    printf("semicoreSum                 = %35.25lf Ry\n",semicoreSum);
+    printf("contourSum                  = %35.25lf Ry\n",contourSum);
     printf("evssum                      = %35.25lf Ry\n",eigenvalueSum);
     printf("kinetic Energy              = %35.25lf Ry\n",kineticEnergy);
   }

@@ -20,7 +20,7 @@ void calculateEvec(LSMSSystemParameters &lsms, LocalTypeInfo &local)
       Real evecMagnitude = std::sqrt(moment[0] * moment[0] + \
                                      moment[1] * moment[1] + \
                                      moment[2] * moment[2]);
-      if (lsms.global.iprint > 0)
+      if (lsms.global.iprint >= 0)
       {
         printf(" GETEVEC: moment = (%12.8f, %12.8f, %12.8f) magnitude = %12.8f\n", moment[0], moment[1], moment[2], evecMagnitude);
       }

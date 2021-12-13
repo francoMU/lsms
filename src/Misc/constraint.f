@@ -56,6 +56,7 @@ c     ================================================================
 c     Check to see if B_con=0: if so then set evec_r=evec and return..
 c     ================================================================
       b_con_mag=zero
+      print *, "B", b_con
       do i=1,3
          b_con_g(i)=b_con(1)*b_basis(i,1)+b_con(2)*b_basis(i,2)+
      >            b_con(3)*b_basis(i,3)
@@ -96,7 +97,7 @@ c
          write(6,'('' B xcor      :'',3f12.5,5x
      >             )')  (evec(i),i=1,3)
          if(abs(b_con_mag).gt.tol) then
-            write(6,'('' B constraint:'',3f12.5,5x,
+            write(6,'('' B constraint tol:'',3f12.5,5x,
      >                f10.5)')  (b_con_g(i)/b_con_mag,i=1,3),b_con_mag
          else
             write(6,'('' B constraint:'',3f12.5,5x,

@@ -7,7 +7,9 @@
 #include <fenv.h>
 
 #ifdef _OPENMP
+
 #include <omp.h>
+
 #endif
 
 // #define USE_PAPI 1
@@ -91,11 +93,10 @@ feenableexcept (unsigned int excepts)
 
   return ( fesetenv (&fenv) ? -1 : old_excepts );
 }
-*/ 
+*/
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   LSMSSystemParameters lsms;
   LSMSCommunication comm;
   CrystalParameters crystal;
@@ -143,8 +144,7 @@ int main(int argc, char *argv[])
   if (comm.rank == 0)
     lsms.global.iprint = 0;
 
-  if (comm.rank == 0)
-  {
+  if (comm.rank == 0) {
     printf("LSMS_3: Program started\n");
     printf("Using %d MPI processes\n", comm.size);
 #ifdef _OPENMP
@@ -158,8 +158,7 @@ int main(int argc, char *argv[])
     printf("Reading input file '%s'\n", inputFileName);
     fflush(stdout);
 
-    if (luaL_loadfile(L, inputFileName) || lua_pcall(L,0,0,0))
-    {
+    if (luaL_loadfile(L, inputFileName) || lua_pcall(L, 0, 0, 0)) {
       fprintf(stderr, "!! Cannot run input file!!\n");
       exit(1);
     }
@@ -167,8 +166,7 @@ int main(int argc, char *argv[])
     printf("Loaded input file!\n");
     fflush(stdout);
 
-    if (readInput(L, lsms, crystal, mix, potentialShifter, alloyDesc))
-    {
+    if (readInput(L, lsms, crystal, mix, potentialShifter, alloyDesc)) {
       fprintf(stderr, "!! Something wrong in input file!!\n");
       exit(1);
     }
@@ -177,8 +175,7 @@ int main(int argc, char *argv[])
     printf("===================\n");
     printf("Number of atoms        : %10d\n", crystal.num_atoms);
     printf("Number of atomic types : %10d\n", crystal.num_types);
-    switch (lsms.mtasa)
-    {
+    switch (lsms.mtasa) {
       case 1:
         printf("Performing Atomic Sphere Approximation (ASA) calculation\n");
         break;
@@ -194,26 +191,24 @@ int main(int argc, char *argv[])
 #ifdef LSMS_DEBUG
   MPI_Barrier(comm.comm);
 #endif
- 
+
   communicateParameters(comm, lsms, crystal, mix, alloyDesc);
   if (comm.rank != lsms.global.print_node)
     lsms.global.iprint = lsms.global.default_iprint;
   // printf("maxlmax=%d\n",lsms.maxlmax);
-  if(comm.rank == 0)
-  {
+  if (comm.rank == 0) {
     printf("communicated Parameters.\n");
     fflush(stdout);
   }
 
   local.setNumLocal(distributeTypes(crystal, comm));
   local.setGlobalId(comm.rank, crystal);
-     
+
 #if defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
   deviceAtoms.resize(local.num_local);
 #endif
-     
-  if(comm.rank == 0)
-  {
+
+  if (comm.rank == 0) {
     printf("set global ids.\n");
     fflush(stdout);
   }
@@ -231,8 +226,8 @@ int main(int argc, char *argv[])
   if (lsms.xcFunctional[0] == 2)         // use new LSMS functional
     lsms.newFunctional.init(lsms.n_spin_pola, lsms.xcFunctional);
 
-  lsms.angularMomentumIndices.init(2*crystal.maxlmax);
-  sphericalHarmonicsCoeficients.init(2*crystal.maxlmax);
+  lsms.angularMomentumIndices.init(2 * crystal.maxlmax);
+  sphericalHarmonicsCoeficients.init(2 * crystal.maxlmax);
 
   gauntCoeficients.init(lsms, lsms.angularMomentumIndices, sphericalHarmonicsCoeficients);
   iFactors.init(lsms, crystal.maxlmax);
@@ -242,15 +237,13 @@ int main(int argc, char *argv[])
 #endif
 
   double timeBuildLIZandCommList = MPI_Wtime();
-  if (lsms.global.iprint >= 0)
-  {
+  if (lsms.global.iprint >= 0) {
     printf("building the LIZ and Communication lists [buildLIZandCommLists]\n");
     fflush(stdout);
   }
   buildLIZandCommLists(comm, lsms, crystal, local);
   timeBuildLIZandCommList = MPI_Wtime() - timeBuildLIZandCommList;
-  if (lsms.global.iprint >= 0)
-  {
+  if (lsms.global.iprint >= 0) {
     printf("time for buildLIZandCommLists [num_local=%d]: %lf sec\n",
            local.num_local, timeBuildLIZandCommList);
     fflush(stdout);
@@ -264,15 +257,15 @@ int main(int argc, char *argv[])
 // we need to know the max. size of the kkr matrix to invert: lsms.n_spin_cant*local.maxNrmat()
 // which is only available after building the LIZ
 
-  acceleratorInitialize(lsms.n_spin_cant*local.maxNrmat(), lsms.global.GPUThreads);
+  acceleratorInitialize(lsms.n_spin_cant * local.maxNrmat(), lsms.global.GPUThreads);
   local.tmatStore.pinMemory();
 #if defined(ACCELERATOR_CUBLAS) || defined(ACCELERATOR_LIBSCI) || defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
   // deviceStorage = allocateDStore();
   deviceStorage = new DeviceStorage;
 #endif
 
-  for (int i=0; i<local.num_local; i++)
-    local.atom[i].pmat_m.resize(lsms.energyContour.groupSize());  
+  for (int i = 0; i < local.num_local; i++)
+    local.atom[i].pmat_m.resize(lsms.energyContour.groupSize());
 
 // set maximal number of radial grid points and core states if reading from bigcell file
   local.setMaxPts(lsms.global.iprpts);
@@ -283,8 +276,7 @@ int main(int argc, char *argv[])
   if (lsms.global.iprint >= 1) printCrystalParameters(stdout, crystal);
   if (lsms.global.iprint >= 0) printAlloyParameters(stdout, alloyDesc);
 
-  if (lsms.global.iprint >= 1)
-  {
+  if (lsms.global.iprint >= 1) {
     printCommunicationInfo(stdout, comm);
   }
   fflush(stdout);
@@ -316,23 +308,20 @@ int main(int argc, char *argv[])
 
   loadPotentials(comm, lsms, crystal, local);
 
-  if (lsms.global.iprint >= 0)
-  {
-    fprintf(stdout,"LIZ for atom 0 on this node\n");
+  if (lsms.global.iprint >= 0) {
+    fprintf(stdout, "LIZ for atom 0 on this node\n");
     printLIZInfo(stdout, local.atom[0]);
-    if(local.atom[0].forceZeroMoment) {
-      fprintf(stdout,"\nMagnetic moment of atom 0 forced to be zero!\n\n");
+    if (local.atom[0].forceZeroMoment) {
+      fprintf(stdout, "\nMagnetic moment of atom 0 forced to be zero!\n\n");
     }
   }
 
-  if ( alloyDesc.size() > 0 )
-  {
-    if(lsms.global.iprint >= 0)
-    {
+  if (alloyDesc.size() > 0) {
+    if (lsms.global.iprint >= 0) {
       printf("Entering the LOADING of the alloy banks.\n");
       fflush(stdout);
     }
-    loadAlloyBank(comm,lsms,alloyDesc,alloyBank); 
+    loadAlloyBank(comm, lsms, alloyDesc, alloyBank);
   }
 
 // for testing purposes:
@@ -357,9 +346,8 @@ int main(int argc, char *argv[])
 #endif
 
 // Generate new grids after new rmt is defined
-  for (int i=0; i<local.num_local; i++)
-  {
-    if(local.atom[i].generateNewMesh)
+  for (int i = 0; i < local.num_local; i++) {
+    if (local.atom[i].generateNewMesh)
       interpolatePotential(lsms, local.atom[i]);
   }
 
@@ -374,8 +362,7 @@ int main(int argc, char *argv[])
 // need to calculate madelung matrices
   calculateMadelungMatrices(lsms, crystal, local);
 
-  if (lsms.global.iprint >= 1)
-  {
+  if (lsms.global.iprint >= 1) {
     printLocalTypeInfo(stdout, local);
   }
 
@@ -411,18 +398,15 @@ int main(int argc, char *argv[])
   }
 */
 
-  if (lsms.n_spin_cant > 1)
-  {
-    for (int i=0; i<local.num_local; i++)
+  if (lsms.n_spin_cant > 1) {
+    for (int i = 0; i < local.num_local; i++)
       local.atom[i].get_b_basis();
-  }
-  else
-  {
-    for (int i=0; i<local.num_local; i++)
+  } else {
+    for (int i = 0; i < local.num_local; i++)
       local.atom[i].reset_b_basis();
   }
 
-  mixing -> prepare(comm, lsms, local.atom);
+  mixing->prepare(comm, lsms, local.atom);
 
 #ifdef USE_PAPI
   #define NUM_PAPI_EVENTS 2
@@ -465,18 +449,69 @@ int main(int argc, char *argv[])
   int potentialWriteCounter = 0;
 
   FILE *kFile = NULL;
-  if (comm.rank == 0)
-  {
+  if (comm.rank == 0) {
     iterationStart = readNextIterationNumber("k.out");
-    kFile = fopen("k.out","a");
+    kFile = fopen("k.out", "a");
   }
+
+  if (lsms.global.iprint >= 0) {
+    for (int i = 0; i < local.num_local; i++) {
+      std::printf("B     %2d: %f %f %f\n", -1, local.atom[i].b_con[0], local.atom[i].b_con[1],
+                  local.atom[i].b_con[2]);
+      std::printf("Evec  %2d: %f %f %f\n", -1, local.atom[i].evec[0], local.atom[i].evec[1],
+                  local.atom[i].evec[2]);
+      std::printf("EvecN %2d: %f %f %f\n", -1, local.atom[i].evecNew[0], local.atom[i].evecNew[1],
+                  local.atom[i].evecNew[2]);
+      std::printf("EvecO %2d: %f %f %f\n", -1, local.atom[i].evecOut[0], local.atom[i].evecOut[1],
+                  local.atom[i].evecOut[2]);
+    }
+  }
+
+  // Precalculate the new constrain
+  calculateEvec(lsms, local);
+  for (int i = 0; i < local.num_local; i++) {
+    if (!mix.quantity[MixingParameters::moment_direction]) {
+      local.atom[i].newConstraint();
+      std::printf("New constraint\n");
+    }
+
+    local.atom[i].evec[0] = local.atom[i].evecNew[0];
+    local.atom[i].evec[1] = local.atom[i].evecNew[1];
+    local.atom[i].evec[2] = local.atom[i].evecNew[2];
+
+    checkIfSpinHasFlipped(lsms, local.atom[i]);
+  }
+
+
+  /*
+   * Hard code the B field
+   */
+
+  local.atom[0].b_con[0] = 0.020231445147156;
+  local.atom[0].b_con[1] = -0.092616060041468;
+  local.atom[0].b_con[2] = 0.000016719726451;
+  local.atom[1].b_con[0] = 0.075695843934309;
+  local.atom[1].b_con[1] = 0.090268925418799;
+  local.atom[1].b_con[2] = 0.000024602867257;
+  local.atom[2].b_con[0] = 0.075695843933351;
+  local.atom[2].b_con[1] = -0.090268925417478;
+  local.atom[2].b_con[2] = 0.000024602867258;
+  local.atom[3].b_con[0] = -0.092616060041977;
+  local.atom[3].b_con[1] = 0.020231445147094;
+  local.atom[3].b_con[2] = 0.000016719726454;
+
+
+
+
+  /*
+   *
+   */
 
   int iteration;
 #ifdef USE_NVTX
   nvtxRangePushA("SCFLoop");
-#endif  
-  for (iteration=0; iteration<lsms.nscf && !converged; iteration++)
-  {
+#endif
+  for (iteration = 0; iteration < lsms.nscf && !converged; iteration++) {
     if (lsms.global.iprint >= -1 && comm.rank == 0)
       printf("SCF iteration %d:\n", iteration);
 
@@ -493,17 +528,45 @@ int main(int argc, char *argv[])
     // Calculate magnetic moments for each site and check if spin has flipped
     calculateEvec(lsms, local);
     // mixEvec(lsms, local, 0.0);
-    mixing -> updateMoments(comm, lsms, local.atom);
-    for (int i=0; i<local.num_local; i++)
-    {
-      if(!mix.quantity[MixingParameters::moment_direction])
+    mixing->updateMoments(comm, lsms, local.atom);
+
+    if (lsms.global.iprint >= 0) {
+      for (int i = 0; i < local.num_local; i++) {
+        std::printf("B     %2d: %f %f %f\n", iteration, local.atom[i].b_con[0], local.atom[i].b_con[1],
+                    local.atom[i].b_con[2]);
+        std::printf("Evec  %2d: %f %f %f\n", iteration, local.atom[i].evec[0], local.atom[i].evec[1],
+                    local.atom[i].evec[2]);
+        std::printf("EvecN %2d: %f %f %f\n", iteration, local.atom[i].evecNew[0], local.atom[i].evecNew[1],
+                    local.atom[i].evecNew[2]);
+        std::printf("EvecO %2d: %f %f %f\n", iteration, local.atom[i].evecOut[0], local.atom[i].evecOut[1],
+                    local.atom[i].evecOut[2]);
+      }
+    }
+
+    for (int i = 0; i < local.num_local; i++) {
+      if (!mix.quantity[MixingParameters::moment_direction]) {
         local.atom[i].newConstraint();
-      
+        std::printf("New constraint\n");
+      }
+
       local.atom[i].evec[0] = local.atom[i].evecNew[0];
       local.atom[i].evec[1] = local.atom[i].evecNew[1];
       local.atom[i].evec[2] = local.atom[i].evecNew[2];
-      
+
       checkIfSpinHasFlipped(lsms, local.atom[i]);
+    }
+
+    if (lsms.global.iprint >= 0) {
+      for (int i = 0; i < local.num_local; i++) {
+        std::printf("B     %2d: %f %f %f\n", iteration, local.atom[i].b_con[0], local.atom[i].b_con[1],
+                    local.atom[i].b_con[2]);
+        std::printf("Evec  %2d: %f %f %f\n", iteration, local.atom[i].evec[0], local.atom[i].evec[1],
+                    local.atom[i].evec[2]);
+        std::printf("EvecN %2d: %f %f %f\n", iteration, local.atom[i].evecNew[0], local.atom[i].evecNew[1],
+                    local.atom[i].evecNew[2]);
+        std::printf("EvecO %2d: %f %f %f\n", iteration, local.atom[i].evecOut[0], local.atom[i].evecOut[1],
+                    local.atom[i].evecOut[2]);
+      }
     }
 
     double dTimePM = MPI_Wtime();
@@ -524,11 +587,11 @@ int main(int argc, char *argv[])
 
     // Calculate charge density rms
     calculateLocalQrms(lsms, local);
-    
+
     // Mix charge density
-    mixing -> updateChargeDensity(comm, lsms, local.atom);
+    mixing->updateChargeDensity(comm, lsms, local.atom);
     dTimePM = MPI_Wtime() - dTimePM;
-    timeCalcPotentialsAndMixing += dTimePM; 
+    timeCalcPotentialsAndMixing += dTimePM;
 
     // pf = fopen("vr_test_3.dat","w");
     // printAtomPotential(pf, local.atom[0]);
@@ -537,9 +600,8 @@ int main(int argc, char *argv[])
     // Recalculate core states
     // - swap core state energies for different spin channels first if spin has flipped
     //   (from LSMS 1: lsms_main.f:2101-2116)
-    for (int i=0; i<local.num_local; i++) {
-      if (local.atom[i].spinFlipped)
-      {
+    for (int i = 0; i < local.num_local; i++) {
+      if (local.atom[i].spinFlipped) {
         checkIfSpinHasFlipped(lsms, local.atom[i]);
         if (!local.atom[i].spinFlipped)
           swapCoreStateEnergies(local.atom[i]);
@@ -559,8 +621,8 @@ int main(int argc, char *argv[])
     // printAtomPotential(pf, local.atom[0]);
     // fclose(pf);
 
-    mixing -> updatePotential(comm, lsms, local.atom);
-    
+    mixing->updatePotential(comm, lsms, local.atom);
+
     // pf = fopen("vr_test_6.dat","w");
     // printAtomPotential(pf, local.atom[0]);
     // fclose(pf);
@@ -571,21 +633,20 @@ int main(int argc, char *argv[])
     timeCalcPotentialsAndMixing += dTimePM;
 
     Real rms = 0.0;
-    if(lsms.n_spin_pola > 1)
-    {
+    if (lsms.n_spin_pola > 1) {
       // rms = 0.5 * (local.qrms[0] + local.qrms[1]);
       rms = 0.0;
-      for(int i=0; i<local.num_local; i++)
-        rms = std::max(rms, 0.5*(local.atom[i].qrms[0]+local.atom[i].qrms[1]));
+      for (int i = 0; i < local.num_local; i++)
+        rms = std::max(rms, 0.5 * (local.atom[i].qrms[0] + local.atom[i].qrms[1]));
       globalMax(comm, rms);
     } else {
       // rms = local.qrms[0];
       rms = 0.0;
-      for(int i=0; i<local.num_local; i++)
+      for (int i = 0; i < local.num_local; i++)
         rms = std::max(rms, local.atom[i].qrms[0]);
       globalMax(comm, rms);
     }
-    
+
 // check for convergence
     converged = rms < lsms.rmsTolerance;
     /*
@@ -598,28 +659,24 @@ int main(int argc, char *argv[])
     globalAnd(comm, converged);
     */
 
-    if (comm.rank == 0)
-    {
+    if (comm.rank == 0) {
       printf("Band Energy = %lf Ry %10s", eband, "");
       printf("Fermi Energy = %lf Ry\n", lsms.chempot);
       printf("Total Energy = %lf Ry\n", lsms.totalEnergy);
-      printf("RMS = %lg\n",rms);
-      if(lsms.global.iprint > 0)
-      {
-        printf("  qrms[0] = %lg   qrms[1] = %lg\n",local.qrms[0], local.qrms[1]);
+      printf("RMS = %lg\n", rms);
+      if (lsms.global.iprint > 0) {
+        printf("  qrms[0] = %lg   qrms[1] = %lg\n", local.qrms[0], local.qrms[1]);
         printf("  local.atom[i]:\n");
-        for (int i=0; i<local.num_local; i++)
-        {
-          printf("  %d : qrms[0] = %lg   qrms[1] = %lg\n",i,local.atom[i].qrms[0], local.atom[i].qrms[1]);
-          printf("  %d : vrms[0] = %lg   vrms[1] = %lg\n",i,local.atom[i].vrms[0], local.atom[i].vrms[1]);
+        for (int i = 0; i < local.num_local; i++) {
+          printf("  %d : qrms[0] = %lg   qrms[1] = %lg\n", i, local.atom[i].qrms[0], local.atom[i].qrms[1]);
+          printf("  %d : vrms[0] = %lg   vrms[1] = %lg\n", i, local.atom[i].vrms[0], local.atom[i].vrms[1]);
         }
       }
     }
 
-    if (kFile != NULL)
-    {
-      fprintf(kFile,"%4d %20.12lf %12.6lf %12.6lf  %14.10lf\n",
-              iterationStart+iteration, lsms.totalEnergy, lsms.chempot, local.atom[0].mtotws, rms);
+    if (kFile != NULL) {
+      fprintf(kFile, "%4d %20.12lf %12.6lf %12.6lf  %14.10lf\n",
+              iterationStart + iteration, lsms.totalEnergy, lsms.chempot, local.atom[0].mtotws, rms);
       fflush(kFile);
     }
 
@@ -629,13 +686,11 @@ int main(int argc, char *argv[])
     // Periodically write the new potential for scf calculations 
     potentialWriteCounter++;
     if ((lsms.pot_out_type >= 0 && potentialWriteCounter >= lsms.writeSteps)
-        || converged)
-    {
+        || converged) {
       if (comm.rank == 0) std::cout << "Writing new potentials and restart file.\n";
       writePotentials(comm, lsms, crystal, local);
       potentialWriteCounter = 0;
-      if (comm.rank == 0)
-      { 
+      if (comm.rank == 0) {
         writeRestart("i_lsms.restart", lsms, crystal, mix, potentialShifter, alloyDesc);
       }
     }
@@ -645,15 +700,15 @@ int main(int argc, char *argv[])
   nvtxRangePop();
 #endif
   timeScfLoop = MPI_Wtime() - timeScfLoop;
-  
+
   writeInfoEvec(comm, lsms, crystal, local, eband, lsms.infoEvecFileOut);
-  if(lsms.localAtomDataFile[0]!=0)
+  if (lsms.localAtomDataFile[0] != 0)
     writeLocalAtomData(comm, lsms, crystal, local, eband, lsms.localAtomDataFile);
 
   if (kFile != NULL)
     fclose(kFile);
 
- 
+
 
 // -----------------------------------------------------------------------------
 
@@ -687,12 +742,10 @@ int main(int argc, char *argv[])
   }
 #endif
 
-  if (lsms.pot_out_type >= 0)
-  {
+  if (lsms.pot_out_type >= 0) {
     if (comm.rank == 0) std::cout << "Writing new potentials.\n";
     writePotentials(comm, lsms, crystal, local);
-    if (comm.rank == 0)
-    {
+    if (comm.rank == 0) {
       std::cout << "Writing restart file.\n";
       writeRestart("i_lsms.restart", lsms, crystal, mix, potentialShifter, alloyDesc);
     }
@@ -700,19 +753,18 @@ int main(int argc, char *argv[])
 
   double fomScale = calculateFomScaleDouble(comm, local);
 
-  if (comm.rank == 0)
-  {
+  if (comm.rank == 0) {
     printf("Band Energy = %.15lf Ry\n", eband);
     printf("Fermi Energy = %.15lf Ry\n", lsms.chempot);
     printf("Total Energy = %.15lf Ry\n", lsms.totalEnergy);
     printf("timeScfLoop[rank==0] = %lf sec\n", timeScfLoop);
-    printf("     number of iteration:%d\n",iteration);
-    printf("timeScfLoop/iteration = %lf sec\n", timeScfLoop / (double)iteration);
+    printf("     number of iteration:%d\n", iteration);
+    printf("timeScfLoop/iteration = %lf sec\n", timeScfLoop / (double) iteration);
     // printf(".../lsms.nscf = %lf sec\n", timeScfLoop / (double)lsms.nscf);
-    printf("timeCalcChemPot[rank==0]/iteration = %lf sec\n", timeCalcChemPot / (double)iteration);
+    printf("timeCalcChemPot[rank==0]/iteration = %lf sec\n", timeCalcChemPot / (double) iteration);
     // printf("timeCalcChemPot[rank==0]/lsms.nscf = %lf sec\n", timeCalcChemPot / (double)lsms.nscf);
     printf("timeCalcPotentialsAndMixing[rank==0]/iteration = %lf sec\n",
-            timeCalcPotentialsAndMixing / (double)iteration);
+           timeCalcPotentialsAndMixing / (double) iteration);
     printf("timeBuildLIZandCommList[rank==0]: %lf sec\n",
            timeBuildLIZandCommList);
     // fom = [ \sum_#atoms (LIZ * (lmax+1)^2)^3 ] / time per iteration
@@ -721,16 +773,15 @@ int main(int argc, char *argv[])
     // fomScale = \sum_#atoms (LIZ * (lmax+1)^2)^3
     // energyContourPoints
     long energyContourPoints = 1;
-    if(lsms.energyContour.grid==2)
-    {
-      energyContourPoints = lsms.energyContour.npts+1;
+    if (lsms.energyContour.grid == 2) {
+      energyContourPoints = lsms.energyContour.npts + 1;
     }
-    printf("FOM Scale = %lf\n",(double)fomScale);
-    printf("Energy Contour Points = %ld\n",energyContourPoints);
-    printf("FOM = %lg/sec\n",fomScale * (double)iteration / timeScfLoop);
+    printf("FOM Scale = %lf\n", (double) fomScale);
+    printf("Energy Contour Points = %ld\n", energyContourPoints);
+    printf("FOM = %lg/sec\n", fomScale * (double) iteration / timeScfLoop);
     // printf("FOM = %lg/sec\n",fomScale * (double)lsms.nscf / timeScfLoop);
     printf("FOM * energyContourPoints = = %lg/sec\n",
-            (double)energyContourPoints * (double)fomScale * (double)iteration / timeScfLoop);
+           (double) energyContourPoints * (double) fomScale * (double) iteration / timeScfLoop);
     //         (double)energyContourPoints * (double)fomScale * (double)lsms.nscf / timeScfLoop);
   }
 

@@ -9,7 +9,7 @@ c
       integer ngauss_mad
       integer ngaussr_mad
 c
-      parameter(iprslat_mad=24001)
+      parameter(iprslat_mad=55000)
       parameter(ipknlat_mad=29215)
       parameter(iplmax_mad=10)
       parameter(ngauss_mad=64)

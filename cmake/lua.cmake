@@ -33,6 +33,7 @@ if (NOT Lua_FOUND)
     file(COPY ${PROJECT_SOURCE_DIR}/external/lua-5.2.4
             DESTINATION ${CMAKE_BINARY_DIR}/external)
 
+
     set(_src ${CMAKE_BINARY_DIR}/external/lua-5.2.4)
     get_filename_component(_src "${_src}" REALPATH)
 
@@ -44,13 +45,18 @@ if (NOT Lua_FOUND)
     file(MAKE_DIRECTORY ${_include})
     get_filename_component(_include "${_include}" REALPATH)
 
+    # Configure the makefile
+    set(INSTALL_TOP ${_install})
+    configure_file(
+            "${PROJECT_SOURCE_DIR}/external/lua-5.2.4/Makefile.in"
+            "${CMAKE_BINARY_DIR}/external/lua-5.2.4/Makefile")
+
     include(ExternalProject)
 
     ExternalProject_Add(Lua
             SOURCE_DIR ${_src}
             BUILD_IN_SOURCE true
-#            CONFIGURE_COMMAND sed -i .tmp -e "/^INSTALL_TOP/c\\\rINSTALL_TOP=${_install}" ${_src}/Makefile
-            CONFIGURE_COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/replace_INSTALL_TOP.cmake ${_src}/Makefile ${_src}/Makefile ${_install}
+            CONFIGURE_COMMAND ""
             BUILD_COMMAND ${MAKE_EXECUTABLE} -C ${_src}
             INSTALL_COMMAND ${MAKE_EXECUTABLE} install -C ${_src}
             )

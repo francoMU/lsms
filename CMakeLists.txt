@@ -55,10 +55,10 @@ include(lua)
 # Build LibXC in this project
 option(USE_LIBXC "Use the libxc libary" ON)
 if (USE_LIBXC)
-    message(STATUS "LIBXC is used")
+    message(STATUS "libxc is used")
     include(libxc)
-else()
-    message(STATUS "LIBXC is not used")
+else ()
+    message(STATUS "libxc is not used")
 endif ()
 
 # Build mjson library
@@ -185,6 +185,7 @@ if (ARCH_IBM)
    target_compile_definitions(lsmscore PUBLIC "ARCH_IBM")
 endif()
 
+
 # Find MPI library
 find_package(MPI REQUIRED COMPONENTS CXX OPTIONAL_COMPONENTS)
 target_link_libraries(lsmscore PUBLIC MPI::MPI_CXX)
@@ -251,8 +252,8 @@ target_link_libraries(lsmscore PUBLIC mjson)
 
 # LibXC
 if (USE_LIBXC)
+    # libxc::libxc contains the compile definition already
     target_link_libraries(lsmscore PUBLIC libxc::libxc)
-    target_compile_definitions(lsmscore PUBLIC USE_LIBXC)
 endif ()
 
 # DL

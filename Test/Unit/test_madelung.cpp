@@ -19,7 +19,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
     if (i != v.size() - 1)
       os << ", ";
   }
-  os << "]";
+  os << "]\n";
   return os;
 }
 

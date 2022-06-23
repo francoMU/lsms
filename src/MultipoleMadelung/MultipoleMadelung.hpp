@@ -8,7 +8,6 @@
 #include <complex>
 #include <vector>
 
-#include "Main/SystemParameters.hpp"
 #include "common.hpp"
 
 namespace lsms {
@@ -20,6 +19,11 @@ class MultipoleMadelung {
 
   /// Local number of atoms
   int local_num_atoms;
+
+  /// Madelung Matrix values
+  matrix<double> madsum;
+  array3d<std::complex<double>> dl_matrix;
+  matrix<double> dl_factor;
 
   double scaling_factor;
   double rscut;
@@ -35,6 +39,15 @@ class MultipoleMadelung {
   /// Angular-momentum index cutoff l
   int lmax;
 
+  MultipoleMadelung(const matrix<double> &lattice,
+                    const matrix<double> &atom_position, int num_atoms,
+                    int lmax, std::vector<int> global_position_index);
+
+  double getMadSum(int i, int j) const;
+
+  std::complex<double> getDlMatrix(int g_atom, int k, int l_atom);
+
+  double getDlFactor(int i, int j) const;
   /// Object for calculating the Madelung constants
   MultipoleMadelung(LSMSSystemParameters &lsms, CrystalParameters &crystal,
                     LocalTypeInfo &local);

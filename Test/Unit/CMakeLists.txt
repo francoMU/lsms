@@ -117,3 +117,13 @@ target_link_libraries(test_madelung PRIVATE lsmscore)
 
 gtest_discover_tests(test_madelung)
 ##################################################################
+
+###################################################################
+# 7. Test Poisson Solver Routines
+add_executable(test_parallel_outward test_parallel_outward.cpp)
+target_link_libraries(test_parallel_outward PUBLIC lsmscore)
+add_test(
+        NAME test_parallel_outward
+        COMMAND $<TARGET_FILE:test_parallel_outward>
+)
+###################################################################

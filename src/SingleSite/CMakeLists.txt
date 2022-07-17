@@ -1,7 +1,9 @@
 
 target_sources(
   lsmscore
-  PUBLIC SingleSiteScattering.cpp
+  PUBLIC nrel_spherical_solver.cpp
+         nrel_spherical_solver.hpp
+         SingleSiteScattering.cpp
          readSingleAtomData_hdf5.cpp
          readSingleAtomData_bigcell.cpp
          F_readSingleAtomData_bigcell.f90

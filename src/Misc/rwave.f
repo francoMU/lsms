@@ -67,7 +67,6 @@ c     ==================================================
 c
       external dfv
 c
-c
       if(wsdim .lt. (max(l+1,2) * 2))then
          write(6,*) 'ERROR: wsdim=',wsdim,' < minimum =',
      *        (max(l+1,2) * 2)
@@ -167,6 +166,7 @@ c
 c
 c------ only find irregular solution if required to
 c
+      irregflg = .False.
       if(irregflg) then
 c
         r=r_sph
@@ -232,6 +232,7 @@ c     do i=jmt+1,kmax
           dbj=ka*(ws(l-1,1)-ws(l,1)*cdum)
           dbh1=(ws(l-1,2)-ws(l,2)*cdum)*eiz
         endif
+        print *, i
         rr(i)=bj*rad(i)+bh1*tatoml
         ri(i)=bh1
         drr(i)=dbj*rad(i)+dbh1*tatoml

@@ -52,6 +52,8 @@ target_link_libraries(
         gfortran
 )
 
+add_subdirectory(Atomic)
+
 add_subdirectory(Accelerator)
 
 add_subdirectory(Communication)

@@ -26,7 +26,7 @@ void getvmt(LSMSSystemParameters lsms, AtomData &atom, CrystalParameters &crysta
   for(int i=0; i<crystal.num_types; i++)
   {
     vmt1 += atom.madelungMatrix[i] * qsub[i];
-    //u0 += atom.madelungMatrix[i] * qsub[i] * qsub[mytype];
+    u0 += atom.madelungMatrix[i] * qsub[i] * qsub[mytype];
   }
 
   u0MT = u0;
@@ -60,7 +60,7 @@ void getvmt(LSMSSystemParameters lsms, AtomData &atom, CrystalParameters &crysta
     
     default:                              // Muffin-Tin case
       Real surfaceAreaMT = 4.0 * M_PI * rSphere * rSphere;
-      vmt = vmt1 * atom.omegaMT + surfaceAreaMT * (atom.omegaMT * atom.rhoInt / 5.0 + qsub[mytype]);
+      vmt = vmt1 * atom.omegaMT; // + surfaceAreaMT * (atom.omegaMT * atom.rhoInt / 5.0 + qsub[mytype]);
       //u0 += atom.rhoInt * atom.omegaMT * (-6.0/5.0 * atom.rhoInt * atom.omegaMT + 3.0 * qsub[mytype]) / rSphere;
       vmt1 += surfaceAreaMT * atom.rhoInt;
   
@@ -70,7 +70,7 @@ void getvmt(LSMSSystemParameters lsms, AtomData &atom, CrystalParameters &crysta
         // Delta Q_i, the charge due to shape correction
         Real qCorrection = atom.qtotws - atom.qtotmt - atom.rhoInt*(atom.omegaWS - atom.omegaMT);
         vmt1 -= 2.0 * qCorrection / rSphere;
-        //u0 += qCorrection * (2.0 * dq_mt + qCorrection) / rSphere;
+        u0 += qCorrection * (2.0 * dq_mt + qCorrection) / rSphere;
       }
   }
 

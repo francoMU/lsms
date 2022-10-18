@@ -61,9 +61,9 @@ void getvmt(LSMSSystemParameters lsms, AtomData &atom, CrystalParameters &crysta
     default:                              // Muffin-Tin case
       Real surfaceAreaMT = 4.0 * M_PI * rSphere * rSphere;
       vmt = 0.0;
-      //vmt = vmt1 * atom.omegaMT + surfaceAreaMT * (atom.omegaMT * atom.rhoInt / 5.0 + qsub[mytype]);
-      //u0 += atom.rhoInt * atom.omegaMT * (-6.0/5.0 * atom.rhoInt * atom.omegaMT + 3.0 * qsub[mytype]) / rSphere;
-      //vmt1 += surfaceAreaMT * atom.rhoInt;
+      vmt = vmt1 * atom.omegaMT + surfaceAreaMT * (atom.omegaMT * atom.rhoInt / 5.0 + qsub[mytype]);
+      u0 += atom.rhoInt * atom.omegaMT * (-6.0/5.0 * atom.rhoInt * atom.omegaMT + 3.0 * qsub[mytype]) / rSphere;
+      vmt1 += surfaceAreaMT * atom.rhoInt;
   
       if (lsms.mtasa >= 2)                // MT-ASA case
       {

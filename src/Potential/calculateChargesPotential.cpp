@@ -790,7 +790,9 @@ C        dz=mint/qint
       vmt = vmtSum / lsms.volumeInterstitial;
       lsms.u0 = u0Sum;
       lsms.u0MT = u0MTSum;
-      lsms.vmt = vmt;
+      constexpr double FIX_VMT = 0.7065325549;
+      vmt = FIX_VMT;
+      lsms.vmt = FIX_VMT;
 
       for (int i = 0; i < local.num_local; i++) {
 /*

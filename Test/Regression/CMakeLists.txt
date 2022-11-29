@@ -9,21 +9,21 @@ if (NOT USE_ACCELERATOR_CUDA_C AND NOT USE_ACCELERATOR_HIP)
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/fe_bcc_libxc
             DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+    find_program (BASH_PROGRAM bash)
+
     # 1. Regression test: Al fcc
     add_test(NAME regtest_al_fcc
             COMMAND
             ${CMAKE_COMMAND} -E env OMP_NUM_THREADS=1 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} 1 ${MPIEXEC_PREFLAGS} $<TARGET_FILE:lsms_main> i_lsms.lua &&
-            ${CMAKE_COMMAND} -E rename k.out k.out.new &&
-            ${CMAKE_COMMAND} -E compare_files k.out.new k.out.ref
+            ${BASH_PROGRAM} ${CMAKE_CURRENT_BINARY_DIR}/al_fcc/test.sh
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/al_fcc
             )
 
     # 2. Regression test: Fe bcc (LIBXC)
     add_test(NAME regtest_fe_bcc_libxc
             COMMAND
-            ${CMAKE_COMMAND} -E env OMP_NUM_THREADS=1 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} 1 ${MPIEXEC_PREFLAGS} $<TARGET_FILE:lsms_main> i_lsms.lua
-            ${CMAKE_COMMAND} -E rename k.out k.out.new &&
-            ${CMAKE_COMMAND} -E compare_files k.out.new k.out.ref
+            ${CMAKE_COMMAND} -E env OMP_NUM_THREADS=1 ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} 1 ${MPIEXEC_PREFLAGS} $<TARGET_FILE:lsms_main> i_lsms.lua &&
+            ${BASH_PROGRAM} ${CMAKE_CURRENT_BINARY_DIR}/fe_bcc_libxc/test.sh
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/fe_bcc_libxc
             )
 

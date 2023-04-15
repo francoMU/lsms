@@ -24,7 +24,7 @@ target_sources(lsmscore
         trgtol.f
         green_function.f
         gf_local.f
-        int_zz_zj.f
+        int_zz_zj.f90
         mdosms_c.f
         mgreen_c.f
         green_function_rel.f

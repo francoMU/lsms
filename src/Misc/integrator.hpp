@@ -32,12 +32,12 @@ std::vector<T> diff(const std::vector<T> &x, U length) {
 
 template<typename T, typename II, typename U,
     std::enable_if_t<std::is_integral<U>::value, bool> = true>
-T simpson_nonuniform(const std::vector<T> &x, II f, U length) {
+auto simpson_nonuniform(const std::vector<T> &x, II f, U length) {
 
   auto N = length - 1;
   auto h = diff(x, length);
 
-  auto result = 0.0;
+  auto result = f[0] - f[0];
 
   for (U i = 1; i < N; i += 2) {
     auto hph = h[i] + h[i - 1];
@@ -103,7 +103,7 @@ T radialIntegral(Matrix<T> &integrand,
  * Radial integrator for first matrix dimension
  */
 template<typename T, typename II>
-T radialIntegral(II integrand,
+auto radialIntegral(II integrand,
                  const std::vector<T> &radial_mesh, std::size_t end) {
   auto result = simpson_nonuniform(radial_mesh, integrand, end);
   return result;

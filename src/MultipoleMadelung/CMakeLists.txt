@@ -1,6 +1,10 @@
 
 
 target_sources(lsmscore PUBLIC
+
+        MultipoleMoments.cpp
+        MultipoleMoments.hpp
+
         calculateMultipoleMadelung.hpp
         calculateMultipoleMadelung.cpp
 

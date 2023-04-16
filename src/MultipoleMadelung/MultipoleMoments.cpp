@@ -21,42 +21,18 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
   int maxkkrsz = (lsms.maxlmax + 1) * (lsms.maxlmax + 1);
   int max_mmoms = (l_mom_max + 1) * (l_mom_max + 1);
 
-  /**
-   * For would be to compare greenIntLLp this is the first moment of the greens function
-   *
-   * calculate radially L, L' resolved Green's function integrated
-   * integrated over the atomic volume
-   *
-   *
-   *
-   *
-   *
-   */
-
   for (auto i_atom = 0; i_atom < local.num_local; i_atom++) {
 
+    std::vector<std::complex<Real>> rad(local.atom[i_atom].jmt, 0.0);
 
     for (auto iie = 0; iie < lsms.energyContour.groupSize(); iie++) {
 
-      std::complex<double> factor = 0.0;
+      std::vector<std::complex<Real>> radial(local.atom[i_atom].jmt, 0.0);
 
       for (auto isp = 0; isp < lsms.n_spin_pola; isp++) {
 
         NonRelativisticSingleScattererSolution &SSSol = solutionNonRel[iie][i_atom];
 
-        Array3d<std::complex<double>> zl_zlp(local.atom[i_atom].lmax + 1,
-                                             local.atom[i_atom].lmax + 1,
-                                             2);
-
-        Matrix<std::complex<double>> zl_jlp(local.atom[i_atom].lmax + 1, 2);
-
-
-        // Get the Green's function right
-
-        auto ir = 40;
-
-        std::complex<double> fac {0.0};
-
         for (auto l = 0; l <= local.atom[i_atom].lmax; l++) {
           for (auto m = -l; m <= l; m++) {
 
@@ -69,73 +45,13 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
             } else {
               tau00 = tau00_l[iie](kl + (maxkkrsz * kl), i_atom + local.num_local);
             }
-
-            fac += SSSol.zlr(ir, l, isp) * tau00 * SSSol.zlr(ir, l, isp) -
-                SSSol.zlr(ir, l, isp) * SSSol.jlr(ir, l, isp);
-
-          }
-
-        }
-
-        std::cout << iie << " " << 2.0 * fac << std::endl;
-
-
-        // Solve integral Z_l * Z_lp
-        for (auto l = 0; l <= local.atom[i_atom].lmax; l++) {
-
-          for (auto lp = 0; lp <= local.atom[i_atom].lmax; lp++) {
-
-            std::vector<std::complex<Real>> radial(local.atom[i_atom].jmt);
 
             for (auto ir = 0; ir < local.atom[i_atom].jmt; ir++) {
 
-              radial[ir] =
-                  SSSol.zlr(ir, l, isp) * SSSol.zlr(ir, lp, isp);
+              radial[ir] += SSSol.zlr(ir, l, isp) * tau00 * SSSol.zlr(ir, l, isp) -
+                  SSSol.zlr(ir, l, isp) * SSSol.jlr(ir, l, isp);
 
             }
-
-            auto res = lsms::radialIntegral(radial, local.atom[i_atom].r_mesh, local.atom[i_atom].jmt);
-
-            zl_zlp(l, lp, isp) = res;
-
-          }
-
-        }
-
-        // Solve integral Z_l * J_l * delta_l,lp
-        for (auto l = 0; l <= local.atom[i_atom].lmax; l++) {
-
-          std::vector<std::complex<Real>> radial(local.atom[i_atom].jmt);
-
-          for (auto ir = 0; ir < local.atom[i_atom].jmt; ir++) {
-
-            radial[ir] =
-                SSSol.zlr(ir, l, isp) * SSSol.jlr(ir, l, isp) * (2.0 * l + 1.0);
-
-          }
-
-          auto res = lsms::radialIntegral(radial, local.atom[i_atom].r_mesh, local.atom[i_atom].jmt);
-
-          zl_jlp(l, isp) = res;
-
-        }
-
-        for (auto l = 0; l <= local.atom[i_atom].lmax; l++) {
-          for (auto m = -l; m <= l; m++) {
-
-            auto kl = l * l + l + m;
-
-            std::complex<double> tau00 = 0.0;
-
-            if (isp == 0) {
-              tau00 = tau00_l[iie](kl + (maxkkrsz * kl), i_atom);
-            } else {
-              tau00 = tau00_l[iie](kl + (maxkkrsz * kl), i_atom + local.num_local);
-            }
-
-            auto gf_LLp = zl_zlp(l, l, isp) * tau00 - zl_jlp(l, isp);
-
-            factor -= std::imag(gf_LLp * dele1[1]);
 
           }
 
@@ -143,21 +59,19 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
 
       }
 
+      for (auto ir = 0; ir < local.atom[i_atom].jmt; ir++) {
+
+        rad[ir] -= 2.0 * std::imag(radial[ir] * dele1[iie])
+            * local.atom[i_atom].r_mesh[ir] * local.atom[i_atom].r_mesh[ir] / M_PI;
+
+      }
+
     }
 
-//    std::cout << factor << std::endl;
-//    std::cout << factor / M_PI << std::endl;
-//    std::cout << factor / sqrt(M_PI) << std::endl;
-//    std::cout << factor * sqrt(M_PI) << std::endl;
-//    std::cout << factor * M_PI << std::endl;
+    auto res = lsms::radialIntegral(rad, local.atom[i_atom].r_mesh, local.atom[i_atom].jmt);
+
 
   }
-
-
-
-  /**
-   */
-
 
   for (auto i_atom = 0; i_atom < local.num_local; i_atom++) {
 
@@ -187,8 +101,8 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
 
               for (auto ir = 0; ir < local.atom[i_atom].jmt; ir++) {
 
-                radial[ir] = std::pow(local.atom[i_atom].r_mesh[ir], l_mom) *
-                    SSSol.zlr(ir, l, isp) * std::conj(SSSol.zlr(ir, lp, isp));
+                radial[ir] = std::pow(local.atom[i_atom].r_mesh[ir], l_mom + 2) *
+                    SSSol.zlr(ir, l, isp) * SSSol.zlr(ir, lp, isp);
 
               }
 
@@ -207,8 +121,8 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
 
             for (auto ir = 0; ir < local.atom[i_atom].jmt; ir++) {
 
-              radial[ir] = std::pow(local.atom[i_atom].r_mesh[ir], l_mom) *
-                  SSSol.zlr(ir, l, isp) * std::conj(SSSol.jlr(ir, l, isp));
+              radial[ir] = std::pow(local.atom[i_atom].r_mesh[ir], l_mom + 2) *
+                  SSSol.zlr(ir, l, isp) * SSSol.jlr(ir, l, isp);
 
             }
 
@@ -238,11 +152,29 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
                       tau00 = tau00_l[iie](kl + (maxkkrsz * klp), i_atom + local.num_local);
                     }
 
-                    auto gf_LLp = zl_zlp(l, lp, isp) * tau00 - zl_jlp(l, isp);
+                    auto gf_LLp = zl_zlp(l, lp, isp) * tau00 ;
 
-                    if ((l_mom + l + lp) % 2 && m - mp == m_mom) {
-                      local.atom[i_atom].multi_moms[il_mom] += GauntCoeficients::cgnt(l_mom / 2, kl, klp)
-                          * std::imag(gf_LLp * dele1[iie]) * std::sqrt(4 * M_PI) / (2.0 * l_mom + 1);
+                    if (kl == klp) {
+                      gf_LLp -= zl_jlp(l, isp);
+                    }
+
+                    if (((l_mom + l + lp) % 2 == 0) && m - mp == m_mom) {
+
+//                      if(iie == 10 && m_mom == 0 && l_mom == 1) {
+//
+//                        fmt::print("{:2d} {:2d} {:2d} {:2d}: {:10.6f} {:10.6e} {:10.6e}\n",
+//                                   l,
+//                                   lp,
+//                                   m,
+//                                   mp,
+//                                   GauntCoeficients::cgnt(l_mom / 2, kl, klp),
+//                                   std::real(tau00), std::imag(tau00));
+//
+//                      }
+                      local.atom[i_atom].multi_moms[il_mom] -= 2.0 * GauntCoeficients::cgnt(l_mom / 2, kl, klp)
+                          * std::imag(gf_LLp * dele1[iie]) * std::sqrt(4 * M_PI) / ((2.0 * l_mom + 1) * M_PI);
+
+
                     }
 
                   }
@@ -263,6 +195,8 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
 
 }
 
+
+
 void printMultipoleMoments(LSMSCommunication &comm,
                            LSMSSystemParameters &lsms,
                            LocalTypeInfo &local,
@@ -279,7 +213,10 @@ void printMultipoleMoments(LSMSCommunication &comm,
 
         int k_mom = l * l + l + m;
 
-        fmt::print(" {:2d} {:2d}: {:20.8f} {:20.8f}\n", l, m, std::real(moms[k_mom]), std::imag(moms[k_mom]));
+        if(std::fabs(std::real(moms[k_mom])) > 1.0e-8) {
+          fmt::print(" {:2d} {:2d}: {:20.8f}\n", l, m, std::real(moms[k_mom]));
+        }
+
 
       }
 

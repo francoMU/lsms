@@ -184,11 +184,11 @@ int main(int argc, char *argv[]) {
     lsms.newFunctional.init(lsms.n_spin_pola, lsms.xcFunctional);
   }
 
-  AngularMomentumIndices::init(2 * crystal.maxlmax);
-  SphericalHarmonicsCoeficients::init(2 * crystal.maxlmax);
+  AngularMomentumIndices::init(4 * crystal.maxlmax);
+  SphericalHarmonicsCoeficients::init(4 * crystal.maxlmax);
 
   GauntCoeficients::init(lsms);
-  IFactors::init(lsms, crystal.maxlmax);
+  IFactors::init(lsms, crystal.maxlmax * 2);
 
 #if defined(ACCELERATOR_CUDA_C) || defined(ACCELERATOR_HIP)
   deviceConstants.allocate();

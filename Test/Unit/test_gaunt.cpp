@@ -118,6 +118,8 @@ TEST(GauntFactorTest, Lmax3) {
 
   }
 
+
+
 }
 
 }  // namespace gaunt_tests

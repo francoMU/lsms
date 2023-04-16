@@ -54,23 +54,23 @@ subroutine mgreen(zj_flag, kkrsz, lmax, jws, iprpts, &
          else
             ctmp = zlr_right(ir, l) * wt
          endif
-         !green(ir) = green(ir) + zlr_left(ir, l) * ctmp
+         green(ir) = green(ir) + zlr_left(ir, l) * ctmp
       enddo
    enddo
 
-   i = 0
-   do l = 0, lmax, 1
-      do m = -l, l
-
-         i = i + 1
-
-         do ir = 1, jws
-            green(ir) = green(ir) + zlr_left(ir, l) * (zlr_right(ir, l) * w1(i, i) - jlr(ir, l))
-         end do
-
-
-         end do
-   end do
+!   i = 0
+!   do l = 0, lmax, 1
+!      do m = -l, l
+!
+!         i = i + 1
+!
+!         do ir = 1, jws
+!            green(ir) = green(ir) + zlr_left(ir, l) * (zlr_right(ir, l) * w1(i, i) - jlr(ir, l))
+!         end do
+!
+!
+!         end do
+!   end do
 
 
 

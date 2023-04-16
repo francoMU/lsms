@@ -40,7 +40,7 @@ class GauntCoeficients {
   static Array3d<Real> cgnt;
 
   static void init(LSMSSystemParameters &lsms) {
-    lmax = AngularMomentumIndices::lmax / 2;
+    lmax = AngularMomentumIndices::lmax;
     // lmax=lsms.maxlmax;
 
     //    if(useNewGaunt)

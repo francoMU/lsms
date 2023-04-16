@@ -581,8 +581,6 @@ void energyContourIntegration(LSMSCommunication &comm,
                             std::imag(greenIntLLp(lm1, lm2, isp)));
             }
 
-            std::cout << iie << " " << green(40, 0, i) << std::endl;
-
             if (local.atom[i].forceZeroMoment && (lsms.n_spin_pola > 1)) {
               if (lsms.n_spin_cant > 1)  // spin canted case
               {
@@ -781,9 +779,9 @@ void energyContourIntegration(LSMSCommunication &comm,
    */
 
   lsms::calculateMultipoleMoments(comm, lsms, local,
-                                  solutionNonRel, tau00_le, dele1, 3);
+                                  solutionNonRel, tau00_le, dele1, 6);
 
 
-  lsms::printMultipoleMoments(comm, lsms, local, 3);
+  lsms::printMultipoleMoments(comm, lsms, local, 6);
 
 }

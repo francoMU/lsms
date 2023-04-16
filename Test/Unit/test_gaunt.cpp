@@ -15,12 +15,12 @@ namespace gaunt_tests {
 
 using namespace lsms;
 
-template <typename T>
+template<typename T>
 bool approx_equal(T x, T y, T epsilon) {
   return fabs(x - y) / max(fabs(x), fabs(y)) <= epsilon;
 }
 
-template <typename T>
+template<typename T>
 T relative_diff(T ref, T val) {
   return std::fabs(ref - val) / std::fabs(ref);
 }
@@ -86,34 +86,37 @@ TEST(GauntFactorTest, Lmax3) {
       0.1802237515728685748747963944546917104709985754562351930533759359,
       cgnt(1, 6, 6), 1e-12);
 
-  /**
-   * l1 = 1
-   * l2 = 2
-   * l3 = 3
-   *
-   * m1 = 0
-   * m2 = 0
-   * m3 = 0
-   *
-   */
+  {
+    int l1 = 1;
+    int l2 = 2;
+    int l3 = 3;
 
-  int l1 = 1;
-  int l2 = 2;
-  int l3 = 3;
+    int m1 = 0;
+    int m2 = 0;
+    int m3 = 0;
 
-  int m1 = 0;
-  int m2 = 0;
-  int m3 = 0;
+    int k2 = l2 * l2 + l2 + m2;
+    int k3 = l3 * l3 + l3 + m3;
 
-  int k1 = l1 * l1 + l1 + m1;
-  int k2 = l2 * l2 + l2 + m2;
-  int k3 = l3 * l3 + l3 + m3;
+    EXPECT_NEAR(0.2477666950834760618905, cgnt(0, k2, k3), 1e-12);
+  }
 
-  std::cout << cgnt(0, k2, k3) << std::endl;
-  std::cout << cgnt(0, k2, k3) << std::endl;
+  {
 
-  EXPECT_NEAR(0.2477666950834760618905, cgnt(0, k2, k3), 1e-12);
+    int l1 = 3;
+    int l2 = 2;
+    int l3 = 3;
 
+    int m1 = 0;
+    int m2 = 0;
+    int m3 = 0;
+
+    int k2 = l2 * l2 + l2 + m2;
+    int k3 = l3 * l3 + l3 + m3;
+
+    EXPECT_NEAR(0.168208834801344003216, cgnt(0, k2, k3), 1e-12);
+
+  }
 
 }
 

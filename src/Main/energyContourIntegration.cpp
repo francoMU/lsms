@@ -16,7 +16,13 @@
 #include "PhysicalConstants.hpp"
 #include "SingleSite/SingleSiteScattering.hpp"
 #include "calculateDensities.hpp"
+#include "MultipoleMoments.hpp"
 // #include <omp.h>
+
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/printf.h>
+
 #ifdef USE_NVTX
 #include <nvToolsExt.h>
 #endif
@@ -344,8 +350,12 @@ void energyContourIntegration(LSMSCommunication &comm,
   Matrix<Complex> tau00_l(
       maxkkrsz_ns * maxkkrsz_ns,
       local.num_local * lsms.n_spin_pola /
-          lsms.n_spin_cant);  // This would be cleaner as a
+          lsms.n_spin_cant);
+  // This would be cleaner as a
                               // std::vector<Matrix<Complex>>
+
+  std::vector<Matrix<Complex>> tau00_le(lsms.energyContour.groupSize());
+
   Matrix<Complex> dos(4, local.num_local);
   // dos=0.0;
   Matrix<Complex> dosck(4, local.num_local);
@@ -484,6 +494,8 @@ void energyContourIntegration(LSMSCommunication &comm,
       double timeCATM = MPI_Wtime();
       calculateAllTauMatrices(comm, lsms, local, vr_con, energy, iie, tau00_l);
 
+      tau00_le[iie] = tau00_l;
+
       timeCalculateAllTauMatrices += MPI_Wtime() - timeCATM;
       // if(!lsms.global.checkIstop("buildKKRMatrix"))
       {
@@ -500,7 +512,7 @@ void energyContourIntegration(LSMSCommunication &comm,
         double timeCalcDensities = MPI_Wtime();
         if (lsms.relativity != full) {
 // openMP here
-#pragma omp parallel for default(none)                                    \
+//#pragma omp parallel for default(none)                                    \
     shared(local, lsms, dos, dosck, green, dipole, solutionNonRel, dele1, \
            tau00_l, gfOutFile) firstprivate(ie, iie, pnrel, energy, nume)
           for (int i = 0; i < local.num_local; i++) {
@@ -568,6 +580,8 @@ void energyContourIntegration(LSMSCommunication &comm,
                             lm2, std::real(greenIntLLp(lm1, lm2, isp)),
                             std::imag(greenIntLLp(lm1, lm2, isp)));
             }
+
+            std::cout << iie << " " << green(40, 0, i) << std::endl;
 
             if (local.atom[i].forceZeroMoment && (lsms.n_spin_pola > 1)) {
               if (lsms.n_spin_cant > 1)  // spin canted case
@@ -759,4 +773,17 @@ void energyContourIntegration(LSMSCommunication &comm,
     for (int i = 0; i < local.num_local; i++) fclose(gfOutFile[i]);
     exitLSMS(comm, 0);
   }
+
+
+
+  /*
+   * Multipole moments
+   */
+
+  lsms::calculateMultipoleMoments(comm, lsms, local,
+                                  solutionNonRel, tau00_le, dele1, 3);
+
+
+  lsms::printMultipoleMoments(comm, lsms, local, 3);
+
 }

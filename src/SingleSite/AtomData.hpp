@@ -552,6 +552,9 @@ public:
   Real vrms[2]{0.0};
   Real qrms[2]{0.0};
 
+// multipole moments
+  std::vector<Complex> multi_moms;
+
   void resetLocalDensities()
   {
     dos_real=0.0;

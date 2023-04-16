@@ -222,6 +222,16 @@ endif()
 
 target_link_libraries(test_ss PUBLIC matplot)
 
-
 gtest_discover_tests(test_ss)
+##################################################################
+
+##################################################################
+# 14. Test: Multipole Madelung calculation
+add_executable(test_multipole_moments test_multipole_moments.cpp)
+target_link_libraries(test_multipole_moments PUBLIC gtest_main)
+target_link_libraries(test_multipole_moments PRIVATE lsmscore)
+target_sources(test_multipole_moments PUBLIC accel_common.hpp)
+target_include_directories(test_multipole_moments PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+gtest_discover_tests(test_multipole_moments)
 ##################################################################

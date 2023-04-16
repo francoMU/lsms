@@ -85,6 +85,36 @@ TEST(GauntFactorTest, Lmax3) {
   EXPECT_NEAR(
       0.1802237515728685748747963944546917104709985754562351930533759359,
       cgnt(1, 6, 6), 1e-12);
+
+  /**
+   * l1 = 1
+   * l2 = 2
+   * l3 = 3
+   *
+   * m1 = 0
+   * m2 = 0
+   * m3 = 0
+   *
+   */
+
+  int l1 = 1;
+  int l2 = 2;
+  int l3 = 3;
+
+  int m1 = 0;
+  int m2 = 0;
+  int m3 = 0;
+
+  int k1 = l1 * l1 + l1 + m1;
+  int k2 = l2 * l2 + l2 + m2;
+  int k3 = l3 * l3 + l3 + m3;
+
+  std::cout << cgnt(0, k2, k3) << std::endl;
+  std::cout << cgnt(0, k2, k3) << std::endl;
+
+  EXPECT_NEAR(0.2477666950834760618905, cgnt(0, k2, k3), 1e-12);
+
+
 }
 
 }  // namespace gaunt_tests

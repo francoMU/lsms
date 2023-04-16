@@ -8,18 +8,22 @@
 #include "SingleSiteScattering.hpp"
 #include "LSMSCommunication.hpp"
 #include "integrator.hpp"
+#include "Coeficients.hpp"
 
 namespace lsms {
 
 void calculateMultipoleMoments(LSMSCommunication &comm,
                                LSMSSystemParameters &lsms,
-                               LocalTypeInfo &local) {
+                               LocalTypeInfo &local,
+                               std::vector<Complex> &dele1) {
 
 
   // How to access the  wave functions
   int maxkkrsz = (lsms.maxlmax + 1) * (lsms.maxlmax + 1);
   int maxkkrsz_ns = lsms.n_spin_cant * maxkkrsz;
-  int l_mom_max = 10;
+  int l_mom_max = 3;
+
+  int max_mmoms = (l_mom_max + 1) * (l_mom_max + 1);
 
   // solution{Non}Rel[energy point][local atom idx]
   std::vector<std::vector<NonRelativisticSingleScattererSolution>> solutionNonRel;
@@ -31,23 +35,22 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
 
   for (auto i_atom = 0; i_atom < local.num_local; i_atom++) {
 
+    std::vector<std::complex<double>> multi_moms(max_mmoms, 0.0);
+
     for (auto l_mom = 0; l_mom <= l_mom_max; l_mom++) {
 
       for (auto iie = 0; iie < lsms.energyContour.groupSize(); iie++) {
 
-        NonRelativisticSingleScattererSolution &SSSol = solutionNonRel[iie][i_atom];
-
-        // Z * tau *Z^+ - Z * J^+
-
-
-
-        Array3d<std::complex<double>> zl_zlp(local.atom[i_atom].lmax + 1,
-                                             local.atom[i_atom].lmax + 1,
-                                             2);
-
-        Matrix<std::complex<double>> zl_jlp(local.atom[i_atom].lmax + 1, 2);
-
         for (auto isp = 0; isp < lsms.n_spin_pola; isp++) {
+
+          NonRelativisticSingleScattererSolution &SSSol = solutionNonRel[iie][i_atom];
+
+          Array3d<std::complex<double>> zl_zlp(local.atom[i_atom].lmax + 1,
+                                               local.atom[i_atom].lmax + 1,
+                                               2);
+
+          Matrix<std::complex<double>> zl_jlp(local.atom[i_atom].lmax + 1, 2);
+
 
           // Solve integral Z_l * Z_lp
           for (auto l = 0; l <= local.atom[i_atom].lmax; l++) {
@@ -90,9 +93,6 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
           }
 
 
-          //mqn:       do m = -l, l
-          //lm = l**2 + l + m + 1
-
           for (auto m_mom = -l_mom; m_mom <= l_mom; m_mom++) {
             auto il_mom = l_mom * l_mom + l_mom + m_mom;
 
@@ -104,8 +104,8 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
                 for (auto lp = 0; lp <= local.atom[i_atom].lmax; lp++) {
                   for (auto mp = -lp; mp <= lp; mp++) {
 
-                    auto il = l * l + l + m;
-                    auto ilp = lp * lp + lp + mp;
+                    auto kl = l * l + l + m;
+                    auto klp = lp * lp + lp + mp;
 
                     std::complex<double> tau00 = 0.0;
 
@@ -119,9 +119,9 @@ void calculateMultipoleMoments(LSMSCommunication &comm,
 
                     //gaunt = gaunt_real_table(l1, l2, l, m1, m2, m)
 
-                    std::complex<double> gaunt;
+                    //std::complex<double> gaunt = GauntCoeficients::cgnt(j3, kl, klp);
 
-                    factor += gf_LLp * gaunt;
+                    //multi_moms[il_mom] += gaunt * std::imag(gf_LLp * dele1[iie]);
 
                   }
 

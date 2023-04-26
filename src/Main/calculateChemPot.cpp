@@ -1,6 +1,10 @@
 /* -*- c-file-style: "bsd"; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 #include "calculateChemPot.hpp"
 
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/printf.h>
+
 // calculate the chemical potential and the eigenvalue sum
 // see LSMS_1.9 mufind
 void lsms::calculateChemPot(LSMSCommunication &comm, LSMSSystemParameters &lsms, LocalTypeInfo &local, Real &eigensum) {

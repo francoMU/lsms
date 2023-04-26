@@ -118,6 +118,7 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms,
   lsms.h_step = 0.02;
   luaGetReal(L, "h_step", &lsms.h_step);
 
+  lsms.global.turn_off = false;
   lsms.global.debug_atomic = false;
   lsms.global.debug_chem_pot = false;
   lsms.global.debug_madelung = false;
@@ -128,6 +129,7 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms,
   lsms.global.debug_energy = false;
   lsms.global.debug_convergence = false;
 
+  luaGetBoolean(L, "turn_off", &lsms.global.turn_off);
   luaGetBoolean(L, "debug_atomic", &lsms.global.debug_atomic);
   luaGetBoolean(L, "debug_chem_pot", &lsms.global.debug_chem_pot);
   luaGetBoolean(L, "debug_madelung", &lsms.global.debug_madelung);
@@ -818,6 +820,7 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms, CrystalParameters &cryst
   lsms.h_step = 0.02;
   luaGetReal(L, "h_step", &lsms.h_step);
 
+  lsms.global.turn_off = false;
   lsms.global.debug_atomic = false;
   lsms.global.debug_chem_pot = false;
   lsms.global.debug_madelung = false;
@@ -828,6 +831,7 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms, CrystalParameters &cryst
   lsms.global.debug_energy = false;
   lsms.global.debug_convergence = false;
 
+  luaGetBoolean(L, "turn_off", &lsms.global.turn_off);
   luaGetBoolean(L, "debug_atomic", &lsms.global.debug_atomic);
   luaGetBoolean(L, "debug_chem_pot", &lsms.global.debug_chem_pot);
   luaGetBoolean(L, "debug_madelung", &lsms.global.debug_madelung);

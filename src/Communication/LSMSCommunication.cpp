@@ -105,6 +105,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
     MPI_Pack(&lsms.rmax, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
     MPI_Pack(&lsms.h_step, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
 
+    MPI_Pack(&lsms.global.turn_off, 1, MPI_CXX_BOOL, buf, s, &pos,comm.comm);
     MPI_Pack(&lsms.global.debug_atomic, 1, MPI_CXX_BOOL, buf, s, &pos,comm.comm);
     MPI_Pack(&lsms.global.debug_chem_pot, 1, MPI_CXX_BOOL, buf, s, &pos,comm.comm);
     MPI_Pack(&lsms.global.debug_madelung, 1, MPI_CXX_BOOL, buf, s, &pos,comm.comm);
@@ -255,6 +256,8 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
     MPI_Unpack(buf, s, &pos, &lsms.rmax, 1, MPI_DOUBLE, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.h_step, 1, MPI_DOUBLE, comm.comm);
 
+    MPI_Unpack(buf, s, &pos, &lsms.global.turn_off, 1, MPI_CXX_BOOL,
+               comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.global.debug_atomic, 1, MPI_CXX_BOOL,
                comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.global.debug_chem_pot, 1, MPI_CXX_BOOL,

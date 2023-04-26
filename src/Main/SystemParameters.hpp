@@ -30,6 +30,7 @@ class LSMSGlobals {
   int iprpts, ipcore;
   int iprint;
 
+  bool turn_off;
   bool debug_atomic;
   bool debug_chem_pot;
   bool debug_madelung;

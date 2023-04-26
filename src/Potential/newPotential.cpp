@@ -181,15 +181,15 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
 
         ss << fmt::sprintf(" ==== Potential debug (%d) (%d) ====\n", comm.rank, local.global_id[i]);
         ss << fmt::sprintf("  Vhartree: %30.24f  %30.24f\n", 2.0 * vhartree[jmt - 1], 2.0 * vhartree[0]);
-        ss << fmt::sprintf("  Vcore:    %30.24f\n", -2.0 * local.atom[i].ztotss / local.atom[i].r_mesh[jmt - 1]);
+        //ss << fmt::sprintf("  Vcore:    %30.24f\n", -2.0 * local.atom[i].ztotss / local.atom[i].r_mesh[jmt - 1]);
         ss << fmt::sprintf("  VXC:      %30.24f  %30.24f\n", local.atom[i].exchangeCorrelationPotential(jmt - 1, is),
                            local.atom[i].exchangeCorrelationPotential(0, is));
         ss << fmt::sprintf("  VM:       %30.24f\n", vmt1);
-        ss << fmt::sprintf("  Density   %30.20f  %30.24f\n",
+        ss << fmt::sprintf("  Density:  %30.20f  %30.24f\n",
                            local.atom[i].rhoNew(jmt - 1, 0),
                            local.atom[i].rhoNew(0, 0));
-        ss << fmt::sprintf("  r         %30.20f  %30.24f\n", local.atom[i].r_mesh[jmt - 1], local.atom[i].r_mesh[0]);
-        ss << fmt::sprintf("  VMT Vend: %30.24f  %30.24f\n", vmt1, 2.0 * Vend);
+        //ss << fmt::sprintf("  r         %30.20f  %30.24f\n", local.atom[i].r_mesh[jmt - 1], local.atom[i].r_mesh[0]);
+        //ss << fmt::sprintf("  VMT Vend: %30.24f  %30.24f\n", vmt1, 2.0 * Vend);
 
         std::cout << ss.str() << std::endl;
       }
@@ -237,7 +237,7 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
     ss << fmt::sprintf(" ==== Potential debug (%d) ====\n", comm.rank);
     ss << fmt::sprintf("  Pot. ave.:         %40.24f\n", vpot_ave);
     ss << fmt::sprintf("  Pot. ave. Hartree: %40.24f\n", vpot_ave_hartree);
-    ss << fmt::sprintf("  Pot. ave. Core:    %40.24f\n", vpot_ave_core);
+    //ss << fmt::sprintf("  Pot. ave. Core:    %40.24f\n", vpot_ave_core);
     ss << fmt::sprintf("  Pot. ave. XC:      %40.24f\n", vpot_ave_xc);
     ss << fmt::sprintf("  Pot. ave. VMT1:    %40.24f\n", vpot_ave_vmt1);
 

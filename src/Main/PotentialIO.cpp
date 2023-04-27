@@ -294,7 +294,9 @@ int loadPotentials(LSMSCommunication &comm, LSMSSystemParameters &lsms,
   }
 
   if (lsms.overwrite_efermi) {
+    for (int i = 0; i < local.num_local; i++) {
       lsms.chempot += lsms.efermi * Real(local.n_per_type[i]);
+    }
   } else {
     for (int i = 0; i < local.num_local; i++) {
       lsms.chempot += local.atom[i].efermi * Real(local.n_per_type[i]);

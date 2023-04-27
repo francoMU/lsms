@@ -59,11 +59,12 @@ site_default = {
 }
 
 debug_atomic = false
+debug_chem_pot = true
 debug_madelung = false
 debug_core_states = false
 debug_radial_charge = false
 debug_charge = false
-debug_potential = false
+debug_potential = true
 debug_energy = false
 debug_convergence = false
 

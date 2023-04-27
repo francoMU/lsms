@@ -462,7 +462,8 @@ int main(int argc, char *argv[]) {
     lsms::checkRadialChargeDensity(lsms, local);
 
     if (comm.rank == 0) {
-      fmt::printf("Initial MTZ: %20.9f\n", lsms.vmt);
+      fmt::print("Initial MTZ:   {: 15.12f}\n", lsms.vmt);
+      fmt::print("Initial Fermi: {: 15.12f}\n", lsms.efermi);
     }
 
   }

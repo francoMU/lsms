@@ -104,6 +104,7 @@ class LSMSSystemParameters {
   int n_spin_cant;
   int n_spin_pola;
   int nscf;
+  int fermi_iter;
   int writeSteps;
   int mtasa;
   int use_voronoi;

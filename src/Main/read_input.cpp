@@ -516,6 +516,9 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms,
   lsms.nscf = 1;
   luaGetInteger(L, "nscf", &lsms.nscf);
 
+  lsms.fermi_iter = 1;
+  luaGetInteger(L, "fermi_iter", &lsms.fermi_iter);
+
   // read the frequency of writing the potential during an scf calculation
   // (writeSteps)
   lsms.writeSteps = 30000;
@@ -1179,6 +1182,9 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms, CrystalParameters &cryst
 // c     nscf        : maximum number of scf iterations requested........
   lsms.nscf = 1;
   luaGetInteger(L, "nscf", &lsms.nscf);
+
+  lsms.fermi_iter = 1;
+  luaGetInteger(L, "fermi_iter", &lsms.fermi_iter);
 
 // read the frequency of writing the potential during an scf calculation (writeSteps)
   lsms.writeSteps=30000;

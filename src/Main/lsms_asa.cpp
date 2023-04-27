@@ -489,14 +489,19 @@ int main(int argc, char *argv[]) {
     // Recalculate core states from `vr`
     lsms::calculateCoreStates(comm, lsms, local);
 
-    // Calculate band energy from `vr`
-    energyContourIntegration(comm, lsms, local);
-
-    // Calculate chemical potential
     double dTimeCCP = MPI_Wtime();
-    lsms::calculateChemPot(comm, lsms, local, eband);
-    dTimeCCP = MPI_Wtime() - dTimeCCP;
-    timeCalcChemPot += dTimeCCP;
+
+    for (auto subiteration = 0; subiteration < lsms.fermi_iter; subiteration++) {
+
+      // Calculate band energy from `vr`
+      energyContourIntegration(comm, lsms, local);
+
+      // Calculate chemical potential
+      lsms::calculateChemPot(comm, lsms, local, eband);
+      dTimeCCP = MPI_Wtime() - dTimeCCP;
+      timeCalcChemPot += dTimeCCP;
+
+    }
 
     // Create radial charge density in `rhoNew`
     double dTimeCHD = MPI_Wtime();

@@ -69,6 +69,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
              comm.comm);
     MPI_Pack(&lsms.fixRMT, 1, MPI_INT, buf, s, &pos, comm.comm);
     MPI_Pack(&lsms.nscf, 1, MPI_INT, buf, s, &pos, comm.comm);
+    MPI_Pack(&lsms.fermi_iter,1,MPI_INT,buf,s,&pos,comm.comm);
     MPI_Pack(&lsms.writeSteps, 1, MPI_INT, buf, s, &pos, comm.comm);
     MPI_Pack(&lsms.temperature, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
     MPI_Pack(&lsms.clight, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
@@ -215,6 +216,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
                MPI_INT, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.fixRMT, 1, MPI_INT, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.nscf, 1, MPI_INT, comm.comm);
+    MPI_Unpack(buf, s, &pos, &lsms.fermi_iter, 1, MPI_INT, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.writeSteps, 1, MPI_INT, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.temperature, 1, MPI_DOUBLE, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.clight, 1, MPI_DOUBLE, comm.comm);
@@ -427,6 +429,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
     MPI_Pack(&lsms.xcFunctional[0],numFunctionalIndices,MPI_INT,buf,s,&pos,comm.comm);
     MPI_Pack(&lsms.fixRMT,1,MPI_INT,buf,s,&pos,comm.comm);
     MPI_Pack(&lsms.nscf,1,MPI_INT,buf,s,&pos,comm.comm);
+    MPI_Pack(&lsms.fermi_iter,1,MPI_INT,buf,s,&pos,comm.comm);
     MPI_Pack(&lsms.writeSteps,1,MPI_INT,buf,s,&pos,comm.comm);
     MPI_Pack(&lsms.temperature,1,MPI_DOUBLE,buf,s,&pos,comm.comm);
     MPI_Pack(&lsms.clight,1,MPI_DOUBLE,buf,s,&pos,comm.comm);
@@ -506,6 +509,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
     MPI_Unpack(buf,s,&pos,&lsms.xcFunctional[0],numFunctionalIndices,MPI_INT,comm.comm);
     MPI_Unpack(buf,s,&pos,&lsms.fixRMT,1,MPI_INT,comm.comm);
     MPI_Unpack(buf,s,&pos,&lsms.nscf,1,MPI_INT,comm.comm);
+    MPI_Unpack(buf, s, &pos, &lsms.fermi_iter, 1, MPI_INT, comm.comm);
     MPI_Unpack(buf,s,&pos,&lsms.writeSteps,1,MPI_INT,comm.comm);
     MPI_Unpack(buf,s,&pos,&lsms.temperature,1,MPI_DOUBLE,comm.comm);
     MPI_Unpack(buf,s,&pos,&lsms.clight,1,MPI_DOUBLE,comm.comm);

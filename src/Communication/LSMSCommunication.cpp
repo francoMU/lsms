@@ -100,6 +100,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
     MPI_Pack((int *)&lsms.global.linearSolver, 32, MPI_INT, buf, s, &pos,
              comm.comm);
 
+    MPI_Pack(&lsms.overwrite_efermi, 1, MPI_CXX_BOOL, buf, s, &pos, comm.comm);
     MPI_Pack(&lsms.efermi, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
     MPI_Pack(&lsms.rmin, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
     MPI_Pack(&lsms.rmax, 1, MPI_DOUBLE, buf, s, &pos, comm.comm);
@@ -251,6 +252,7 @@ void communicateParameters(LSMSCommunication &comm, LSMSSystemParameters &lsms,
     MPI_Unpack(buf, s, &pos, (int *)&lsms.global.linearSolver, 32, MPI_INT,
                comm.comm);
 
+    MPI_Unpack(buf, s, &pos, &lsms.overwrite_efermi, 1, MPI_CXX_BOOL, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.efermi, 1, MPI_DOUBLE, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.rmin, 1, MPI_DOUBLE, comm.comm);
     MPI_Unpack(buf, s, &pos, &lsms.rmax, 1, MPI_DOUBLE, comm.comm);

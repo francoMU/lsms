@@ -155,6 +155,7 @@ class LSMSSystemParameters {
                              // adjustContourBottom
   Real largestCorestate;     // maximum of the core levels
 
+  bool overwrite_efermi = false; // Overwrite efermi from potential
   Real efermi; // Input fermi level in case of start from atomic density
   Real rmin; // starting of rmesh
   Real rmax; // ending of rmesh

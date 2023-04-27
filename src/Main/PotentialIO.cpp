@@ -291,8 +291,16 @@ int loadPotentials(LSMSCommunication &comm, LSMSSystemParameters &lsms,
   lsms.chempot = 0.0;
   for (int i = 0; i < local.num_local; i++) {
     lsms.zvaltss += local.atom[i].zvalss * Real(local.n_per_type[i]);
-    lsms.chempot += local.atom[i].efermi * Real(local.n_per_type[i]);
   }
+
+  if (lsms.overwrite_efermi) {
+      lsms.chempot += lsms.efermi * Real(local.n_per_type[i]);
+  } else {
+    for (int i = 0; i < local.num_local; i++) {
+      lsms.chempot += local.atom[i].efermi * Real(local.n_per_type[i]);
+    }
+  }
+
   Real fspace[2];
   fspace[0] = lsms.zvaltss;
   fspace[1] = lsms.chempot;

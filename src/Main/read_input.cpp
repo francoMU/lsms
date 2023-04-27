@@ -109,6 +109,8 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms,
   luaGetInteger(L, "default_iprint", &lsms.global.default_iprint);
   luaGetInteger(L, "iprint", &lsms.global.iprint);
 
+  lsms.overwrite_efermi = false;
+  luaGetBoolean(L, "overwrite_efermi", &lsms.overwrite_efermi);
   lsms.efermi = 0.6;
   luaGetReal(L, "efermi", &lsms.efermi);
   lsms.rmin = 0.0001;
@@ -811,6 +813,8 @@ int readInput(lua_State *L, LSMSSystemParameters &lsms, CrystalParameters &cryst
   luaGetInteger(L,"default_iprint",&lsms.global.default_iprint);
   luaGetInteger(L,"iprint",&lsms.global.iprint);
 
+  lsms.overwrite_efermi = false;
+  luaGetBoolean(L, "overwrite_efermi", &lsms.overwrite_efermi);
   lsms.efermi = 0.6;
   luaGetReal(L, "efermi", &lsms.efermi);
   lsms.rmin = 0.0001;

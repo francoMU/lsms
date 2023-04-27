@@ -24,6 +24,7 @@ print_node = 0
 istop = "main"
 
 nscf = 50
+fermi_iter = 5
 rmsTolerance = 1.0e-11
 energyTolerance = 1.0e-8
 

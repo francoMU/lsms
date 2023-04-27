@@ -6,7 +6,7 @@
 #include <fmt/format.h>
 #include <fmt/printf.h>
 #include <gtest/gtest.h>
-//#include <matplot/matplot.h>
+#include <matplot/matplot.h>
 
 #include <cmath>
 #include <iostream>
@@ -31,6 +31,9 @@ void single_scatterer_nonrel_(int *nrelv, double *clight, int *lmax, int *kkrsz,
 }
 
 TEST(SingleSiteTests, NewRadialSolver) {
+
+  // QT_QPA_PLATFORM=offscreen
+
   int n = 1000;
   double clight = 274.071998412000027656176826;
   int lmax = 3;
@@ -79,7 +82,7 @@ TEST(SingleSiteTests, NewRadialSolver) {
   std::vector<Real> y(n);
   Real result;
 
-  // auto ax1 = matplot::subplot(2, 1, 0);
+  auto ax1 = matplot::subplot(2, 1, 0);
 
   for (auto ir = 0; ir < n; ir++) {
     y[ir] = std::real(P[ir]) * r_mesh[ir];
@@ -93,15 +96,16 @@ TEST(SingleSiteTests, NewRadialSolver) {
     y[ir] /= result;
   }
 
-  // matplot::plot(r_mesh, y, "--xr");
-  // matplot::hold(matplot::on);
+  matplot::plot(r_mesh, y, "--xr");
+  matplot::hold(matplot::on);
 
-  // matplot::xlim({0, r_sph + 0.5});
+  matplot::xlim({0, r_sph + 0.5});
 
   auto name = std::string(
       ::testing::UnitTest::GetInstance()->current_test_info()->name());
 
-  // matplot::save(name + ".png");
+  //matplot::show();
+  matplot::save(name + ".png");
 }
 
 TEST(SingleSiteTests, BasicSolver) {

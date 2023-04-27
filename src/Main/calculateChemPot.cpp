@@ -39,8 +39,6 @@ c     ================================================================
   xtws = wspace[0];
   tnen = wspace[1];
 
-
-
 // if(iharris<=1)
   Real etop = lsms.chempot;
   if (lsms.global.iprint >= 0) {
@@ -56,6 +54,7 @@ c     ================================================================
   if (comm.rank == 0 && lsms.global.debug_chem_pot) {
     std::stringstream ss;
     ss << fmt::sprintf(" ==== Chemical potential debug  ====\n");
+    ss << fmt::sprintf("  Ztotal:         %40.24f\n", lsms.zvaltss);
     ss << fmt::sprintf("  int. DOS:       %40.24f\n", xtws);
     ss << fmt::sprintf("  last. DOS:      %40.24f\n", tnen);
     ss << fmt::sprintf("  chem. Pot.:     %40.24f\n", etop);

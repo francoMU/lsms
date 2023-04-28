@@ -56,6 +56,8 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
   std::vector<Real> ro3(local.num_local, 0.0);
   std::vector<Real> dz(local.num_local, 0.0);
 
+  std::vector<Real> vmt_array(crystal.num_types, 0.0);
+
   for (int i = 0; i < local.num_local; i++) {
     /**
      * Site indices
@@ -88,6 +90,8 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
         u0 += local.atom[i].madelungMatrix[j] * qsub[j] * qsub[global_i];
 
       }
+
+      vmt_array[local.global_id[i]] = vmt1;
       
     }
 
@@ -192,27 +196,31 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
       vpot_ave += vpot;
     }
 
-    if (lsms.global.debug_potential) {
+//    if (lsms.global.debug_potential) {
+//
+//      std::stringstream ss;
+//
+//      ss << fmt::sprintf(" ==== Potential debug (%d) (%d) ====\n", comm.rank, local.global_id[i]);
+//      ss << fmt::sprintf("  Vhartree: %30.24f  %30.24f\n", 2.0 * vhartree[jmt - 1], 2.0 * vhartree[0]);
+//      ss << fmt::sprintf("  VM:       %30.24f\n", vmt1);
+//
+//      if (lsms.n_spin_pola == 1) {
+//        ss << fmt::sprintf("  VXC:      %30.24f  %30.24f\n", local.atom[i].exchangeCorrelationPotential(jmt - 1, 0),
+//                           local.atom[i].exchangeCorrelationPotential(0, 0));
+//      } else {
+//        ss << fmt::sprintf("  VXC:      %30.24f  %30.24f\n", local.atom[i].exchangeCorrelationPotential(jmt - 1, 0),
+//                           local.atom[i].exchangeCorrelationPotential(0, 0));
+//        ss << fmt::sprintf("  VXC:      %30.24f  %30.24f\n", local.atom[i].exchangeCorrelationPotential(jmt - 1, 1),
+//                           local.atom[i].exchangeCorrelationPotential(0, 1));
+//      }
+//
+//      std::cout << ss.str() << std::endl;
+//    }
 
-      std::stringstream ss;
+  }
 
-      ss << fmt::sprintf(" ==== Potential debug (%d) (%d) ====\n", comm.rank, local.global_id[i]);
-      ss << fmt::sprintf("  Vhartree: %30.24f  %30.24f\n", 2.0 * vhartree[jmt - 1], 2.0 * vhartree[0]);
-      ss << fmt::sprintf("  VM:       %30.24f\n", vmt1);
-
-      if (lsms.n_spin_pola == 1) {
-        ss << fmt::sprintf("  VXC:      %30.24f  %30.24f\n", local.atom[i].exchangeCorrelationPotential(jmt - 1, 0),
-                           local.atom[i].exchangeCorrelationPotential(0, 0));
-      } else {
-        ss << fmt::sprintf("  VXC:      %30.24f  %30.24f\n", local.atom[i].exchangeCorrelationPotential(jmt - 1, 0),
-                           local.atom[i].exchangeCorrelationPotential(0, 0));
-        ss << fmt::sprintf("  VXC:      %30.24f  %30.24f\n", local.atom[i].exchangeCorrelationPotential(jmt - 1, 1),
-                           local.atom[i].exchangeCorrelationPotential(0, 1));
-      }
-
-      std::cout << ss.str() << std::endl;
-    }
-
+  if (lsms.global.debug_potential) {
+    globalSum(comm, vmt_array.data(), crystal.num_types);
   }
 
   /**
@@ -242,12 +250,15 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
 
     std::stringstream ss;
 
-    ss << fmt::sprintf(" ==== Potential debug (%d) ====\n", comm.rank);
-    ss << fmt::sprintf("  Pot. ave.:         %40.24f\n", vpot_ave);
-    ss << fmt::sprintf("  Pot. ave. Hartree: %40.24f\n", vpot_ave_hartree);
-    //ss << fmt::sprintf("  Pot. ave. Core:    %40.24f\n", vpot_ave_core);
-    ss << fmt::sprintf("  Pot. ave. XC:      %40.24f\n", vpot_ave_xc);
-    ss << fmt::sprintf("  Pot. ave. VMT1:    %40.24f\n", vpot_ave_vmt1);
+    ss << fmt::sprintf(" ==== Potential debug ====\n");
+    ss << fmt::format("  {:8s}: {:34.24f}\n", "Ave.", vpot_ave);
+    ss << fmt::format("  {:8s}: {:34.24f}\n", "Hartree",vpot_ave_hartree);
+    ss << fmt::format("  {:8s}: {:34.24f}\n", "XC", vpot_ave_xc);
+    ss << fmt::format("  {:8s}: {:34.24f}\n", "VMT", vpot_ave_vmt1);
+
+    for(auto j = 0; j < crystal.num_types; j++) {
+      ss << fmt::format("  Site {:3d}: {:34.24f} {:34.24f}\n", j, vmt_array[j], qsub[j]);
+    }
 
     std::cout << ss.str() << std::endl;
   }

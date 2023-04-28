@@ -23,8 +23,8 @@ default_iprint = -1
 print_node = 0
 istop = "main"
 
-nscf = 50
-fermi_iter = 5
+nscf = 1
+fermi_iter = 2
 rmsTolerance = 1.0e-11
 energyTolerance = 1.0e-8
 
@@ -59,15 +59,15 @@ site_default = {
     evec = {0, 0, 1}
 }
 
-debug_atomic = false
+debug_atomic = true
 debug_chem_pot = true
-debug_madelung = false
-debug_core_states = false
-debug_radial_charge = false
-debug_charge = false
+debug_madelung = true
+debug_core_states = true
+debug_radial_charge = true
+debug_charge = true
 debug_potential = true
-debug_energy = false
-debug_convergence = false
+debug_energy = true
+debug_convergence = true
 
 mixing = {
     {quantity = "potential", algorithm = "broyden", alpha = 0.05},

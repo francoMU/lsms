@@ -404,7 +404,12 @@ void energyContourIntegration(LSMSCommunication &comm,
   eGroupIdx[numEGroups] = nume;
 
   for (int ig = 0; ig < numEGroups; ig++) {
-// solve single site problem
+
+    /**
+     *
+     * Solve single-site problem
+     */
+
 #ifdef USE_NVTX
     nvtxEventAttributes_t eventAttrib = {0};
     eventAttrib.version = NVTX_VERSION;
@@ -445,6 +450,9 @@ void energyContourIntegration(LSMSCommunication &comm,
                               iie);
       }
     }
+
+
+
 
     if (lsms.global.iprint >= 2) printf("About to send t matrices\n");
     sendTmats(comm, local);

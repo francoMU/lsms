@@ -12,7 +12,7 @@ relativity = "s"
 core_relativity = "f"
 
 num_atoms = 2
-nspin = 1
+nspin = 2
 mtasa = 1
 use_voronoi = 0
 
@@ -55,7 +55,7 @@ site_default = {
     rsteps = {89.5, 91.5, 93.2, 99.9},
     atom = "Fe",
     rad = 2,
-    mag_mom = 2.0,
+    mag_mom = 0.0,
     evec = {0, 0, 1}
 }
 

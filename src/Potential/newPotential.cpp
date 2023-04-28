@@ -92,7 +92,7 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
       }
 
       vmt_array[local.global_id[i]] = vmt1;
-      
+
     }
 
     local.atom[i].localMadelungEnergy = u0;
@@ -205,6 +205,13 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
 //      ss << fmt::sprintf("  VM:       %30.24f\n", vmt1);
 //
 //      if (lsms.n_spin_pola == 1) {
+//        ss << fmt::sprintf("  Dens:     %30.24f\n", local.atom[i].rhoNew(jmt - 1, 0));
+//      } else {
+//        ss << fmt::sprintf("  Dens:     %30.24f\n", local.atom[i].rhoNew(jmt - 1, 0));
+//        ss << fmt::sprintf("  Dens:     %30.24f\n", local.atom[i].rhoNew(jmt - 1, 1));
+//      }
+//
+//      if (lsms.n_spin_pola == 1) {
 //        ss << fmt::sprintf("  VXC:      %30.24f  %30.24f\n", local.atom[i].exchangeCorrelationPotential(jmt - 1, 0),
 //                           local.atom[i].exchangeCorrelationPotential(0, 0));
 //      } else {
@@ -252,11 +259,11 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
 
     ss << fmt::sprintf(" ==== Potential debug ====\n");
     ss << fmt::format("  {:8s}: {:34.24f}\n", "Ave.", vpot_ave);
-    ss << fmt::format("  {:8s}: {:34.24f}\n", "Hartree",vpot_ave_hartree);
+    ss << fmt::format("  {:8s}: {:34.24f}\n", "Hartree", vpot_ave_hartree);
     ss << fmt::format("  {:8s}: {:34.24f}\n", "XC", vpot_ave_xc);
     ss << fmt::format("  {:8s}: {:34.24f}\n", "VMT", vpot_ave_vmt1);
 
-    for(auto j = 0; j < crystal.num_types; j++) {
+    for (auto j = 0; j < crystal.num_types; j++) {
       ss << fmt::format("  Site {:3d}: {:34.24f} {:34.24f}\n", j, vmt_array[j], qsub[j]);
     }
 

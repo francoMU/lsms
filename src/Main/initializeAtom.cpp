@@ -647,7 +647,6 @@ void initializeNewPotentials(LSMSCommunication &comm, LSMSSystemParameters &lsms
       fmt::print("{:>10}: {:10.6f}\n", "rmt", local.atom[i].rmt);
     }
 
-
     // Create aligned mesh
     int max_point = std::floor(std::log(lsms.rmax / lsms.rmin) / lsms.h_step) + 1;
     local.atom[i].jmt = std::floor(std::log(local.atom[i].rmt / lsms.rmin) / lsms.h_step) + 1;

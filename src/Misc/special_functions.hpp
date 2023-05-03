@@ -13,6 +13,8 @@ void sph_bessel_jl(std::complex<double> z, int lmax,
   double dummy;
 
   constexpr double eps = std::numeric_limits<double>::epsilon();
+  constexpr double min = std::numeric_limits<double>::min();
+  constexpr int MAX_BESSEL_ITER = 2000;
 
   if (abs(z) < eps) {
 
@@ -26,14 +28,49 @@ void sph_bessel_jl(std::complex<double> z, int lmax,
     return;
   }
 
-//  // Modified Steed's algorithm
-//  tk = 2 * n_max * z_1 + 3 * z_1;
-//  cf1 = n_max * z_1;
+  z_1 = 1.0 / z;
 
-//  if (abs(cf1) < small)
-//    then
-//        cf1 = small
-//    endif
+//  // Modified Steed's algorithm
+  tk = z_1 * 2.0 * (double) n_max * z_1 + z_1 * 3.0;
+  cf1 = z_1 * (double) n_max;
+
+  if (std::abs(cf1) < small) {
+    cf1 = small;
+  }
+
+  den = 1.0;
+
+  c = cf1;
+  d = 0.0;
+
+
+  for(k = 0; k < MAX_BESSEL_ITER; k++) {
+
+    c = tk - 1.0 / c;
+    d = tk - d;
+
+    if (abs(c) < small) then
+          c = small
+      endif
+      if (abs(d) < small) then
+            d = small
+        endif
+
+            d = 1 / d;
+        dcf1 = d * c;
+    cf1 = cf1 * dcf1;
+
+    if (real(d) < 0.0_dp) then
+          den = -den;
+      endif
+
+      if (abs(dcf1 - 1.0_dp) < eps) then
+            break
+        endif
+
+            tk = tk + 2 * z_1;
+  }
+
 
 }
 

@@ -159,8 +159,6 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
       }
     }
 
-    auto Vend = lsms::radialIntegral(density, local.atom[i].r_mesh, jmt) / rSphere;
-
     lsms::radial_poisson(vhartree, vhartreederiv, local.atom[i].r_mesh,
                          local.atom[i].h, density, jmt);
 
@@ -186,16 +184,21 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
 
       vpot = 2.0 * vhartree[jmt - 1]
           - 2.0 * local.atom[i].ztotss / local.atom[i].r_mesh[jmt - 1]
-          + local.atom[i].exchangeCorrelationPotential(jmt - 1, is) / 3.0
-          + local.atom[i].exchangeCorrelationPotential(jmt - 2, is) / 3.0
-          + local.atom[i].exchangeCorrelationPotential(jmt - 3, is) / 3.0;
-          //+ vmt1;
+          + local.atom[i].exchangeCorrelationPotential(jmt - 1, is) / 4.0
+          + local.atom[i].exchangeCorrelationPotential(jmt - 2, is) / 4.0
+          + local.atom[i].exchangeCorrelationPotential(jmt - 3, is) / 4.0
+          + local.atom[i].exchangeCorrelationPotential(jmt - 4, is) / 4.0
+          + vmt1;
 
       if (lsms.global.debug_potential) {
 
         vpot_ave_hartree += 2.0 * vhartree[jmt - 1];
         vpot_ave_core -= 2.0 * local.atom[i].ztotss / local.atom[i].r_mesh[jmt - 1];
-        vpot_ave_xc += local.atom[i].exchangeCorrelationPotential(jmt - 1, is);
+        vpot_ave_xc +=
+            local.atom[i].exchangeCorrelationPotential(jmt - 1, is) / 4.0
+                + local.atom[i].exchangeCorrelationPotential(jmt - 2, is) / 4.0
+                + local.atom[i].exchangeCorrelationPotential(jmt - 3, is) / 4.0
+                + local.atom[i].exchangeCorrelationPotential(jmt - 4, is) / 4.0;
         vpot_ave_vmt1 += vmt1;
 
       }
@@ -266,6 +269,7 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
 
     ss << fmt::sprintf(" ==== Potential debug ====\n");
     ss << fmt::format("  {:8s}: {:34.24f}\n", "Ave.", vpot_ave);
+    ss << fmt::format("  {:8s}: {:34.24f}\n", "Core", vpot_ave_core);
     ss << fmt::format("  {:8s}: {:34.24f}\n", "Hartree", vpot_ave_hartree);
     ss << fmt::format("  {:8s}: {:34.24f}\n", "XC", vpot_ave_xc);
     ss << fmt::format("  {:8s}: {:34.24f}\n", "VMT", vpot_ave_vmt1);

@@ -4,6 +4,8 @@
 target_sources(lsmscore
         PUBLIC
 
+        special_functions.hpp
+
         SphericalHarmonics.cpp
         SphericalHarmonics.hpp
 

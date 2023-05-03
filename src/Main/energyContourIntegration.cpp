@@ -3,6 +3,10 @@
 
 #include "energyContourIntegration.hpp"
 
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/printf.h>
+
 #include <mpi.h>
 
 #include <complex>

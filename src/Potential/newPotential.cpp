@@ -179,10 +179,17 @@ void lsms::ASAPotential::calculatePotential(LSMSCommunication &comm,
         local.atom[i].vrNew(ir, is) = vpot * local.atom[i].r_mesh[ir];
       }
 
+
+      /**
+       * Here we try to eliminate the moving around of the muffin-tin zero
+       */
+
       vpot = 2.0 * vhartree[jmt - 1]
           - 2.0 * local.atom[i].ztotss / local.atom[i].r_mesh[jmt - 1]
-          + local.atom[i].exchangeCorrelationPotential(jmt - 1, is)
-          + vmt1;
+          + local.atom[i].exchangeCorrelationPotential(jmt - 1, is) / 3.0
+          + local.atom[i].exchangeCorrelationPotential(jmt - 2, is) / 3.0
+          + local.atom[i].exchangeCorrelationPotential(jmt - 3, is) / 3.0;
+          //+ vmt1;
 
       if (lsms.global.debug_potential) {
 

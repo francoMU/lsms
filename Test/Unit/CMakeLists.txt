@@ -202,7 +202,7 @@ gtest_discover_tests(test_atomicdft)
 ##################################################################
 
 ##################################################################
-# 13. Test: Single site routines
+# 14. Test: Single site routines
 add_executable(test_ss test_single_site.cpp)
 target_link_libraries(test_ss PUBLIC gtest_main)
 target_link_libraries(test_ss PRIVATE lsmscore)
@@ -224,4 +224,15 @@ target_link_libraries(test_ss PUBLIC matplot)
 
 
 gtest_discover_tests(test_ss)
+##################################################################
+
+##################################################################
+# 15. Test: Mixer routines
+add_executable(test_special_functions test_special_functions.cpp)
+target_link_libraries(test_special_functions PUBLIC gtest_main)
+target_link_libraries(test_special_functions PRIVATE lsmscore)
+target_sources(test_special_functions PUBLIC accel_common.hpp)
+target_include_directories(test_special_functions PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+gtest_discover_tests(test_special_functions)
 ##################################################################

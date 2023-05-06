@@ -228,7 +228,7 @@ gtest_discover_tests(test_ss)
 
 ##################################################################
 # 15. Test: Mixer routines
-add_executable(test_special_functions test_special_functions.cpp)
+add_executable(test_special_functions test_special_functions.cpp zsphbesj.f90)
 target_link_libraries(test_special_functions PUBLIC gtest_main)
 target_link_libraries(test_special_functions PRIVATE lsmscore)
 target_sources(test_special_functions PUBLIC accel_common.hpp)

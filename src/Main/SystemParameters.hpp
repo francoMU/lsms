@@ -147,6 +147,7 @@ class LSMSSystemParameters {
               // energy just from MT
   Real vmt;   // Muffin-tin zero
   Real totalEnergy;  // Total energy
+  Real rhoInt;
   // Real pressure;               // Pressure
 
   // repeat the MPI rank from comm for reporting purposes

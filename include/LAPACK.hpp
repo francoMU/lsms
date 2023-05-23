@@ -33,6 +33,9 @@ namespace LAPACK {
   //MSS
   extern "C" int  dgetrf_(int* M, int* N, double* A, int* LDA, int* IPIV, int* INFO);
   extern "C" int  zgetrf_(int* M, int* N, std::complex<double>* A, int* LDA, int* IPIV, int* INFO);
+  extern "C" int  zgetrf2_(int* M, int* N, std::complex<double>* A, int* LDA, int* IPIV, int* INFO);
+  extern "C" int  zgecon_(const char * norm, int* N, std::complex<double>* A, int* LDA,
+                          const char * anorm, double* rcond, std::complex<double>* WORK, double *RWORK, int* INF0);
 
   extern "C" int  zgetrs_(const char * trans, int* n, int* nrhs, std::complex<double>* A, int* LDA, int* IPIV, std::complex<double>* B, int *LDB, int* INFO);
 

@@ -7,8 +7,22 @@
 
 #include "AtomData.hpp"
 #include "SystemParameters.hpp"
+#include "LSMSCommunication.hpp"
 
 namespace lsms {
+
+/**
+ * Calculated the local radial charge density
+ *
+ * ONLY ASA version for nspin == 1 and nspin == 2
+ *
+ */
+void calculateASAIntCharge(
+    LSMSCommunication &comm,
+    LSMSSystemParameters &lsms,
+    LocalTypeInfo &local,
+    double &rhoInt
+    );
 
 /**
  * Calculated the local radial charge density

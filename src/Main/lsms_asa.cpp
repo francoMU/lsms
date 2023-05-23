@@ -453,6 +453,11 @@ int main(int argc, char *argv[]) {
 
   if (lsms.pot_in_type == -1) {
 
+    // Calculate the charge density after mixing
+    double rhoInt;
+    lsms::calculateASAIntCharge(comm, lsms, local, rhoInt);
+    lsms.rhoInt = rhoInt;
+
     potential->calculatePotential(comm, lsms, local, crystal, qsub);
 
     // Initialize potentials and charge densities
@@ -506,6 +511,8 @@ int main(int argc, char *argv[]) {
     // Create radial charge density in `rhoNew`
     double dTimeCHD = MPI_Wtime();
     lsms::calculateRadialChargeDensity(lsms, local);
+
+    // Calculate `interstial charge`
 
     // Calculate charge density rms `New`
     lsms::calculateQRMS(lsms, local);
@@ -634,6 +641,11 @@ int main(int argc, char *argv[]) {
 
     dTimeCM = MPI_Wtime() - dTimeCM;
     timeCalcMixCharge += dTimeCM;
+
+    // Calculate the charge density after mixing
+    double rhoInt;
+    lsms::calculateASAIntCharge(comm, lsms, local, rhoInt);
+    lsms.rhoInt = rhoInt;
 
     // Create new potential `vrNew` from charge `rhoNew`
     double dTimeP = MPI_Wtime();

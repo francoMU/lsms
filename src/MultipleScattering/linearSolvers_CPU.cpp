@@ -84,6 +84,23 @@ void solveTau00zgetrf(LSMSSystemParameters &lsms, LocalTypeInfo &local,
   std::vector<double> rwork(nrmat_ns);
   int info, iter;
 
+//  Matrix<Complex> m1 = m;
+//
+//  std::vector<std::complex<double> > work1(nrmat_ns * nrmat_ns * 2);
+//  std::vector<double> work2(nrmat_ns * nrmat_ns * 2);
+//
+//  for(int i =0; i < nrmat_ns; i++) {
+//    for(int j =0; j < nrmat_ns; j++) {
+//      std::cout << m1(i, j) << std::endl;
+//    }
+//  }
+//
+//  double rcond;
+//  LAPACK::zgecon_("1", &nrmat_ns, &m1(0, 0),
+//                  &nrmat_ns, "1", &rcond, work1.data(), work2.data(), &info);
+//
+//  std::cout << "  ===== " << rcond  << std::endl;
+
   LAPACK::zgetrf_(&nrmat_ns, &nrmat_ns, &m(0, 0), &nrmat_ns, &ipiv[0], &info);
   LAPACK::zgetrs_("N", &nrmat_ns, &kkrsz_ns, &m(0, 0), &nrmat_ns, &ipiv[0],
                   &tau(0, 0), &nrmat_ns, &info);
@@ -260,6 +277,11 @@ void solveTau00zblocklu_cpp(LSMSSystemParameters &lsms, LocalTypeInfo &local,
   //  c     ================================================================
   // c     create tau00 => {[1-t*G]**(-1)}*t : for central site only.......
   // c     ----------------------------------------------------------------
+
+
+  /**
+   * Test the matrix before
+   */
 
   LAPACK::zgetrf_(&kkrsz_ns, &kkrsz_ns, &wbig(0, 0), &kkrsz_ns, ipvt, &info);
 

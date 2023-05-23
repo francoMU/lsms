@@ -9,6 +9,57 @@
 
 namespace lsms {
 
+void calculateASAIntCharge(
+    LSMSCommunication &comm,
+    LSMSSystemParameters &lsms,
+    LocalTypeInfo &local,
+    double &rhoInt
+    ) {
+
+  rhoInt = 0.0;
+  double qInt = 0.0;
+  double mInt = 0.0;
+
+  for (int i = 0; i < local.num_local; i++) {
+
+    auto &atom = local.atom[i];
+
+    double r_out = atom.r_mesh[atom.jws];
+    double r_in = atom.r_mesh[atom.jws - 8];
+
+    double delta_vol = 4.0 / 3.0 * M_PI * (r_out * r_out * r_out - r_in * r_in * r_in);
+
+    if (lsms.n_spin_pola == 1) {
+      double up = lsms::radialIntegral(atom.rhoNew,
+                                       atom.r_mesh, atom.jmt - 8, atom.jmt, 0);
+
+      qInt += up;
+      rhoInt += up / delta_vol;
+
+    } else {
+
+      double up = lsms::radialIntegral(atom.rhoNew,
+                                       atom.r_mesh, atom.jmt - 8, atom.jmt, 0) / delta_vol;
+
+      double down = lsms::radialIntegral(atom.rhoNew,
+                                         atom.r_mesh, atom.jmt - 8, atom.jmt, 1) / delta_vol;
+
+      qInt += up + down;
+      rhoInt += (up + down) / delta_vol;
+      mInt += down - down;
+
+    }
+
+  }
+
+  globalSum(comm, rhoInt);
+  globalSum(comm, qInt);
+  globalSum(comm, mInt);
+
+  rhoInt /= lsms.num_atoms;
+
+}
+
 void calculateRadialChargeDensity(LSMSSystemParameters &lsms,
                                   LocalTypeInfo &local) {
   /*

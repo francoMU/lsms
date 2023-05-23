@@ -225,3 +225,11 @@ target_link_libraries(test_ss PUBLIC matplot)
 
 gtest_discover_tests(test_ss)
 ##################################################################
+
+##################################################################
+# 13. Test: Single site routines
+add_executable(run_multipole_madelung run_multipole_madelung.cpp)
+target_link_libraries(run_multipole_madelung PRIVATE lsmscore)
+target_sources(run_multipole_madelung PUBLIC accel_common.hpp)
+target_include_directories(run_multipole_madelung PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+##################################################################

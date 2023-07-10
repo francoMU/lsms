@@ -233,3 +233,14 @@ target_link_libraries(run_multipole_madelung PRIVATE lsmscore)
 target_sources(run_multipole_madelung PUBLIC accel_common.hpp)
 target_include_directories(run_multipole_madelung PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 ##################################################################
+
+##################################################################
+# 10. Test: Multipole Madelung calculation
+add_executable(test_g0 test_g0.cpp)
+target_link_libraries(test_g0 PUBLIC gtest_main)
+target_link_libraries(test_g0 PRIVATE lsmscore)
+target_sources(test_g0 PUBLIC accel_common.hpp)
+target_include_directories(test_g0 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+gtest_discover_tests(test_g0)
+##################################################################

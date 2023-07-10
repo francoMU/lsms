@@ -2,7 +2,6 @@
 // Created by F.Moitzi on 23.06.2022.
 //
 
-#include <gtest/gtest.h>
 
 #include <iostream>
 #include <vector>

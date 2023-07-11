@@ -8,6 +8,10 @@
 #include <vector>
 #include <complex>
 
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/printf.h>
+
 #include "lattice_utils.hpp"
 #include "SphericalHarmonics.hpp"
 #include "Madelung/Madelung.hpp"
@@ -44,21 +48,47 @@ TEST(BareStructureConstantsTestSuite, Structure1) {
   Matrix<double> bravais(3,3);
   Matrix<double> reciprocal_bravais(3,3);
 
-  bravais(0, 0) = 1.0 * a * scale;
-  bravais(0, 1) = 0.0;
-  bravais(0, 2) = 0.0;
+  bravais(0, 0) = 1.0 * a;
+  bravais(0, 1) = 0.5 * a;
+  bravais(0, 2) = 0.25 * a;
 
   bravais(1, 0) = 0.0;
-  bravais(1, 1) = 1.0 * a * scale;
-  bravais(1, 2) = 0.0;
+  bravais(1, 1) = 0.9 * a;
+  bravais(1, 2) = 0.1 * a;
 
   bravais(2, 0) = 0.0;
   bravais(2, 1) = 0.0;
-  bravais(2, 2) = 1.0 * a * scale;
-
+  bravais(2, 2) = 0.8 * a;
 
   // This we need to fix
+  // @TODO: fix this routine an correct it
   reciprocal_lattice(bravais, reciprocal_bravais,scale);
+
+  // Print lattice
+  for(int j = 0; j < 3; j++) {
+    fmt::print("{:10.5f} {:10.f} {:10.5f}\n", bravais(j,0), bravais(j, 1), bravais(j, 2));
+  }
+
+  // Print reciprocal lattice
+  for(int j = 0; j < 3; j++) {
+    fmt::print("{:10.5f} {:10.f} {:10.5f}\n", reciprocal_bravais(j,0), reciprocal_bravais(j, 1), reciprocal_bravais(j, 2));
+  }
+
+
+  EXPECT_NEAR(reciprocal_bravais(0,0), 6.28318531, 1.0e-8);
+  EXPECT_NEAR(reciprocal_bravais(1,1),  6.98131701, 1.0e-8);
+  EXPECT_NEAR(reciprocal_bravais(2,2), 7.85398163, 1.0e-8);
+
+  EXPECT_NEAR(reciprocal_bravais(1,0), -3.4906585, 1.0e-8);
+  EXPECT_NEAR(reciprocal_bravais(2,0), -1.5271631, 1.0e-8);
+  EXPECT_NEAR(reciprocal_bravais(2,1), -0.87266463, 1.0e-8);
+
+
+
+  /**
+   * Compare reciprocal lattice with pymatgen
+   */
+
 
 
   /**

@@ -4,6 +4,11 @@
 target_sources(lsmscore
         PUBLIC
 
+        Faddeeva.c
+        Faddeeva.cc
+        Faddeeva.h
+        Faddeeva.hh
+
         SphericalHarmonics.cpp
         SphericalHarmonics.hpp
 

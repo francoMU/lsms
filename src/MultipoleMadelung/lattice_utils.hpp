@@ -44,6 +44,14 @@ double omega(matrix<double> &bravais);
 void reciprocal_lattice(matrix<double> &bravais,
                         matrix<double> &reciprocal_bravais, double &scale);
 
+
+/**
+ * Calculate reciprocal lattice
+ */
+void reciprocal_lattice(Matrix<double> &bravais,
+                        Matrix<double> &reciprocal_bravais);
+
+
 }  // namespace lsms
 
 #endif  // LSMS_LATTICE_HPP

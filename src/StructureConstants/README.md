@@ -5,10 +5,14 @@ The goal is a program the reads in a structure and some parameters in a toml for
 It will calculate the structure constants `B_ij`
 
 
-1. Structure that contains all the parameters
+1. 
+   - create a `Structure Class`
+   - Add some algos from pymatgen to that class "calculate nearest distance for example"
+   - One can copy that from GA
+   - make it a round thing
+   - Make also an adapter to spglib
 
-    - Structure Class
-    - Parameter Class
+
    
 
 

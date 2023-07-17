@@ -16,3 +16,24 @@ target_sources(structureconsts PUBLIC
         )
 
 target_include_directories(structureconsts PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+include(FetchContent)
+set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+set(BUILD_GTEST ON CACHE BOOL "" FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG release-1.12.1
+)
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
+
+add_executable(test_ndarray test_ndarray.cpp)
+target_include_directories(test_ndarray PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(test_ndarray PUBLIC structureconsts)
+
+gtest_discover_tests(test_ndarray)

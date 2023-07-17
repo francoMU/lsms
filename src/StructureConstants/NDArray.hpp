@@ -221,6 +221,15 @@ class NDArray {
     return *this;
   }
 
+  NDArray transpose() {
+
+    NDArray transpose;
+
+
+
+
+  }
+
   template <typename Indices>
   inline T &operator[](Indices i) {
     return data_[i];

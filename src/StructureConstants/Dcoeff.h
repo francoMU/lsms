@@ -21,7 +21,7 @@ class Dcoeff {
 
  public:
 
-  void computeDij(std::complex<double> &d1);
+  void computeD1ij(std::complex<double> &d1);
 
 
 

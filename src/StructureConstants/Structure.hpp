@@ -24,6 +24,8 @@ class Structure {
       NDArray<double, 2> &coords,
       std::vector<int> &species);
 
+  void calculateLLLreduction();
+
 
 
 };

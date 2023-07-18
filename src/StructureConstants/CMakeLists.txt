@@ -18,6 +18,16 @@ target_sources(structureconsts PUBLIC
 target_include_directories(structureconsts PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 
+#
+# Find Eigen3
+#
+
+find_package(Eigen3 REQUIRED)
+
+target_link_libraries(structureconsts PUBLIC Eigen3::Eigen)
+
+
+
 include(FetchContent)
 set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 set(BUILD_GTEST ON CACHE BOOL "" FORCE)

@@ -55,7 +55,6 @@ int main(int argc, char *argv[]) {
     }
 
 
-
     k = 2;
 
     mapping.setIdentity();
@@ -87,22 +86,50 @@ int main(int argc, char *argv[]) {
         }
 
 
-        double norm = b(indexing::all, k - 1).squaredNorm();
-        std::cout << norm << std::endl;
+        double norm1 = b(indexing::all, k - 1).squaredNorm();
+        double norm2 = delta - std::fabs(u(k - 1, k - 2)) * b(indexing::all, k - 2).squaredNorm();
 
-//        if ()
+        if (norm1 >= norm2) {
+            k += 1;
+        } else {
+
+            v = a(indexing::all, k - 1);
+            a(indexing::all, k - 1) = a(indexing::all, k - 2);
+            a(indexing::all, k - 2) = v;
+
+            // H.col(i).swap(H.col(j))
+
+            v_m = mapping(indexing::all, k - 1);
+            mapping(indexing::all, k - 1) = mapping(indexing::all, k - 2);
+            mapping(indexing::all, k - 2) = v_m;
+
+            for (int s = k - 1; s < k + 1; s++) {
+
+                u(s - 1, seq(0, s - 2)) = a(indexing::all, s - 2).transpose() * b(indexing::all, seq(0, s - 2));
+                u(s - 1, seq(0, s - 2)) = u(s - 1, seq(0, s - 2)).array() / m(seq(0, s - 2)).transpose().array();
+                b(indexing::all, s - 1) = a(indexing::all, s - 1) -
+                                      b(indexing::all, seq(0, s - 2)) * u(s - 1, seq(0, s - 2)).transpose();
+                m(s - 1) = b(indexing::all, s - 1).transpose() * b(indexing::all, s - 1);
+
+            }
+
+
+            if (k > 2) {
+                k -= 1;
+            } else {
+
+
+            }
+
+
+        }
 
 
     }
 
+    std::cout << a.transpose() << std::endl;
+    std::cout << mapping.transpose() << std::endl;
 
-    //       do i = 1, 2
-    //       u(i, 0:i - 1) = matmul(a(:, i), b(:, 0:i - 1)) / m(0:i - 1)
-    //       b(:, i) = a(:, i) - matmul(b(:, 0:i - 1), u(i, 0:i - 1))
-    //       m(i) = dot_product(b(:, i), b(:, i))
-    //    end do
-
-    // b[:, 0] = a[:, 0]
 
 
 }

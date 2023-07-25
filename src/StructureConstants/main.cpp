@@ -54,7 +54,6 @@ int main(int argc, char *argv[]) {
         m(i) = b(indexing::all, i).transpose() * b(indexing::all, i);
     }
 
-
     k = 2;
 
     mapping.setIdentity();
@@ -62,9 +61,13 @@ int main(int argc, char *argv[]) {
     while (k <= 3) {
 
 
+        /*
+         * Size reduction
+         */
         for (int i = k - 1; i > 0; i--) {
 
             mu = u(k - 1, i - 1);
+
 
             if (std::fabs(mu) > 0.5) {
 
@@ -74,51 +77,53 @@ int main(int argc, char *argv[]) {
 
                 uu.setZero();
 
+
                 if (i >= 2) {
                     uu(seq(0, (i - 2))) = u(i - 1, seq(0, (i - 2)));
                 }
 
                 uu(i - 1) = 1.0;
 
-                u(k - 1, seq(0, i - 1)) = u(k - 1, seq(0, i - 1)) - q * uu(seq(0, i - 1));
+                u(k - 1, seq(0, i - 1)).array() = u(k - 1, seq(0, i - 1)).array()
+                                                  - q * uu(seq(0, i - 1)).transpose().array();
 
             }
         }
 
 
         double norm1 = b(indexing::all, k - 1).squaredNorm();
-        double norm2 = delta - std::fabs(u(k - 1, k - 2)) * b(indexing::all, k - 2).squaredNorm();
+        double norm2 = (delta - std::pow(std::fabs(u(k - 1, k - 2)), 2)) * b(indexing::all, k - 2).squaredNorm();
 
         if (norm1 >= norm2) {
             k += 1;
         } else {
 
-            v = a(indexing::all, k - 1);
-            a(indexing::all, k - 1) = a(indexing::all, k - 2);
-            a(indexing::all, k - 2) = v;
+            //v = a(indexing::all, k - 1);
+            //a(indexing::all, k - 1) = a(indexing::all, k - 2);
+            //a(indexing::all, k - 2) = v;
+
+            a.col(k - 1).swap(a.col(k - 2));
+            mapping.col(k - 1).swap(mapping.col(k - 2));
 
             // H.col(i).swap(H.col(j))
 
-            v_m = mapping(indexing::all, k - 1);
-            mapping(indexing::all, k - 1) = mapping(indexing::all, k - 2);
-            mapping(indexing::all, k - 2) = v_m;
+            //v_m = mapping(indexing::all, k - 1);
+            //mapping(indexing::all, k - 1) = mapping(indexing::all, k - 2);
+            //mapping(indexing::all, k - 2) = v_m;
+
 
             for (int s = k - 1; s < k + 1; s++) {
-
-                u(s - 1, seq(0, s - 2)) = a(indexing::all, s - 2).transpose() * b(indexing::all, seq(0, s - 2));
+                u(s - 1, seq(0, s - 2)) = a(indexing::all, s - 1).transpose() * b(indexing::all, seq(0, s - 2));
                 u(s - 1, seq(0, s - 2)) = u(s - 1, seq(0, s - 2)).array() / m(seq(0, s - 2)).transpose().array();
+
                 b(indexing::all, s - 1) = a(indexing::all, s - 1) -
-                                      b(indexing::all, seq(0, s - 2)) * u(s - 1, seq(0, s - 2)).transpose();
+                                          b(indexing::all, seq(0, s - 2)) * u(s - 1, seq(0, s - 2)).transpose();
                 m(s - 1) = b(indexing::all, s - 1).transpose() * b(indexing::all, s - 1);
 
             }
 
-
             if (k > 2) {
                 k -= 1;
-            } else {
-
-
             }
 
 
@@ -130,6 +135,14 @@ int main(int argc, char *argv[]) {
     std::cout << a.transpose() << std::endl;
     std::cout << mapping.transpose() << std::endl;
 
+    /**
+     * 0.1 0.2 0.9
+  2   0   0
+0.1 1.8   0
+0 0 1
+1 0 0
+0 1 0
 
+     */
 
 }

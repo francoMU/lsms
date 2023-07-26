@@ -5,30 +5,53 @@
 #ifndef LSMS_SRC_STRUCTURECONSTANTS_STRUCTURE_H_
 #define LSMS_SRC_STRUCTURECONSTANTS_STRUCTURE_H_
 
-#include "NDArray.hpp"
+#include <Eigen/Dense>
+#include <map>
+#include<tuple>
 
 namespace SC {
 
 
-class Structure {
+    constexpr double DEFAULT_DELTA = 0.75;
 
- private:
-
-  NDArray<double, 2> lattice;
-  NDArray<double, 2> coords;
-  std::vector<int> species;
-
- public:
-
-  Structure(NDArray<double, 2> &lattice,
-      NDArray<double, 2> &coords,
-      std::vector<int> &species);
-
-  void calculateLLLreduction();
+    class Structure {
 
 
+    private:
 
-};
+
+        // Lattice
+        Eigen::Matrix<double, 3, 3> lattice;
+
+        // Coordinates
+        Eigen::Matrix<double, Eigen::Dynamic, 3> coordinates;
+
+        // Species
+        Eigen::Vector<int, Eigen::Dynamic> species;
+
+        // Map for lll-reduction
+        std::map<double, std::tuple<Eigen::Matrix<double, 3, 3>, Eigen::Matrix<double, 3, 3>>> map;
+
+    public:
+
+        Structure(const Eigen::Matrix<double, 3, 3> &lattice,
+                  const Eigen::Matrix<double, Eigen::Dynamic, 3> &coordinates,
+                  const Eigen::Vector<int, Eigen::Dynamic> &species);
+
+
+        void calculateLLLreduction(
+                Eigen::Matrix<double, 3, 3> &lll,
+                Eigen::Matrix<double, 3, 3> &lll_mapping,
+                double delta = DEFAULT_DELTA);
+
+
+        const Eigen::Matrix<double, 3, 3> &lll_matrix();
+
+        const Eigen::Matrix<double, 3, 3> &lll_mapping();
+
+        void get_distances(const Eigen::Vector<double, 3> &fcoords1, const Eigen::Vector<double, 3> &fcoords2);
+
+    };
 
 
 }

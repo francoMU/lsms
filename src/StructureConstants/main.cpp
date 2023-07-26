@@ -136,13 +136,120 @@ int main(int argc, char *argv[]) {
     std::cout << mapping.transpose() << std::endl;
 
     /**
-     * 0.1 0.2 0.9
-  2   0   0
-0.1 1.8   0
-0 0 1
-1 0 0
-0 1 0
-
+     *
+     *
      */
+
+    lll = a.transpose();
+    lll_mapping = mapping.transpose();
+    lll_inverse = lll_mapping.inverse();
+
+    /**
+     *
+     */
+
+    Vector<double, 3> fcoords1;
+    Vector<double, 3> fcoords2;
+
+    fcoords1 << 0.5, 0.5, 0.5;
+    fcoords2 << 0.25, 0.15, 0.85;
+
+
+    Vector<double, 3> lll_fcoords1;
+    Vector<double, 3> lll_fcoords2;
+
+    Vector<double, 3> pre_image;
+    Vector<double, 3> cart1;
+    Vector<double, 3> cart2;
+    Vector<double, 3> dv;
+
+    Matrix<double, 3, 27> images;
+    Matrix<double, 3, 27> cart_images;
+
+    images << -1, -1, -1,
+            -1, -1, 0,
+            -1, -1, 1,
+            -1, 0, -1,
+            -1, 0, 0,
+            -1, 0, 1,
+            -1, 1, -1,
+            -1, 1, 0,
+            -1, 1, 1,
+
+            0, -1, -1,
+            0, -1, 0,
+            0, -1, 1,
+            0, 0, -1,
+            0, 0, 0,
+            0, 0, 1,
+            0, 1, -1,
+            0, 1, 0,
+            0, 1, 1,
+
+            1, -1, -1,
+            1, -1, 0,
+            1, -1, 1,
+            1, 0, -1,
+            1, 0, 0,
+            1, 0, 1,
+            1, 1, -1,
+            1, 1, 0,
+            1, 1, 1;
+
+
+    lll_fcoords1 = fcoords1.transpose() * lll_inverse;
+    lll_fcoords2 = fcoords2.transpose() * lll_inverse;
+
+    lll_fcoords1.unaryExpr([](const int x) { return x % 2; });
+    lll_fcoords2.unaryExpr([](const int x) { return x % 2; });
+
+
+    cart1 = lll_fcoords1.transpose() * lll;
+    cart2 = lll_fcoords2.transpose() * lll;
+
+    cart_images = lll.transpose() * images;
+
+    pre_image = cart2 - cart1;
+
+    double best = 1.0e20;
+    int bestk = 0;
+
+    for (auto i = 0; i < 27; i++) {
+        dv = pre_image + cart_images(indexing::all, i);
+        double d = dv.squaredNorm();
+
+        if (d < best) {
+            best = d;
+            bestk = i;
+        }
+
+    }
+
+    auto dist_vec = pre_image + cart_images(indexing::all, bestk);
+    double dist = std::sqrt(best);
+
+    std::cout << dist_vec << std::endl;
+    std::cout << dist << std::endl;
+
+    /**
+     *
+     */
+
+    Matrix<double, Dynamic, 3> coordinates(2, 3);
+    Vector<int, Dynamic> species(2);
+
+
+    coordinates <<
+            0.5, 0.5, 0.5,
+            1.5, 0.5, 0.5;
+
+    species << 1, 0;
+
+    SC::Structure structure(lattice, coordinates, species);
+
+
+    structure.lll_matrix();
+
+    structure.lll_matrix();
 
 }

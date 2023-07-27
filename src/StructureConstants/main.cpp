@@ -235,6 +235,12 @@ int main(int argc, char *argv[]) {
      *
      */
 
+    lattice
+        << 1.0, 0.0, 0.0,
+           0.0, 1.0, 0.0,
+           0.0, 0.0, 1.0;
+
+
     Matrix<double, Dynamic, 3> coordinates(2, 3);
     Vector<int, Dynamic> species(2);
 
@@ -248,8 +254,15 @@ int main(int argc, char *argv[]) {
     SC::Structure structure(lattice, coordinates, species);
 
 
-    structure.lll_matrix();
+    Vector<double, 3> f1;
+    Vector<double, 3> f2;
 
-    structure.lll_matrix();
+    f1 << 0.0, 0.0, 0.0;
+    f2 << 0.9, 0.9, 0.9;
+
+
+    structure.get_distances(f1, f2);
+
+
 
 }

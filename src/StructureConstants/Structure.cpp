@@ -258,8 +258,16 @@ void SC::Structure::get_distances(const Eigen::Vector<double, 3> &fcoords1, cons
 
     }
 
+
+
+
     auto dist_vec = pre_image + cart_images(indexing::all, bestk);
+
+    std::cout << dist_vec << std::endl;
+
     double dist = std::sqrt(best);
+
+    std::cout << dist << std::endl;
 
 
 }

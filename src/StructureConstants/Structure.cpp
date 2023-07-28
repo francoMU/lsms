@@ -124,6 +124,19 @@ void SC::Structure::calculateLLLreduction(
 
             if (k > 2) {
                 k -= 1;
+            } else {
+
+
+                Matrix<double, Dynamic, 1> p = (a(indexing::all, seq(k, 2)).transpose() *
+                                                b(indexing::all, seq(k - 2, k - 1))).transpose();
+                Matrix<double, Dynamic, Dynamic> q = m(seq(k - 2, k - 1)).asDiagonal();
+
+
+                Matrix<double, Dynamic, Dynamic> result = q.colPivHouseholderQr().solve(p).transpose();
+
+                u(seq(k, 2), seq(k - 2, k - 1)) = result;
+
+
             }
 
 
@@ -178,7 +191,8 @@ const Eigen::Matrix<double, 3, 3> &SC::Structure::lll_mapping() {
 
     }
 
-    return std::get<1>(map[DEFAULT_DELTA]);}
+    return std::get<1>(map[DEFAULT_DELTA]);
+}
 
 
 void SC::Structure::get_distances(const Eigen::Vector<double, 3> &fcoords1, const Eigen::Vector<double, 3> &fcoords2) {
@@ -257,8 +271,6 @@ void SC::Structure::get_distances(const Eigen::Vector<double, 3> &fcoords1, cons
         }
 
     }
-
-
 
 
     auto dist_vec = pre_image + cart_images(indexing::all, bestk);

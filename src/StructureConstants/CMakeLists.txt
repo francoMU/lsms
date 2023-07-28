@@ -42,8 +42,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
-add_executable(test_ndarray test_ndarray.cpp)
-target_include_directories(test_ndarray PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(test_ndarray PUBLIC structureconsts)
+add_executable(test_structure test_structure.cpp)
+target_include_directories(test_structure PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(test_structure PUBLIC structureconsts)
 
-gtest_discover_tests(test_ndarray)
+gtest_discover_tests(test_structure)

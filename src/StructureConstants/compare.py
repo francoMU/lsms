@@ -4,9 +4,11 @@ import numpy as np
 import sys
 
 matrix = np.array(
-    [[2.0, 0.0, 0.0],
-     [0.1, 1.8, 0.0],
-     [0.1, 0.2, 0.9]])
+    [
+        [8.0, 0.0, 0.0],
+        [0.0, 3.0, 0.0],
+        [-0.1, 10.0, 1.0],
+    ])
 
 a = matrix.copy().T
 
@@ -55,10 +57,8 @@ while k <= 3:
     # Check the Lovasz condition.
     if dot(b[:, k - 1], b[:, k - 1]) >= (delta - abs(u[k - 1, k - 2]) ** 2) * dot(b[:, (k - 2)], b[:, (k - 2)]):
         # Increment k if the Lovasz condition holds.
-        print("Step 1")
         k += 1
     else:
-        print("Step 2")
         # If the Lovasz condition fails,
         # swap the k-th and (k-1)-th basis vector
         v = a[:, k - 1].copy()
@@ -78,42 +78,37 @@ while k <= 3:
             m[s - 1] = dot(b[:, s - 1], b[:, s - 1])
 
         if k > 2:
+            print("+++")
             k -= 1
-            print("ppppppppppppp")
         else:
+            print("---")
+            print(k)
             # We have to do p/q, so do lstsq(q.T, p.T).T instead.
             p = dot(a[:, k:3].T, b[:, (k - 2): k])
+            print(p)
             q = np.diag(m[(k - 2): k])  # type: ignore
+            print(q)
             # pylint: disable=E1101
             result = np.linalg.lstsq(q.T, p.T, rcond=None)[0].T  # type: ignore
+            print(result.shape)
+            print(result)
+            print(u)
             u[k:3, (k - 2): k] = result
+            print(u)
 
 
 print(" ----------------- ")
 print(a.T)
 print("====================")
-print(mapping.T)
-
-print("\n\n\n")
-print("====================")
-
-k = 2
-a = np.array(
-    [[2.0, 0.0, 0.0],
-     [0.1, 1.8, 0.0],
-     [0.1, 0.2, 0.9]])
-
-b = a.T
-b[0, 0] = 3.0
-
-m = [0.1, 0.2, 0.4]
 
 p = dot(a[:, k:3].T, b[:, (k - 2): k])
 q = np.diag(m[(k - 2): k])  # type: ignore
+# pylint: disable=E1101
+result = np.linalg.lstsq(q.T, p.T, rcond=None)[0].T  # type: ignore
+print(result.shape)
+print(u)
+u[k:3, (k - 2): k] = result
 
-print(p)
-print(q)
 
-print("...................")
-print("\n\n\n")
-print("====================")
+print("\n\n\n================\n\n\n")
+

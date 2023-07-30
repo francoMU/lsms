@@ -166,8 +166,6 @@ const Eigen::Matrix<double, 3, 3> &SC::Structure::lll_matrix() {
 
         map.insert({DEFAULT_DELTA, entry});
 
-        std::cout << "Add element" << std::endl;
-
     }
 
     return std::get<0>(map[DEFAULT_DELTA]);
@@ -187,15 +185,16 @@ const Eigen::Matrix<double, 3, 3> &SC::Structure::lll_mapping() {
 
         map.insert({DEFAULT_DELTA, entry});
 
-        std::cout << "Add element" << std::endl;
-
     }
 
     return std::get<1>(map[DEFAULT_DELTA]);
 }
 
 
-void SC::Structure::get_distances(const Eigen::Vector<double, 3> &fcoords1, const Eigen::Vector<double, 3> &fcoords2) {
+void SC::Structure::get_distances(const Eigen::Vector<double, 3> &fcoords1,
+                                  const Eigen::Vector<double, 3> &fcoords2,
+                                  Eigen::Vector<double, 3> &dist_vec,
+                                  double &dist) {
 
     using namespace Eigen;
 
@@ -273,14 +272,8 @@ void SC::Structure::get_distances(const Eigen::Vector<double, 3> &fcoords1, cons
     }
 
 
-    auto dist_vec = pre_image + cart_images(indexing::all, bestk);
-
-    std::cout << dist_vec << std::endl;
-
-    double dist = std::sqrt(best);
-
-    std::cout << dist << std::endl;
-
+    dist_vec = pre_image + cart_images(indexing::all, bestk);
+    dist = std::sqrt(best);
 
 }
 

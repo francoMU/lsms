@@ -49,7 +49,10 @@ namespace SC {
 
         const Eigen::Matrix<double, 3, 3> &lll_mapping();
 
-        void get_distances(const Eigen::Vector<double, 3> &fcoords1, const Eigen::Vector<double, 3> &fcoords2);
+        void get_distances(const Eigen::Vector<double, 3> &fcoords1,
+                           const Eigen::Vector<double, 3> &fcoords2,
+                           Eigen::Vector<double, 3> &dist_vec,
+                           double &dist      );
 
     };
 

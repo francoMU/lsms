@@ -45,5 +45,6 @@ include(GoogleTest)
 add_executable(test_structure test_structure.cpp)
 target_include_directories(test_structure PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(test_structure PUBLIC structureconsts)
+target_link_libraries(test_structure PUBLIC gtest_main)
 
 gtest_discover_tests(test_structure)

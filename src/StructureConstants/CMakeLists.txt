@@ -10,6 +10,7 @@ target_link_libraries(sc_main PUBLIC structureconsts)
 target_sources(structureconsts PUBLIC
         Structure.cpp
         Structure.hpp
+
         NDArray.hpp
         #        Dcoeff.cpp
         #        Dcoeff.h

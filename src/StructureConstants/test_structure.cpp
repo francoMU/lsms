@@ -11,7 +11,8 @@
 
 #include "Structure.hpp"
 
-bool CheckMatrixEquality(const Eigen::Matrix<double, 3, 3> &lhs, const Eigen::Matrix<double, 3, 3> &rhs) {
+bool CheckMatrixEquality(const Eigen::Matrix<double, Eigen::Dynamic, 3> &lhs,
+                         const Eigen::Matrix<double, Eigen::Dynamic, 3> &rhs) {
     return lhs.isApprox(rhs, 1e-4);
 }
 
@@ -77,6 +78,22 @@ TEST(StructureTests, LLLMatrix2) {
 
     auto lll_matrix = structure.lll_matrix();
     ASSERT_PRED2(CheckMatrixEquality, lll_matrix_ref, lll_matrix);
+
+    Matrix<double, Dynamic, 3> frac_coords(2, 3);
+    Matrix<double, Dynamic, 3> cart_coords(2, 3);
+
+
+    frac_coords << 0.5, 0.5, 0.5, 0, 0, 0.2;
+
+    Matrix<double, Dynamic, 3> cart_coords_ref(2, 3);
+
+    cart_coords_ref << 2.5, 6., -0.5, -0.8, 0.6, 0.4;
+
+
+    structure.get_cartesian_coords(frac_coords, cart_coords);
+
+
+    ASSERT_PRED2(CheckMatrixEquality, cart_coords_ref, cart_coords);
 
 }
 

@@ -14,8 +14,36 @@ SC::Structure::Structure(const Eigen::Matrix<double, 3, 3> &lattice,
         throw std::runtime_error("Length of species and coordinates is not the same!");
     }
 
+    inv_lattice = lattice.inverse();
+
 }
 
+/**
+ * @brief Perform the Lenstra-Lenstra-Lovász (LLL) lattice reduction algorithm.
+ *
+ * The LLL reduction algorithm is used to transform a given lattice matrix into a
+ * nearly orthogonal basis with short, nearly integral vectors. It is particularly
+ * useful for lattice problems and can simplify many computations involving lattices.
+ *
+ * The LLL algorithm is based on the Gram-Schmidt orthogonalization process with
+ * additional optimizations to improve the orthogonality of the reduced basis.
+ *
+ * @param[out] lll The LLL-reduced lattice matrix will be stored in this parameter.
+ * @param[out] lll_mapping The transformation matrix for LLL reduction will be stored
+ *                         in this parameter. It represents the change of basis from
+ *                         the input lattice to the reduced lattice.
+ * @param[in] delta A parameter controlling the reduction quality. It should be a value
+ *                  in the range (0, 1) where smaller values produce more orthogonal
+ *                  and shorter vectors at the cost of increased computation time.
+ *                  The default value is recommended for most cases.
+ *
+ * @note The input lattice matrix should be provided in the parameter `lattice` of the
+ *       `SC::Structure` class. After calling this function, the output lattice matrix
+ *       will be available in the `lll` parameter, and the transformation matrix will
+ *       be stored in the `lll_mapping` parameter.
+ *
+ * @see SC::Structure::lattice, SC::Structure::lll_matrix, SC::Structure::lll_mapping
+ */
 void SC::Structure::calculateLLLreduction(
         Eigen::Matrix<double, 3, 3> &lll,
         Eigen::Matrix<double, 3, 3> &lll_mapping,
@@ -35,7 +63,6 @@ void SC::Structure::calculateLLLreduction(
     Matrix<double, 3, 3> mapping;
     Vector<double, 10> uu;
     Vector<double, 3> v;
-    Vector<double, 3> v_m;
     Matrix<double, 3, 3> qq;
     Vector<double, 3> pp;
 
@@ -101,16 +128,8 @@ void SC::Structure::calculateLLLreduction(
             k += 1;
         } else {
 
-            //v = a(indexing::all, k - 1);
-            //a(indexing::all, k - 1) = a(indexing::all, k - 2);
-            //a(indexing::all, k - 2) = v;
-
             a.col(k - 1).swap(a.col(k - 2));
             mapping.col(k - 1).swap(mapping.col(k - 2));
-
-            //v_m = mapping(indexing::all, k - 1);
-            //mapping(indexing::all, k - 1) = mapping(indexing::all, k - 2);
-            //mapping(indexing::all, k - 2) = v_m;
 
             for (int s = k - 1; s < k + 1; s++) {
                 u(s - 1, seq(0, s - 2)) = a(indexing::all, s - 1).transpose() * b(indexing::all, seq(0, s - 2));
@@ -179,8 +198,6 @@ const Eigen::Matrix<double, 3, 3> &SC::Structure::lll_mapping() {
 
         calculateLLLreduction(lll, lll_mapping, DEFAULT_DELTA);
 
-        //std::tuple<Eigen::Matrix<double, 3, 3>, Eigen::Matrix<double, 3, 3>> entry;
-
         auto entry = std::make_tuple(lll, lll_mapping);
 
         map.insert({DEFAULT_DELTA, entry});
@@ -190,7 +207,29 @@ const Eigen::Matrix<double, 3, 3> &SC::Structure::lll_mapping() {
     return std::get<1>(map[DEFAULT_DELTA]);
 }
 
-
+/**
+ * @brief Calculate the shortest distance between two points in fractional coordinates.
+ *
+ * This function calculates the shortest distance between two points represented by their
+ * fractional coordinates in the crystal lattice. The fractional coordinates are expressed
+ * as a three-dimensional vector, representing the position of an atom within the unit cell
+ * relative to the lattice vectors.
+ *
+ * @param[in] fcoords1 The fractional coordinates of the first point.
+ * @param[in] fcoords2 The fractional coordinates of the second point.
+ * @param[out] dist_vec A three-dimensional vector storing the shortest distance vector
+ *                      between the two points. The vector points from the first point
+ *                      (fcoords1) to the second point (fcoords2).
+ * @param[out] dist The shortest distance between the two points in the crystal lattice.
+ *
+ * @note The input fractional coordinates `fcoords1` and `fcoords2` should be provided
+ *       as three-dimensional vectors representing the fractional positions of the two
+ *       points within the unit cell. After calling this function, the shortest distance
+ *       vector between the points will be available in the `dist_vec` parameter, and the
+ *       shortest distance itself will be stored in the `dist` parameter.
+ *
+ * @see SC::Structure::calculateLLLreduction, SC::Structure::get_distances_cart
+ */
 void SC::Structure::get_distances(const Eigen::Vector<double, 3> &fcoords1,
                                   const Eigen::Vector<double, 3> &fcoords2,
                                   Eigen::Vector<double, 3> &dist_vec,
@@ -275,6 +314,33 @@ void SC::Structure::get_distances(const Eigen::Vector<double, 3> &fcoords1,
     dist_vec = pre_image + cart_images(indexing::all, bestk);
     dist = std::sqrt(best);
 
+}
+
+
+void SC::Structure::get_distances_cart(const Eigen::Vector<double, 3> &coords1,
+                                       const Eigen::Vector<double, 3> &coords2,
+                                       Eigen::Vector<double, 3> &dist_vec,
+                                       double &dist) {
+
+
+    get_distances(coords1.transpose() * inv_lattice, coords2.transpose() * inv_lattice, dist_vec, dist);
+
+}
+
+void
+SC::Structure::get_fractional_coords(
+        const Eigen::Matrix<double, Eigen::Dynamic, 3> &cart_coords,
+        Eigen::Matrix<double, Eigen::Dynamic, 3> &frac_coords
+) {
+    frac_coords = cart_coords * inv_lattice;
+}
+
+void
+SC::Structure::get_cartesian_coords(
+        const Eigen::Matrix<double, Eigen::Dynamic, 3> &frac_coords,
+        Eigen::Matrix<double, Eigen::Dynamic, 3> &cart_coords
+) {
+    cart_coords = frac_coords * lattice;
 }
 
 

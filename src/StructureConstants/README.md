@@ -1,5 +1,14 @@
 
 
+
+Goals:
+
+- 7 Classes:
+
+   1. Structure
+   2. SpglibWrapper 
+
+
 This readme serves as a guideline on how too finish the project.
 The goal is a program the reads in a structure and some parameters in a toml format.
 It will calculate the structure constants `B_ij`

@@ -1,6 +1,7 @@
 
 #include <iostream>
 
+#include "spglib.h"
 
 #include "Structure.hpp"
 
@@ -9,6 +10,40 @@ SC::Structure::Structure(const Eigen::Matrix<double, 3, 3> &lattice,
                          const Eigen::Vector<int, Eigen::Dynamic> &species) :
 
         lattice{lattice}, coordinates{coordinates}, species{species} {
+
+    {
+
+        SpglibDataset *dataset;
+        // Wurtzite structure (P6_3mc)
+        double lat[3][3] = {
+                {3.111, -1.5555,            0},
+                {0,     2.6942050311733885, 0},
+                {0,     0,                  4.988}};
+        double position[4][3] = {
+                {1.0 / 3, 2.0 / 3, 0.0},
+                {2.0 / 3, 1.0 / 3, 0.5},
+                {1.0 / 3, 2.0 / 3, 0.6181},
+                {2.0 / 3, 1.0 / 3, 0.1181},
+        };
+        int types[4] = {1, 1, 2, 2};
+        int num_atom = 4;
+        double symprec = 1e-5;
+
+        // SplibDataset has to be freed after use.
+        dataset = spg_get_dataset(lat, position, types, num_atom, symprec);
+
+        // Obtain data in SpglibDataset.
+        // The space group number 186 corresponds to the wurtzite-type (P6_3mc).
+        // See https://www.cryst.ehu.es/cgi-bin/cryst/programs/nph-table
+        assert(dataset->spacegroup_number == 186);
+
+        // Deallocate SpglibDataset, otherwise induce memory leak.
+        spg_free_dataset(dataset);
+    }
+
+
+
+
 
     if (coordinates.rows() != species.rows()) {
         throw std::runtime_error("Length of species and coordinates is not the same!");

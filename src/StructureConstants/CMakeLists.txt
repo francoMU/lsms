@@ -27,7 +27,17 @@ find_package(Eigen3 REQUIRED)
 
 target_link_libraries(structureconsts PUBLIC Eigen3::Eigen)
 
+include(FetchContent)
+set(SPGLIB_USE_OMP ON CACHE BOOL "" FORCE)
+FetchContent_Declare(
+        spglib
+        GIT_REPOSITORY https://github.com/spglib/spglib.git
+        GIT_TAG develop
+)
+FetchContent_MakeAvailable(spglib)
 
+target_link_libraries(structureconsts PUBLIC Spglib::symspg)
+target_include_directories(structureconsts PUBLIC ${spglib_SOURCE_DIR}/src)
 
 include(FetchContent)
 set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
@@ -47,5 +57,6 @@ add_executable(test_structure test_structure.cpp)
 target_include_directories(test_structure PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(test_structure PUBLIC structureconsts)
 target_link_libraries(test_structure PUBLIC gtest_main)
+target_link_libraries(test_structure PUBLIC Spglib::symspg)
 
 gtest_discover_tests(test_structure)

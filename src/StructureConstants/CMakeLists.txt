@@ -1,4 +1,5 @@
 
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
 add_library(structureconsts SHARED)
 
@@ -10,7 +11,8 @@ target_link_libraries(sc_main PUBLIC structureconsts)
 target_sources(structureconsts PUBLIC
         Structure.cpp
         Structure.hpp
-
+        SpglibWrapper.cpp
+        SpglibWrapper.h
         NDArray.hpp
         #        Dcoeff.cpp
         #        Dcoeff.h

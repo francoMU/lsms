@@ -1,6 +1,7 @@
 #
 # Created by Franco P. Moitzi
 #
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
 cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 

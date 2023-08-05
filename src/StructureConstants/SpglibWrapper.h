@@ -30,6 +30,8 @@ namespace SC {
 
         SpglibDataset *dataset;
 
+        void deepCopy(const SpglibDataset * rhs_dataset, SpglibDataset *copy_dataset);
+
     public:
 
         SpglibWrapper(const Eigen::Matrix<double, 3, 3> &lattice,
@@ -39,11 +41,11 @@ namespace SC {
 
         SpglibWrapper(const SpglibWrapper &other);
 
-        SpglibWrapper &operator=(const SpglibWrapper &rhs);
-
-        SpglibWrapper(SpglibWrapper &&other) noexcept;
-
-        SpglibWrapper &operator=(SpglibWrapper &&rhs);
+//        SpglibWrapper &operator=(const SpglibWrapper &rhs);
+//
+//        SpglibWrapper(SpglibWrapper &&other) noexcept;
+//
+//        SpglibWrapper &operator=(SpglibWrapper &&rhs);
 
         ~SpglibWrapper();
 

@@ -20,6 +20,17 @@ target_sources(structureconsts PUBLIC
 
 target_include_directories(structureconsts PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+#
+# Boost
+#
+
+
+set(BOOST_INCLUDEDIR "/home/fmoitzi/Software/boost_1_81_0")
+set(BOOST_LIBRARYDIR "/home/fmoitzi/Software/boost_1_81_0/stage/lib")
+
+find_package(Boost REQUIRED)
+target_link_libraries(structureconsts PUBLIC Boost::boost)
+
 
 #
 # Find Eigen3

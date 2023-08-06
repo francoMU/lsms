@@ -10,6 +10,7 @@
 #include <Eigen/Dense>
 
 #include "Structure.hpp"
+#include "SpglibWrapper.h"
 
 bool CheckMatrixEquality(const Eigen::Matrix<double, Eigen::Dynamic, 3> &lhs,
                          const Eigen::Matrix<double, Eigen::Dynamic, 3> &rhs) {
@@ -132,5 +133,31 @@ TEST(StructureTests, Distance1) {
 
     ASSERT_NEAR(0.34641016, dist, 1.0e-8);
 
+
+}
+
+TEST(StructureTests, Symmetry1) {
+
+
+    using namespace SC;
+    using namespace Eigen;
+
+    Matrix<double, 3, 3> lattice;
+    Matrix<double, 3, 3> lll_matrix_ref;
+
+    lattice
+            << 4.0, 0.0, 0.0,
+            0.0, 4.0, 0.0,
+            0.0, 0.0, 4.0;
+
+    Matrix<double, Dynamic, 3> coordinates(2, 3);
+    Vector<int, Dynamic> species(2);
+
+    coordinates << 0.5, 0.5, 0.5, 0.0, 0.0, 0.0;
+    species << 1, 0;
+
+    SpglibWrapper wrapper(lattice, coordinates, species);
+
+    ASSERT_EQ(wrapper.international_symbol(), "Pm-3m");
 
 }

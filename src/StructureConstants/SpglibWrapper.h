@@ -104,6 +104,7 @@ namespace SC {
          */
         std::string international_symbol();
 
+
         /**
          * @brief Destructor for SpglibWrapper.
          */

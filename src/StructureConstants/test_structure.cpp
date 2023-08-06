@@ -161,3 +161,33 @@ TEST(StructureTests, Symmetry1) {
     ASSERT_EQ(wrapper.international_symbol(), "Pm-3m");
 
 }
+
+TEST(StructureTests, MappingOfStorage) {
+
+    using namespace Eigen;
+
+    int (*array_storage)[2][2] = new int[2][2][2]();
+
+    int *array;
+
+    array = new int[8]{1, 2, 3, 4, 5, 6, 7, 8};
+
+    std::cout << "Row-major using stride:\n" <<
+              Map<Matrix<int, 2, 4>, Unaligned, Stride<1, 4> >(array) << std::endl;
+
+    int o = 0;
+
+    for (auto i = 0; i < 2; i++) {
+        for (auto j = 0; j < 2; j++) {
+            for (auto k = 0; k < 2; k++) {
+                o++;
+                array_storage[i][j][k] = o;
+            }
+        }
+    }
+
+    std::cout << "Row-major using stride:\n" <<
+              Map<Matrix<int, 2, 4>, Unaligned, Stride<1, 4> >(reinterpret_cast<int *>(array_storage)) << std::endl;
+}
+
+
